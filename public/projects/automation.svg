@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" role="img" aria-labelledby="title desc">
+  <title id="title">Automation workflow preview</title>
+  <desc id="desc">Diagram workflow otomatis dengan node, koneksi, dan status proses.</desc>
+  <rect width="960" height="600" fill="#080808"/>
+  <path d="M0 80h960M0 200h960M0 320h960M0 440h960M160 0v600M320 0v600M480 0v600M640 0v600M800 0v600" stroke="#ffffff" stroke-opacity=".07"/>
+  <rect x="80" y="78" width="800" height="444" rx="8" fill="#111" stroke="#ffffff" stroke-opacity=".18"/>
+  <path d="M235 222h150M515 222h150M235 378h430M480 222v156" stroke="#ffffff" stroke-opacity=".24" stroke-width="6" stroke-linecap="round"/>
+  <rect x="115" y="170" width="120" height="104" rx="8" fill="#191919" stroke="#ff5b5f" stroke-width="3"/>
+  <rect x="385" y="170" width="130" height="104" rx="8" fill="#191919" stroke="#7bdff2" stroke-width="3"/>
+  <rect x="665" y="170" width="150" height="104" rx="8" fill="#191919" stroke="#ffd166" stroke-width="3"/>
+  <rect x="210" y="326" width="150" height="104" rx="8" fill="#191919" stroke="#8ee6a8" stroke-width="3"/>
+  <rect x="600" y="326" width="175" height="104" rx="8" fill="#191919" stroke="#ff5b5f" stroke-width="3"/>
+  <text x="143" y="232" fill="#f5f5f5" font-family="Consolas, monospace" font-size="26" font-weight="700">INPUT</text>
+  <text x="415" y="232" fill="#f5f5f5" font-family="Consolas, monospace" font-size="26" font-weight="700">BOT</text>
+  <text x="700" y="232" fill="#f5f5f5" font-family="Consolas, monospace" font-size="26" font-weight="700">REPORT</text>
+  <text x="242" y="388" fill="#f5f5f5" font-family="Consolas, monospace" font-size="26" font-weight="700">QUEUE</text>
+  <text x="640" y="388" fill="#f5f5f5" font-family="Consolas, monospace" font-size="26" font-weight="700">DONE</text>
+</svg>

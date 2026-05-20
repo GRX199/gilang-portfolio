@@ -1,0 +1,106 @@
+"use client";
+
+import { Send } from "lucide-react";
+import { FormEvent, useState } from "react";
+import type { SiteConfig } from "@/lib/content-types";
+
+export function ContactForm({
+  contactIntents,
+  siteConfig,
+}: {
+  contactIntents: string[];
+  siteConfig: SiteConfig;
+}) {
+  const [note, setNote] = useState("");
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const name = String(form.get("name") || "");
+    const email = String(form.get("email") || "");
+    const intent = String(form.get("intent") || "");
+    const message = String(form.get("message") || "");
+    const subject = `${intent || "Project"} dari ${name}`;
+    const body = [`Nama: ${name}`, `Email: ${email}`, `Intent: ${intent}`, "", message].join(
+      "\n",
+    );
+
+    window.location.href = `mailto:${siteConfig.email}?subject=${encodeURIComponent(
+      subject,
+    )}&body=${encodeURIComponent(body)}`;
+    setNote("Mail app dibuka. Email tujuan bisa diubah lewat CMS.");
+  }
+
+  return (
+    <section className="section contact-section" id="contact" aria-labelledby="contact-title">
+      <div className="container contact-grid">
+        <div className="section-heading sticky-copy">
+          <p className="eyebrow">Contact</p>
+          <h2 id="contact-title">Ready to build something?</h2>
+          <p>
+            Form ini memakai mail app agar bisa berjalan tanpa backend. Untuk
+            produksi, kamu bisa menggantinya dengan server action, Resend,
+            Nodemailer, atau endpoint API.
+          </p>
+
+          <div className="contact-links">
+            {siteConfig.socials.map((social) => (
+              <a href={social.href} key={social.label} target="_blank" rel="noreferrer">
+                {social.label}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <form className="contact-form" onSubmit={handleSubmit}>
+          <div className="field-grid">
+            <label>
+              <span>01 Nama</span>
+              <input name="name" type="text" autoComplete="name" placeholder="Nama kamu" required />
+            </label>
+            <label>
+              <span>02 Email</span>
+              <input
+                name="email"
+                type="email"
+                autoComplete="email"
+                placeholder="email@domain.com"
+                required
+              />
+            </label>
+          </div>
+
+          <label>
+            <span>03 Kebutuhan</span>
+            <select name="intent" defaultValue={contactIntents[0]} required>
+              {contactIntents.map((intent) => (
+                <option key={intent} value={intent}>
+                  {intent}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label>
+            <span>04 Pesan</span>
+            <textarea
+              name="message"
+              rows={5}
+              placeholder="Ceritakan kebutuhan websitenya..."
+              required
+            />
+          </label>
+
+          <button className="send-button" type="submit">
+            <span>Kirim pesan</span>
+            <Send size={17} aria-hidden="true" />
+          </button>
+
+          <p className="form-note" role="status">
+            {note}
+          </p>
+        </form>
+      </div>
+    </section>
+  );
+}

@@ -1,0 +1,122 @@
+import type { SiteContent } from "@/lib/content-types";
+
+export const defaultContent: SiteContent = {
+  siteConfig: {
+    name: "Nama Kamu",
+    handle: "@namakamu",
+    roles: "Data Management & Website Developer",
+    location: "Indonesia",
+    email: "emailkamu@example.com",
+    siteUrl: "https://example.com",
+    description:
+      "Personal website berbasis Next.js untuk menampilkan profil, project, tech stack, dan kontak.",
+    headline: "Make it simple",
+    bio: "Saya membangun website yang rapi, cepat, dan mudah dikembangkan. Ruang ini disiapkan untuk menampilkan profil, project, tech stack, dan cara orang menghubungi kamu.",
+    focus: "frontend, data, automation",
+    availability: "available for selected work",
+    spotifyUrl:
+      "https://open.spotify.com/track/5WOSNVChcadlsCRiqXE45K?si=fdeaf2edceb649c1",
+    socials: [
+      { label: "GitHub", href: "https://github.com/" },
+      { label: "LinkedIn", href: "https://linkedin.com/" },
+      { label: "Instagram", href: "https://instagram.com/" },
+    ],
+  },
+  statusMessages: [
+    "Based in Indonesia",
+    "Building clean interfaces",
+    "Learning in public",
+  ],
+  quickLinks: [
+    { label: "Selected projects", href: "/portfolio", icon: "Terminal" },
+    { label: "Tech stacks", href: "/stack", icon: "Code2" },
+    { label: "Collaborate", href: "/collaborate", icon: "Send" },
+  ],
+  projects: [
+    {
+      id: "insight-dashboard",
+      title: "Insight Dashboard",
+      year: "2026",
+      status: "Live",
+      description:
+        "Dashboard data untuk memantau metrik operasional, tren performa, dan laporan ringkas.",
+      tags: ["Next.js", "Charts", "PostgreSQL"],
+      image: "/projects/dashboard.svg",
+      href: "/collaborate",
+      icon: "LayoutDashboard",
+      featured: true,
+    },
+    {
+      id: "coffee-time",
+      title: "CoffeeTime",
+      year: "2026",
+      status: "On Progress",
+      description:
+        "Landing page modern untuk coffee shop dengan visual immersive dan layout responsif.",
+      tags: ["Next.js", "Tailwind CSS", "Framer Motion"],
+      image: "/projects/store.svg",
+      href: "/collaborate",
+      icon: "Coffee",
+      featured: true,
+    },
+    {
+      id: "workflow-bot",
+      title: "Workflow Bot",
+      year: "2025",
+      status: "Internal Tool",
+      description:
+        "Bot otomasi untuk notifikasi, pencatatan data, dan laporan terjadwal.",
+      tags: ["Node.js", "API", "Sheets"],
+      image: "/projects/automation.svg",
+      href: "/collaborate",
+      icon: "Bot",
+      featured: true,
+    },
+    {
+      id: "schoolify",
+      title: "Schoolify",
+      year: "2025",
+      status: "Case Study",
+      description:
+        "Platform manajemen sekolah dengan kalender, chart, autentikasi, dan database Prisma.",
+      tags: ["Next.js", "Prisma", "PostgreSQL", "Charts"],
+      image: "/projects/dashboard.svg",
+      href: "/collaborate",
+      icon: "GraduationCap",
+      featured: false,
+    },
+    {
+      id: "launch-page",
+      title: "Launch Page",
+      year: "2024",
+      status: "Archived",
+      description:
+        "Halaman promosi produk dengan visual editorial dan animasi ringan.",
+      tags: ["Next.js", "Motion", "SEO"],
+      image: "/projects/launch.svg",
+      href: "/collaborate",
+      icon: "Rocket",
+      featured: false,
+    },
+  ],
+  stackItems: [
+    { id: "nextjs", name: "Next.js", category: "core", icon: "MonitorSmartphone" },
+    { id: "react", name: "React", category: "core", icon: "Code2" },
+    { id: "typescript", name: "TypeScript", category: "language", icon: "Braces" },
+    { id: "tailwind", name: "Tailwind CSS", category: "framework", icon: "Palette" },
+    { id: "nodejs", name: "Node.js", category: "framework", icon: "Server" },
+    { id: "postgresql", name: "PostgreSQL", category: "tool", icon: "Database" },
+    { id: "rest-api", name: "REST API", category: "framework", icon: "Globe2" },
+    { id: "automation", name: "Automation", category: "core", icon: "Workflow" },
+    { id: "github", name: "GitHub", category: "tool", icon: "GitPullRequest" },
+    { id: "figma", name: "Figma", category: "tool", icon: "PenTool" },
+    { id: "vercel", name: "Vercel", category: "tool", icon: "Gauge" },
+    { id: "email", name: "Email", category: "tool", icon: "Mail" },
+  ],
+  contactIntents: [
+    "Website portfolio",
+    "Landing page",
+    "Dashboard",
+    "Automation tool",
+  ],
+};

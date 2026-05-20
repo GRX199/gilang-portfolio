@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" role="img" aria-labelledby="title desc">
+  <title id="title">Dashboard analytics preview</title>
+  <desc id="desc">Panel gelap dengan grafik garis, kartu metrik, dan tabel ringkas.</desc>
+  <rect width="960" height="600" fill="#080808"/>
+  <path d="M0 80h960M0 200h960M0 320h960M0 440h960M160 0v600M320 0v600M480 0v600M640 0v600M800 0v600" stroke="#ffffff" stroke-opacity=".07"/>
+  <rect x="70" y="70" width="820" height="460" rx="8" fill="#121212" stroke="#ffffff" stroke-opacity=".18"/>
+  <rect x="105" y="105" width="210" height="92" rx="8" fill="#1b1b1b"/>
+  <rect x="345" y="105" width="210" height="92" rx="8" fill="#1b1b1b"/>
+  <rect x="585" y="105" width="270" height="92" rx="8" fill="#1b1b1b"/>
+  <path d="M120 370c72-96 137-104 195-24 47 65 91 62 132-8 57-97 118-92 183 16 36 72 83 80 141 25" fill="none" stroke="#ff5b5f" stroke-width="8" stroke-linecap="round"/>
+  <path d="M120 407c76-33 140-24 191 27 55 55 107 50 155-15 50-68 98-67 144 2 40 60 93 58 159-6" fill="none" stroke="#7bdff2" stroke-width="5" stroke-linecap="round" opacity=".9"/>
+  <text x="120" y="154" fill="#f5f5f5" font-family="Consolas, monospace" font-size="34" font-weight="700">98.4%</text>
+  <text x="360" y="154" fill="#ffd166" font-family="Consolas, monospace" font-size="34" font-weight="700">12.8k</text>
+  <text x="604" y="154" fill="#8ee6a8" font-family="Consolas, monospace" font-size="34" font-weight="700">+24ms</text>
+</svg>
