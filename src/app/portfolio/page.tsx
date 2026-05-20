@@ -26,11 +26,7 @@ export default async function PortfolioPage() {
         />
         <Projects projects={content.projects} />
       </main>
-      <Footer
-        projectCount={content.projects.length}
-        siteConfig={content.siteConfig}
-        stackCount={content.stackItems.length}
-      />
+      <Footer projectCount={content.projects.length} />
     </>
   );
 }

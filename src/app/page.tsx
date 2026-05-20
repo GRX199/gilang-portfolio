@@ -14,11 +14,7 @@ export default async function Home() {
       <main id="main">
         <Hero content={content} />
       </main>
-      <Footer
-        projectCount={content.projects.length}
-        siteConfig={content.siteConfig}
-        stackCount={content.stackItems.length}
-      />
+      <Footer projectCount={content.projects.length} />
     </>
   );
 }

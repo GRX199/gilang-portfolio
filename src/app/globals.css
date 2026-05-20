@@ -976,7 +976,7 @@ textarea:focus {
 .footer-shell {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 24px;
 }
 
@@ -1027,8 +1027,7 @@ textarea:focus {
   box-shadow: 0 0 14px rgba(255, 209, 102, 0.34);
 }
 
-.footer-indicator span,
-.footer-owner span {
+.footer-indicator span {
   color: var(--dim);
   letter-spacing: 0.08em;
 }
@@ -1039,20 +1038,6 @@ textarea:focus {
   color: rgba(246, 244, 239, 0.82);
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.footer-owner {
-  display: grid;
-  gap: 6px;
-  color: var(--dim);
-  font-family: var(--mono);
-  font-size: 11px;
-  text-align: right;
-  text-transform: uppercase;
-}
-
-.footer-owner strong {
-  color: rgba(246, 244, 239, 0.82);
 }
 
 .admin-page {
@@ -1439,10 +1424,6 @@ textarea:focus {
   .footer-indicator strong {
     max-width: none;
     white-space: normal;
-  }
-
-  .footer-owner {
-    text-align: left;
   }
 
   .admin-shell {

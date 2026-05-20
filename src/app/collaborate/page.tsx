@@ -26,11 +26,7 @@ export default async function CollaboratePage() {
         />
         <ContactForm contactIntents={content.contactIntents} siteConfig={content.siteConfig} />
       </main>
-      <Footer
-        projectCount={content.projects.length}
-        siteConfig={content.siteConfig}
-        stackCount={content.stackItems.length}
-      />
+      <Footer projectCount={content.projects.length} />
     </>
   );
 }

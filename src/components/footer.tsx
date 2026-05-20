@@ -1,32 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { SiteConfig } from "@/lib/content-types";
 
 type FooterProps = {
   projectCount: number;
-  siteConfig: SiteConfig;
-  stackCount: number;
 };
 
-export function Footer({ projectCount, siteConfig, stackCount }: FooterProps) {
-  const [timeLabel, setTimeLabel] = useState("");
+export function Footer({ projectCount }: FooterProps) {
+  const [latency, setLatency] = useState("24ms");
 
   useEffect(() => {
-    const updateTime = () => {
-      setTimeLabel(
-        new Intl.DateTimeFormat("id-ID", {
-          hour: "2-digit",
-          minute: "2-digit",
-          timeZone: "Asia/Makassar",
-        })
-          .format(new Date())
-          .replace(".", ":"),
-      );
-    };
+    const timer = window.setInterval(() => {
+      setLatency(`${Math.floor(Math.random() * 18) + 14}ms`);
+    }, 5_000);
 
-    updateTime();
-    const timer = window.setInterval(updateTime, 30_000);
     return () => window.clearInterval(timer);
   }, []);
 
@@ -34,16 +21,11 @@ export function Footer({ projectCount, siteConfig, stackCount }: FooterProps) {
     <footer className="site-footer" aria-label="Status portfolio">
       <div className="container footer-shell">
         <div className="footer-grid">
-          <FooterIndicator label="Status" value={siteConfig.availability} tone="green" />
-          <FooterIndicator label="Focus" value={siteConfig.focus} tone="red" />
-          <FooterIndicator label="Projects" value={`${projectCount} curated`} tone="cyan" />
-          <FooterIndicator label="Stack" value={`${stackCount} tools`} tone="yellow" />
-          <FooterIndicator label="Local" value={`${timeLabel || "--:--"} WITA`} tone="green" />
-        </div>
-
-        <div className="footer-owner">
-          <span>Owner</span>
-          <strong>{siteConfig.handle}</strong>
+          <FooterIndicator label="Build" value="v1.3-main" tone="red" />
+          <FooterIndicator label="Env" value="production" tone="green" />
+          <FooterIndicator label="Platform" value="vercel" tone="cyan" />
+          <FooterIndicator label="Latency" value={latency} tone="yellow" />
+          <FooterIndicator label="Work" value={`${projectCount} projects`} tone="green" />
         </div>
       </div>
     </footer>
