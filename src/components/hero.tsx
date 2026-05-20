@@ -1,9 +1,8 @@
 "use client";
 
-import { motion, type MotionValue, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowUpRight, MapPin, Terminal } from "lucide-react";
 import Link from "next/link";
-import type { CSSProperties } from "react";
 import { useEffect, useState } from "react";
 import type { SiteContent } from "@/lib/content-types";
 import { getIcon } from "@/lib/icon-map";
@@ -18,10 +17,6 @@ export function Hero({ content }: { content: SiteContent }) {
   const springY = useSpring(y, { stiffness: 120, damping: 18 });
   const rotateY = useTransform(springX, [0, 1], [-7, 7]);
   const rotateX = useTransform(springY, [0, 1], [6, -6]);
-  const panelRotateY = useTransform(springX, [0, 1], [9, -9]);
-  const panelRotateX = useTransform(springY, [0, 1], [-7, 7]);
-  const panelX = useTransform(springX, [0, 1], [-14, 14]);
-  const panelY = useTransform(springY, [0, 1], [-10, 10]);
 
   const activeStatus = statusMessages[statusIndex % statusMessages.length] || siteConfig.location;
   const tickerItems = [
@@ -74,84 +69,104 @@ export function Hero({ content }: { content: SiteContent }) {
         y.set(0.5);
       }}
     >
-      <div className="container hero-grid">
-        <motion.div
-          className="hero-copy"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, ease: "easeOut" }}
-          style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        >
-          <p className="eyebrow">
-            {siteConfig.name} - {siteConfig.roles}
-          </p>
-          <h1 id="hero-title">{siteConfig.headline}</h1>
-          <p className="lead">{siteConfig.bio}</p>
+      <motion.div
+        className="hero-tilt-stage"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.55, ease: "easeOut" }}
+        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+      >
+        <div className="container hero-grid">
+          <div className="hero-copy">
+            <p className="eyebrow">
+              {siteConfig.name} - {siteConfig.roles}
+            </p>
+            <h1 id="hero-title">{siteConfig.headline}</h1>
+            <p className="lead">{siteConfig.bio}</p>
 
-          <div className="hero-actions" aria-label="Tautan utama">
-            <Link href="/portfolio">Lihat project</Link>
-            <Link href="/stack">Lihat stack</Link>
-            <Link href="/collaborate">Mulai ngobrol</Link>
+            <div className="hero-actions" aria-label="Tautan utama">
+              <Link href="/portfolio">Lihat project</Link>
+              <Link href="/stack">Lihat stack</Link>
+              <Link href="/collaborate">Mulai ngobrol</Link>
+            </div>
+
+            <Signature />
+
+            <p className="follow-line">- Follow along on the internet.</p>
+
+            <div className="status-list" aria-label="Status personal">
+              <div className="status-item">
+                <MapPin size={15} aria-hidden="true" />
+                <span>{activeStatus}</span>
+              </div>
+              <div className="status-item">
+                <Terminal size={15} aria-hidden="true" />
+                <span>{timeLabel || "Mengambil waktu..."}</span>
+              </div>
+              {quickLinks.map((link) => {
+                const Icon = getIcon(link.icon);
+                return (
+                  <Link className="status-item status-link" href={link.href} key={link.href}>
+                    <Icon size={15} aria-hidden="true" />
+                    <span>{link.label}</span>
+                  </Link>
+                );
+              })}
+            </div>
           </div>
 
-          <Signature />
-
-          <p className="follow-line">- Follow along on the internet.</p>
-
-          <div className="status-list" aria-label="Status personal">
-            <div className="status-item">
-              <MapPin size={15} aria-hidden="true" />
-              <span>{activeStatus}</span>
-            </div>
-            <div className="status-item">
-              <Terminal size={15} aria-hidden="true" />
-              <span>{timeLabel || "Mengambil waktu..."}</span>
-            </div>
-            {quickLinks.map((link) => {
-              const Icon = getIcon(link.icon);
-              return (
-                <Link className="status-item status-link" href={link.href} key={link.href}>
-                  <Icon size={15} aria-hidden="true" />
-                  <span>{link.label}</span>
-                </Link>
-              );
-            })}
-          </div>
-        </motion.div>
-
-        <KineticPanel
-          panelRotateX={panelRotateX}
-          panelRotateY={panelRotateY}
-          panelX={panelX}
-          panelY={panelY}
-          siteConfig={siteConfig}
-        />
-      </div>
-
-      <div className="hero-ticker" aria-hidden="true">
-        <div>
-          {[...tickerItems, ...tickerItems].map((item, index) => (
-            <span key={`${item}-${index}`}>{item}</span>
-          ))}
+          <KineticPanel content={content} />
         </div>
-      </div>
+
+        <div className="hero-ticker" aria-hidden="true">
+          <div>
+            {[...tickerItems, ...tickerItems].map((item, index) => (
+              <span key={`${item}-${index}`}>{item}</span>
+            ))}
+          </div>
+        </div>
+      </motion.div>
     </section>
   );
 }
 
-function KineticPanel({
-  panelRotateX,
-  panelRotateY,
-  panelX,
-  panelY,
-  siteConfig,
-}: {
-  panelRotateX: MotionValue<number>;
-  panelRotateY: MotionValue<number>;
-  panelX: MotionValue<number>;
-  panelY: MotionValue<number>;
-  siteConfig: SiteContent["siteConfig"];
-}) {
+function KineticPanel({ content }: { content: SiteContent }) {
+  const { projects, siteConfig, stackItems } = content;
+  const featuredCount = projects.filter((project) => project.featured).length;
+  const categoryCount = new Set(stackItems.map((item) => item.category)).size;
+  const featuredProject = projects.find((project) => project.featured) || projects[0];
+  const shortAvailability = siteConfig.availability.split(".")[0] || siteConfig.availability;
+  const metrics = [
+    {
+      href: "/portfolio",
+      label: "Project",
+      value: String(projects.length),
+      detail: `${featuredCount} unggulan`,
+    },
+    {
+      href: "/stack",
+      label: "Stack",
+      value: String(stackItems.length),
+      detail: `${categoryCount} kategori`,
+    },
+    {
+      href: "/collaborate",
+      label: "Kontak",
+      value: "Open",
+      detail: shortAvailability,
+    },
+    {
+      href: "/admin",
+      label: "CMS",
+      value: "Ready",
+      detail: "Konten bisa dikurasi",
+    },
+  ];
+  const activityRows = [
+    ["focus", siteConfig.focus],
+    ["location", siteConfig.location],
+    ["featured", featuredProject?.title || "Portfolio siap dibuka"],
+  ];
   const rows = [
     ["profile", siteConfig.handle],
     ["focus", siteConfig.focus],
@@ -166,13 +181,6 @@ function KineticPanel({
       initial={{ opacity: 0, x: 24 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.55, delay: 0.15, ease: "easeOut" }}
-      style={{
-        rotateX: panelRotateX,
-        rotateY: panelRotateY,
-        x: panelX,
-        y: panelY,
-        transformStyle: "preserve-3d",
-      }}
     >
       <div className="console-top">
         <span />
@@ -180,10 +188,37 @@ function KineticPanel({
         <span />
       </div>
 
-      <div className="signal-board" aria-hidden="true">
-        {Array.from({ length: 48 }, (_, index) => (
-          <span key={index} style={{ "--delay": `${(index % 12) * 0.12}s` } as CSSProperties} />
-        ))}
+      <div className="signal-board">
+        <div className="signal-board-head">
+          <div className="signal-board-title">
+            <span>Control panel</span>
+            <strong>{siteConfig.handle}</strong>
+          </div>
+          <Link className="signal-board-action" href="/admin">
+            <Terminal size={14} aria-hidden="true" />
+            CMS
+          </Link>
+        </div>
+
+        <div className="signal-metrics" aria-label="Metrik website">
+          {metrics.map((metric) => (
+            <Link className="signal-metric" href={metric.href} key={metric.label}>
+              <span>{metric.label}</span>
+              <strong>{metric.value}</strong>
+              <small>{metric.detail}</small>
+            </Link>
+          ))}
+        </div>
+
+        <div className="signal-activity" aria-label="Ringkasan aktif">
+          {activityRows.map(([label, value]) => (
+            <div className="signal-activity-item" key={label}>
+              <span>{label}</span>
+              <strong>{value}</strong>
+            </div>
+          ))}
+        </div>
+
         <div className="signal-scan" />
       </div>
 

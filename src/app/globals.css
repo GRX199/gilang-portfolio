@@ -196,6 +196,13 @@ svg {
   animation: heroSweep 7s linear infinite;
 }
 
+.hero-tilt-stage {
+  width: 100%;
+  transform-origin: center;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
 .hero-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 340px;
@@ -348,7 +355,10 @@ p {
 .motion-console {
   position: relative;
   min-height: 540px;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
   transform-origin: center;
+  transform-style: preserve-3d;
 }
 
 .console-top {
@@ -398,30 +408,163 @@ p {
 .signal-board {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
-  gap: 8px;
-  padding: 22px;
+  align-content: start;
+  gap: 14px;
+  padding: 20px;
   border-bottom: 1px solid var(--line);
+  background:
+    radial-gradient(circle at 12% 24%, rgba(255, 91, 95, 0.2), transparent 28%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.015));
+  isolation: isolate;
   overflow: hidden;
 }
 
-.signal-board span {
+.signal-board::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 34px 34px;
+  opacity: 0.46;
+  pointer-events: none;
+}
+
+.signal-board > :not(.signal-scan) {
+  position: relative;
+  z-index: 1;
+}
+
+.signal-board-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  min-width: 0;
+}
+
+.signal-board-title {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.signal-board-title span,
+.signal-metric span,
+.signal-activity-item span {
+  color: var(--red);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.signal-board-title strong {
+  overflow: hidden;
+  color: white;
+  font-size: 20px;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.signal-board-action {
   min-height: 34px;
-  border: 1px solid rgba(255, 255, 255, 0.095);
-  border-radius: 4px;
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent),
-    rgba(255, 255, 255, 0.025);
-  animation: signalPulse 3.4s ease-in-out infinite;
-  animation-delay: var(--delay);
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0 10px;
+  background: rgba(5, 5, 5, 0.48);
+  color: rgba(246, 244, 239, 0.84);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  transition: border-color 180ms ease, color 180ms ease, transform 180ms ease;
 }
 
-.signal-board span:nth-child(3n) {
-  border-color: rgba(255, 91, 95, 0.28);
+.signal-board-action:hover,
+.signal-board-action:focus-visible {
+  border-color: var(--red);
+  color: white;
+  transform: translateY(-1px);
+  outline: none;
 }
 
-.signal-board span:nth-child(5n) {
-  border-color: rgba(123, 223, 242, 0.24);
+.signal-board-action svg {
+  color: var(--cyan);
+}
+
+.signal-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.signal-metric {
+  min-height: 102px;
+  display: grid;
+  gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  padding: 14px;
+  background: rgba(5, 5, 5, 0.42);
+  transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+}
+
+.signal-metric:hover,
+.signal-metric:focus-visible {
+  border-color: rgba(255, 91, 95, 0.58);
+  background: rgba(255, 91, 95, 0.1);
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.signal-metric strong {
+  align-self: end;
+  color: white;
+  font-size: 30px;
+  line-height: 1;
+}
+
+.signal-metric small {
+  min-width: 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.signal-activity {
+  display: grid;
+  gap: 8px;
+}
+
+.signal-activity-item {
+  min-height: 36px;
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.085);
+  border-radius: 6px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.signal-activity-item strong {
+  overflow: hidden;
+  color: rgba(246, 244, 239, 0.88);
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .signal-scan {
@@ -430,6 +573,8 @@ p {
   width: 28%;
   background: linear-gradient(90deg, transparent, rgba(255, 91, 95, 0.18), transparent);
   animation: signalScan 4.8s linear infinite;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .route-stack {
@@ -1149,13 +1294,25 @@ textarea:focus {
   }
 
   .signal-board {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: 6px;
+    gap: 12px;
     padding: 16px;
   }
 
-  .signal-board span {
-    min-height: 24px;
+  .signal-metrics {
+    gap: 8px;
+  }
+
+  .signal-metric {
+    min-height: 92px;
+    padding: 12px;
+  }
+
+  .signal-metric strong {
+    font-size: 25px;
+  }
+
+  .signal-activity-item {
+    grid-template-columns: 68px minmax(0, 1fr);
   }
 
   .hero-ticker {
