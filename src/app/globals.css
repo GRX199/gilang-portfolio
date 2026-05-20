@@ -315,11 +315,11 @@ p {
 }
 
 .signature {
-  width: 188px;
+  width: 204px;
   height: auto;
   margin: 12px 0 22px;
   color: var(--text);
-  opacity: 0.9;
+  opacity: 0.92;
 }
 
 .follow-line {
