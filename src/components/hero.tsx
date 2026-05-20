@@ -284,12 +284,12 @@ function Signature() {
   return (
     <svg
       className="signature"
-      viewBox="0 0 220 100"
+      viewBox="0 0 280 110"
       aria-hidden="true"
       focusable="false"
     >
       <motion.path
-        d="M18 68c19-40 46-58 56-44 9 14-19 54-36 53-12-1-7-22 21-38 27-15 50-9 45 8-5 18-42 18-31 0 11-18 51-10 93 4"
+        d="M56 75c-23 5-42-7-43-28-1-25 32-42 58-31 22 9 25 35 3 49-18 11-43 7-39-8 4-13 31-14 58 0 16 8 30 18 43 26 2-18 11-37 23-40 10-2 11 12 4 24-7 13-20 15-23 5-2-9 10-19 27-20m-2 31c11-28 23-52 36-62 7-6 11-2 7 8-9 22-29 43-42 61m45-26c9-17 27-25 35-12 7 11-8 30-21 26-10-3-8-15 3-22 10-6 23-4 31 5m6 17c5-18 14-33 24-35 10-2 11 13 4 26-2 5 0 7 5 2 10-10 20-14 29-8m34-4c-7-17-29-12-34 5-4 14 12 18 24 8 10-9 13-25 7-34-2 27-12 49-29 55-11 4-24-1-25-10"
         fill="none"
         stroke="currentColor"
         strokeWidth="4"
@@ -298,6 +298,15 @@ function Signature() {
         initial={{ pathLength: 0 }}
         animate={{ pathLength: 1 }}
         transition={{ duration: 1.5, delay: 0.3, ease: "easeInOut" }}
+      />
+      <motion.circle
+        cx="126"
+        cy="32"
+        r="2.6"
+        fill="currentColor"
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.25, delay: 1.2, ease: "easeOut" }}
       />
     </svg>
   );
