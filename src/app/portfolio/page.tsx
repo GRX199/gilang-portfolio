@@ -22,7 +22,7 @@ export default async function PortfolioPage() {
         <InnerPageHeading
           eyebrow="Portfolio"
           title="Selected Projects"
-          description="Kumpulan project yang bisa kamu kurasi dari CMS, lengkap dengan status, tahun, gambar, tag, dan link."
+          description="Kumpulan project pilihan dengan status, tahun, gambar, tag teknologi, dan link yang relevan."
         />
         <Projects projects={content.projects} />
       </main>

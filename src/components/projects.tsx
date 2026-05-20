@@ -18,10 +18,10 @@ export function Projects({ projects, compact = false }: ProjectsProps) {
       <div className="container">
         <div className="section-heading">
           <p className="eyebrow">Selected Work</p>
-          <h2 id="work-title">Project yang bisa kamu tampilkan.</h2>
+          <h2 id="work-title">Project pilihan Gilang.</h2>
           <p>
-            Setiap item punya gambar, status, deskripsi, tag teknologi, dan
-            tautan. Data ini sekarang bisa dikelola lewat CMS lokal.
+            Beberapa pekerjaan web yang menonjol, lengkap dengan status,
+            teknologi, dan gambaran singkat dari tiap project.
           </p>
         </div>
 

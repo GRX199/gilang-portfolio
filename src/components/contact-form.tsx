@@ -28,7 +28,7 @@ export function ContactForm({
     window.location.href = `mailto:${siteConfig.email}?subject=${encodeURIComponent(
       subject,
     )}&body=${encodeURIComponent(body)}`;
-    setNote("Mail app dibuka. Email tujuan bisa diubah lewat CMS.");
+    setNote("Mail app dibuka. Pesan siap dikirim ke email tujuan.");
   }
 
   return (
@@ -38,9 +38,8 @@ export function ContactForm({
           <p className="eyebrow">Contact</p>
           <h2 id="contact-title">Ready to build something?</h2>
           <p>
-            Form ini memakai mail app agar bisa berjalan tanpa backend. Untuk
-            produksi, kamu bisa menggantinya dengan server action, Resend,
-            Nodemailer, atau endpoint API.
+            Ceritakan kebutuhan websitenya, mulai dari landing page, dashboard,
+            sampai portfolio personal. Pesan akan dibuka lewat aplikasi email.
           </p>
 
           <div className="contact-links">

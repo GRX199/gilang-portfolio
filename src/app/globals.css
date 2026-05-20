@@ -137,6 +137,24 @@ svg {
   color: white;
 }
 
+.header-actions {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.round-button.active {
+  background: var(--red);
+  color: white;
+  box-shadow: 0 0 22px var(--red-glow);
+}
+
+.round-button:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 4px;
+}
+
 .nav-pills {
   justify-self: center;
   display: flex;

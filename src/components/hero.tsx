@@ -11,6 +11,7 @@ export function Hero({ content }: { content: SiteContent }) {
   const { quickLinks, siteConfig, statusMessages } = content;
   const [timeLabel, setTimeLabel] = useState("");
   const [statusIndex, setStatusIndex] = useState(0);
+  const [tiltEnabled, setTiltEnabled] = useState(true);
   const x = useMotionValue(0.5);
   const y = useMotionValue(0.5);
   const springX = useSpring(x, { stiffness: 120, damping: 18 });
@@ -22,8 +23,8 @@ export function Hero({ content }: { content: SiteContent }) {
   const tickerItems = [
     siteConfig.focus,
     siteConfig.availability,
-    "Next.js production build",
-    "Sanity-ready content",
+    "Selected project work",
+    "Clean web interfaces",
   ];
 
   useEffect(() => {
@@ -54,12 +55,41 @@ export function Hero({ content }: { content: SiteContent }) {
     };
   }, []);
 
+  useEffect(() => {
+    const syncTiltPreference = () => {
+      setTiltEnabled(window.localStorage.getItem("enable3D") !== "false");
+    };
+
+    const handleTiltChange = (event: Event) => {
+      const nextValue = (event as CustomEvent<boolean>).detail;
+      setTiltEnabled(typeof nextValue === "boolean" ? nextValue : true);
+    };
+
+    const frame = window.requestAnimationFrame(syncTiltPreference);
+    window.addEventListener("portfolio-tilt-change", handleTiltChange);
+    window.addEventListener("storage", syncTiltPreference);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("portfolio-tilt-change", handleTiltChange);
+      window.removeEventListener("storage", syncTiltPreference);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!tiltEnabled) {
+      x.set(0.5);
+      y.set(0.5);
+    }
+  }, [tiltEnabled, x, y]);
+
   return (
     <section
       className="hero-section"
       id="home"
       aria-labelledby="hero-title"
       onMouseMove={(event) => {
+        if (!tiltEnabled) return;
         const rect = event.currentTarget.getBoundingClientRect();
         x.set((event.clientX - rect.left) / rect.width);
         y.set((event.clientY - rect.top) / rect.height);
@@ -74,7 +104,11 @@ export function Hero({ content }: { content: SiteContent }) {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.55, ease: "easeOut" }}
-        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+        style={{
+          rotateX: tiltEnabled ? rotateX : 0,
+          rotateY: tiltEnabled ? rotateY : 0,
+          transformStyle: "preserve-3d",
+        }}
       >
         <div className="container hero-grid">
           <div className="hero-copy">
@@ -156,10 +190,10 @@ function KineticPanel({ content }: { content: SiteContent }) {
       detail: shortAvailability,
     },
     {
-      href: "/admin",
-      label: "CMS",
-      value: "Ready",
-      detail: "Konten bisa dikurasi",
+      href: "/portfolio",
+      label: "Featured",
+      value: String(featuredCount),
+      detail: "project utama",
     },
   ];
   const activityRows = [
@@ -177,7 +211,7 @@ function KineticPanel({ content }: { content: SiteContent }) {
   return (
     <motion.aside
       className="hero-console motion-console"
-      aria-label="Ringkasan build"
+      aria-label="Ringkasan portfolio"
       initial={{ opacity: 0, x: 24 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.55, delay: 0.15, ease: "easeOut" }}
@@ -191,12 +225,12 @@ function KineticPanel({ content }: { content: SiteContent }) {
       <div className="signal-board">
         <div className="signal-board-head">
           <div className="signal-board-title">
-            <span>Control panel</span>
+            <span>Portfolio snapshot</span>
             <strong>{siteConfig.handle}</strong>
           </div>
-          <Link className="signal-board-action" href="/admin">
-            <Terminal size={14} aria-hidden="true" />
-            CMS
+          <Link className="signal-board-action" href="/portfolio">
+            <ArrowUpRight size={14} aria-hidden="true" />
+            Karya
           </Link>
         </div>
 
@@ -232,9 +266,9 @@ function KineticPanel({ content }: { content: SiteContent }) {
 
       <div className="route-stack" aria-label="Navigasi cepat">
         {[
-          ["/portfolio", "Portfolio"],
-          ["/stack", "Tech Stack"],
-          ["/collaborate", "Collaborate"],
+          ["/portfolio", "Project"],
+          ["/stack", "Stack"],
+          ["/collaborate", "Kontak"],
         ].map(([href, label]) => (
           <Link href={href} key={href}>
             <span>{label}</span>

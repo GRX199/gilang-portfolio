@@ -2,16 +2,16 @@ import type { SiteContent } from "@/lib/content-types";
 
 export const defaultContent: SiteContent = {
   siteConfig: {
-    name: "Nama Kamu",
-    handle: "@namakamu",
+    name: "Gilang",
+    handle: "@GRX199",
     roles: "Data Management & Website Developer",
     location: "Indonesia",
     email: "emailkamu@example.com",
-    siteUrl: "https://example.com",
+    siteUrl: "https://gilang-portfolio-iota.vercel.app",
     description:
-      "Personal website berbasis Next.js untuk menampilkan profil, project, tech stack, dan kontak.",
+      "Portfolio personal Gilang untuk menampilkan profil, project, tech stack, dan kontak.",
     headline: "Make it simple",
-    bio: "Saya membangun website yang rapi, cepat, dan mudah dikembangkan. Ruang ini disiapkan untuk menampilkan profil, project, tech stack, dan cara orang menghubungi kamu.",
+    bio: "Saya membangun website yang rapi, cepat, dan mudah dikembangkan. Portfolio ini menampilkan project, tech stack, dan cara untuk mulai berkolaborasi.",
     focus: "frontend, data, automation",
     availability: "available for selected work",
     spotifyUrl:
@@ -25,12 +25,12 @@ export const defaultContent: SiteContent = {
   statusMessages: [
     "Based in Indonesia",
     "Building clean interfaces",
-    "Learning in public",
+    "Open for selected projects",
   ],
   quickLinks: [
-    { label: "Selected projects", href: "/portfolio", icon: "Terminal" },
-    { label: "Tech stacks", href: "/stack", icon: "Code2" },
-    { label: "Collaborate", href: "/collaborate", icon: "Send" },
+    { label: "Project pilihan", href: "/portfolio", icon: "Terminal" },
+    { label: "Stack teknologi", href: "/stack", icon: "Code2" },
+    { label: "Kolaborasi", href: "/collaborate", icon: "Send" },
   ],
   projects: [
     {
@@ -60,16 +60,16 @@ export const defaultContent: SiteContent = {
       featured: true,
     },
     {
-      id: "workflow-bot",
-      title: "Workflow Bot",
+      id: "workflow-automation",
+      title: "Workflow Automation",
       year: "2025",
       status: "Internal Tool",
       description:
-        "Bot otomasi untuk notifikasi, pencatatan data, dan laporan terjadwal.",
+        "Sistem otomasi untuk notifikasi, pencatatan data, dan laporan terjadwal.",
       tags: ["Node.js", "API", "Sheets"],
       image: "/projects/automation.svg",
       href: "/collaborate",
-      icon: "Bot",
+      icon: "Workflow",
       featured: true,
     },
     {
