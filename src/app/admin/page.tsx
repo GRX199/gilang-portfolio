@@ -30,7 +30,11 @@ export default async function AdminPage() {
       <main id="main" className="admin-page">
         <AdminDashboard initialContent={content} iconOptions={iconOptions} />
       </main>
-      <Footer siteConfig={content.siteConfig} />
+      <Footer
+        projectCount={content.projects.length}
+        siteConfig={content.siteConfig}
+        stackCount={content.stackItems.length}
+      />
     </>
   );
 }

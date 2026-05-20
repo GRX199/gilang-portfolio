@@ -26,7 +26,11 @@ export default async function StackPage() {
         />
         <StackSection stackItems={content.stackItems} />
       </main>
-      <Footer siteConfig={content.siteConfig} />
+      <Footer
+        projectCount={content.projects.length}
+        siteConfig={content.siteConfig}
+        stackCount={content.stackItems.length}
+      />
     </>
   );
 }

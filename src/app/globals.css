@@ -973,22 +973,85 @@ textarea:focus {
   padding: 28px 0 44px;
 }
 
+.footer-shell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
 .footer-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 28px;
+  gap: 10px;
   color: var(--dim);
   font-family: var(--mono);
   font-size: 11px;
   text-transform: uppercase;
 }
 
-.footer-grid div {
+.footer-indicator {
+  min-height: 46px;
   display: grid;
-  gap: 6px;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 9px;
+  row-gap: 3px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 8px 11px;
+  background: rgba(255, 255, 255, 0.032);
 }
 
-.footer-grid strong {
+.footer-indicator i {
+  grid-row: span 2;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--red);
+  box-shadow: 0 0 14px var(--red-glow);
+}
+
+.footer-indicator.green i {
+  background: var(--green);
+  box-shadow: 0 0 14px rgba(142, 230, 168, 0.36);
+}
+
+.footer-indicator.cyan i {
+  background: var(--cyan);
+  box-shadow: 0 0 14px rgba(123, 223, 242, 0.36);
+}
+
+.footer-indicator.yellow i {
+  background: var(--yellow);
+  box-shadow: 0 0 14px rgba(255, 209, 102, 0.34);
+}
+
+.footer-indicator span,
+.footer-owner span {
+  color: var(--dim);
+  letter-spacing: 0.08em;
+}
+
+.footer-indicator strong {
+  max-width: 210px;
+  overflow: hidden;
+  color: rgba(246, 244, 239, 0.82);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.footer-owner {
+  display: grid;
+  gap: 6px;
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 11px;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.footer-owner strong {
   color: rgba(246, 244, 239, 0.82);
 }
 
@@ -1363,6 +1426,25 @@ textarea:focus {
     padding-block: 112px 34px;
   }
 
+  .footer-shell {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .footer-indicator strong {
+    max-width: none;
+    white-space: normal;
+  }
+
+  .footer-owner {
+    text-align: left;
+  }
+
   .admin-shell {
     width: min(100% - 32px, 1120px);
   }
@@ -1396,6 +1478,10 @@ textarea:focus {
 
   h2 {
     font-size: 36px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
   }
 
   .stack-card {
