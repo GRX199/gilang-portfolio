@@ -62,8 +62,9 @@ body::after {
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(circle at 88% 18%, rgba(255, 91, 95, 0.14), transparent 28%),
-    radial-gradient(circle at 12% 80%, rgba(123, 223, 242, 0.08), transparent 32%);
+    linear-gradient(112deg, transparent 0 46%, rgba(255, 91, 95, 0.12) 46% 46.5%, transparent 46.5% 100%),
+    linear-gradient(158deg, rgba(123, 223, 242, 0.08), transparent 36%),
+    linear-gradient(28deg, transparent 0 72%, rgba(255, 209, 102, 0.05) 72% 73%, transparent 73% 100%);
 }
 
 a {
@@ -172,11 +173,27 @@ svg {
 }
 
 .hero-section {
+  position: relative;
   min-height: 100svh;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   padding-block: 132px 88px;
+  overflow: hidden;
   perspective: 1200px;
+}
+
+.hero-section::before {
+  content: "";
+  position: absolute;
+  top: 118px;
+  left: -35%;
+  width: 58%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 91, 95, 0.8), transparent);
+  opacity: 0.64;
+  animation: heroSweep 7s linear infinite;
 }
 
 .hero-grid {
@@ -275,9 +292,18 @@ p {
 .signature {
   width: 156px;
   height: auto;
-  margin: 12px 0 42px;
+  margin: 12px 0 22px;
   color: var(--text);
   opacity: 0.9;
+}
+
+.follow-line {
+  margin: 0 0 28px;
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
 .status-list {
@@ -317,6 +343,12 @@ p {
   background: rgba(17, 17, 17, 0.68);
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.36);
   overflow: hidden;
+}
+
+.motion-console {
+  position: relative;
+  min-height: 540px;
+  transform-origin: center;
 }
 
 .console-top {
@@ -361,6 +393,115 @@ p {
 
 .console-lines span {
   color: var(--red);
+}
+
+.signal-board {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 8px;
+  padding: 22px;
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.signal-board span {
+  min-height: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.095);
+  border-radius: 4px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent),
+    rgba(255, 255, 255, 0.025);
+  animation: signalPulse 3.4s ease-in-out infinite;
+  animation-delay: var(--delay);
+}
+
+.signal-board span:nth-child(3n) {
+  border-color: rgba(255, 91, 95, 0.28);
+}
+
+.signal-board span:nth-child(5n) {
+  border-color: rgba(123, 223, 242, 0.24);
+}
+
+.signal-scan {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 28%;
+  background: linear-gradient(90deg, transparent, rgba(255, 91, 95, 0.18), transparent);
+  animation: signalScan 4.8s linear infinite;
+}
+
+.route-stack {
+  display: grid;
+  gap: 10px;
+  padding: 0 20px 20px;
+}
+
+.route-stack a {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0 12px;
+  color: rgba(246, 244, 239, 0.82);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  transition: border-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.route-stack a:hover,
+.route-stack a:focus-visible {
+  border-color: var(--red);
+  color: white;
+  transform: translateX(4px);
+  outline: none;
+}
+
+.route-stack svg {
+  color: var(--red);
+  flex: 0 0 auto;
+}
+
+.hero-ticker {
+  width: min(100% - 48px, 1040px);
+  margin: 58px auto 0;
+  border-block: 1px solid var(--line);
+  overflow: hidden;
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.hero-ticker div {
+  width: max-content;
+  display: flex;
+  align-items: center;
+  gap: 34px;
+  padding-block: 14px;
+  animation: tickerMove 24s linear infinite;
+}
+
+.hero-ticker span {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  white-space: nowrap;
+}
+
+.hero-ticker span::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--red);
 }
 
 .section {
@@ -986,7 +1127,7 @@ textarea:focus {
 
   .hero-section {
     min-height: auto;
-    padding-block: 118px 72px;
+    padding-block: 118px 52px;
   }
 
   h1 {
@@ -1001,8 +1142,25 @@ textarea:focus {
     font-size: 16px;
   }
 
-  .hero-console {
-    display: none;
+  .hero-console.motion-console {
+    display: block;
+    max-width: none;
+    min-height: 0;
+  }
+
+  .signal-board {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 6px;
+    padding: 16px;
+  }
+
+  .signal-board span {
+    min-height: 24px;
+  }
+
+  .hero-ticker {
+    width: min(100% - 32px, 1040px);
+    margin-top: 34px;
   }
 
   .section {
@@ -1067,6 +1225,49 @@ textarea:focus {
 
   .stack-card {
     min-height: 98px;
+  }
+}
+
+@keyframes heroSweep {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(260vw);
+  }
+}
+
+@keyframes signalPulse {
+  0%,
+  100% {
+    opacity: 0.28;
+    transform: translateY(0);
+  }
+
+  50% {
+    opacity: 0.9;
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes signalScan {
+  0% {
+    transform: translateX(-110%);
+  }
+
+  100% {
+    transform: translateX(420%);
+  }
+}
+
+@keyframes tickerMove {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
   }
 }
 
