@@ -9,7 +9,7 @@ export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Tech Stack",
-  description: "Tools, bahasa, framework, dan platform yang digunakan.",
+  description: "Tools, languages, frameworks, and platforms I use.",
 };
 
 export default async function StackPage() {
@@ -21,8 +21,8 @@ export default async function StackPage() {
       <main id="main">
         <InnerPageHeading
           eyebrow="Tech Stacks"
-          title="Tools yang dipakai untuk build."
-          description="Stack disusun per kategori supaya mudah dibaca, mirip pola halaman stack pada website referensi."
+          title="Tools I use to build."
+          description="A categorized stack overview so the tools are easy to scan and compare."
         />
         <StackSection stackItems={content.stackItems} />
       </main>

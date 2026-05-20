@@ -6,12 +6,12 @@ export const defaultContent: SiteContent = {
     handle: "@GRX199",
     roles: "Data Management & Website Developer",
     location: "Indonesia",
-    email: "emailkamu@example.com",
+    email: "hello@example.com",
     siteUrl: "https://gilang-portfolio-iota.vercel.app",
     description:
-      "Portfolio personal Gilang untuk menampilkan profil, project, tech stack, dan kontak.",
+      "Gilang's personal portfolio for profile, projects, tech stack, and contact.",
     headline: "Make it simple",
-    bio: "Saya membangun website yang rapi, cepat, dan mudah dikembangkan. Portfolio ini menampilkan project, tech stack, dan cara untuk mulai berkolaborasi.",
+    bio: "I build clean, fast, and maintainable websites. This portfolio highlights my projects, tech stack, and ways to start a collaboration.",
     focus: "frontend, data, automation",
     availability: "available for selected work",
     spotifyUrl:
@@ -28,9 +28,9 @@ export const defaultContent: SiteContent = {
     "Open for selected projects",
   ],
   quickLinks: [
-    { label: "Project pilihan", href: "/portfolio", icon: "Terminal" },
-    { label: "Stack teknologi", href: "/stack", icon: "Code2" },
-    { label: "Kolaborasi", href: "/collaborate", icon: "Send" },
+    { label: "Selected projects", href: "/portfolio", icon: "Terminal" },
+    { label: "Tech stack", href: "/stack", icon: "Code2" },
+    { label: "Collaborate", href: "/collaborate", icon: "Send" },
   ],
   projects: [
     {
@@ -39,7 +39,7 @@ export const defaultContent: SiteContent = {
       year: "2026",
       status: "Live",
       description:
-        "Dashboard data untuk memantau metrik operasional, tren performa, dan laporan ringkas.",
+        "A data dashboard for monitoring operational metrics, performance trends, and concise reports.",
       tags: ["Next.js", "Charts", "PostgreSQL"],
       image: "/projects/dashboard.svg",
       href: "/collaborate",
@@ -50,9 +50,9 @@ export const defaultContent: SiteContent = {
       id: "coffee-time",
       title: "CoffeeTime",
       year: "2026",
-      status: "On Progress",
+      status: "In Progress",
       description:
-        "Landing page modern untuk coffee shop dengan visual immersive dan layout responsif.",
+        "A modern coffee shop landing page with immersive visuals and a responsive layout.",
       tags: ["Next.js", "Tailwind CSS", "Framer Motion"],
       image: "/projects/store.svg",
       href: "/collaborate",
@@ -65,7 +65,7 @@ export const defaultContent: SiteContent = {
       year: "2025",
       status: "Internal Tool",
       description:
-        "Sistem otomasi untuk notifikasi, pencatatan data, dan laporan terjadwal.",
+        "An automation system for notifications, data logging, and scheduled reports.",
       tags: ["Node.js", "API", "Sheets"],
       image: "/projects/automation.svg",
       href: "/collaborate",
@@ -78,7 +78,7 @@ export const defaultContent: SiteContent = {
       year: "2025",
       status: "Case Study",
       description:
-        "Platform manajemen sekolah dengan kalender, chart, autentikasi, dan database Prisma.",
+        "A school management platform with calendars, charts, authentication, and a Prisma database.",
       tags: ["Next.js", "Prisma", "PostgreSQL", "Charts"],
       image: "/projects/dashboard.svg",
       href: "/collaborate",
@@ -91,7 +91,7 @@ export const defaultContent: SiteContent = {
       year: "2024",
       status: "Archived",
       description:
-        "Halaman promosi produk dengan visual editorial dan animasi ringan.",
+        "A product launch page with editorial visuals and lightweight animation.",
       tags: ["Next.js", "Motion", "SEO"],
       image: "/projects/launch.svg",
       href: "/collaborate",
@@ -114,7 +114,7 @@ export const defaultContent: SiteContent = {
     { id: "email", name: "Email", category: "tool", icon: "Mail" },
   ],
   contactIntents: [
-    "Website portfolio",
+    "Portfolio website",
     "Landing page",
     "Dashboard",
     "Automation tool",

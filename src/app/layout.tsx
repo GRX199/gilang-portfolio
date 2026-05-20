@@ -31,7 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: siteConfig.description,
       url: siteConfig.siteUrl,
       siteName: siteConfig.name,
-      locale: "id_ID",
+      locale: "en_US",
       type: "website",
       images: [
         {
@@ -76,7 +76,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id">
+    <html lang="en">
       <body>
         {children}
         <Analytics />

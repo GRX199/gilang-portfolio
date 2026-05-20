@@ -5,7 +5,7 @@ import type { StackCategory, StackItem } from "@/lib/content-types";
 import { getIcon } from "@/lib/icon-map";
 
 const filters = [
-  { label: "Semua", value: "all" },
+  { label: "All", value: "all" },
   { label: "Core", value: "core" },
   { label: "Language", value: "language" },
   { label: "Framework", value: "framework" },
@@ -26,7 +26,7 @@ export function StackSection({ stackItems }: { stackItems: StackItem[] }) {
       <div className="container">
         <div className="section-heading compact">
           <p className="eyebrow">Tech Stack</p>
-          <h2 id="stack-title">Tools yang sering kamu pakai.</h2>
+          <h2 id="stack-title">Tools I use most often.</h2>
         </div>
 
         <div className="stack-tabs" role="tablist" aria-label="Filter tech stack">

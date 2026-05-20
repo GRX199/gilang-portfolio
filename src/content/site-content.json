@@ -4,11 +4,11 @@
     "handle": "@GRX199",
     "roles": "Data Management & Website Developer",
     "location": "Indonesia",
-    "email": "emailkamu@example.com",
+    "email": "hello@example.com",
     "siteUrl": "https://gilang-portfolio-iota.vercel.app",
-    "description": "Portfolio personal Gilang untuk menampilkan profil, project, tech stack, dan kontak.",
+    "description": "Gilang's personal portfolio for profile, projects, tech stack, and contact.",
     "headline": "Make it simple",
-    "bio": "Saya membangun website yang rapi, cepat, dan mudah dikembangkan. Portfolio ini menampilkan project, tech stack, dan cara untuk mulai berkolaborasi.",
+    "bio": "I build clean, fast, and maintainable websites. This portfolio highlights my projects, tech stack, and ways to start a collaboration.",
     "focus": "frontend, data, automation",
     "availability": "available for selected work",
     "spotifyUrl": "https://open.spotify.com/track/5WOSNVChcadlsCRiqXE45K?si=fdeaf2edceb649c1",
@@ -34,17 +34,17 @@
   ],
   "quickLinks": [
     {
-      "label": "Project pilihan",
+      "label": "Selected projects",
       "href": "/portfolio",
       "icon": "Terminal"
     },
     {
-      "label": "Stack teknologi",
+      "label": "Tech stack",
       "href": "/stack",
       "icon": "Code2"
     },
     {
-      "label": "Kolaborasi",
+      "label": "Collaborate",
       "href": "/collaborate",
       "icon": "Send"
     }
@@ -55,7 +55,7 @@
       "title": "Insight Dashboard",
       "year": "2026",
       "status": "Live",
-      "description": "Dashboard data untuk memantau metrik operasional, tren performa, dan laporan ringkas.",
+      "description": "A data dashboard for monitoring operational metrics, performance trends, and concise reports.",
       "tags": [
         "Next.js",
         "Charts",
@@ -70,8 +70,8 @@
       "id": "coffee-time",
       "title": "CoffeeTime",
       "year": "2026",
-      "status": "On Progress",
-      "description": "Landing page modern untuk coffee shop dengan visual immersive dan layout responsif.",
+      "status": "In Progress",
+      "description": "A modern coffee shop landing page with immersive visuals and a responsive layout.",
       "tags": [
         "Next.js",
         "Tailwind CSS",
@@ -87,7 +87,7 @@
       "title": "Workflow Automation",
       "year": "2025",
       "status": "Internal Tool",
-      "description": "Sistem otomasi untuk notifikasi, pencatatan data, dan laporan terjadwal.",
+      "description": "An automation system for notifications, data logging, and scheduled reports.",
       "tags": [
         "Node.js",
         "API",
@@ -103,7 +103,7 @@
       "title": "Schoolify",
       "year": "2025",
       "status": "Case Study",
-      "description": "Platform manajemen sekolah dengan kalender, chart, autentikasi, dan database Prisma.",
+      "description": "A school management platform with calendars, charts, authentication, and a Prisma database.",
       "tags": [
         "Next.js",
         "Prisma",
@@ -120,7 +120,7 @@
       "title": "Launch Page",
       "year": "2024",
       "status": "Archived",
-      "description": "Halaman promosi produk dengan visual editorial dan animasi ringan.",
+      "description": "A product launch page with editorial visuals and lightweight animation.",
       "tags": [
         "Next.js",
         "Motion",
@@ -207,7 +207,7 @@
     }
   ],
   "contactIntents": [
-    "Website portfolio",
+    "Portfolio website",
     "Landing page",
     "Dashboard",
     "Automation tool"

@@ -20,15 +20,15 @@ export function ContactForm({
     const email = String(form.get("email") || "");
     const intent = String(form.get("intent") || "");
     const message = String(form.get("message") || "");
-    const subject = `${intent || "Project"} dari ${name}`;
-    const body = [`Nama: ${name}`, `Email: ${email}`, `Intent: ${intent}`, "", message].join(
+    const subject = `${intent || "Project"} from ${name}`;
+    const body = [`Name: ${name}`, `Email: ${email}`, `Intent: ${intent}`, "", message].join(
       "\n",
     );
 
     window.location.href = `mailto:${siteConfig.email}?subject=${encodeURIComponent(
       subject,
     )}&body=${encodeURIComponent(body)}`;
-    setNote("Mail app dibuka. Pesan siap dikirim ke email tujuan.");
+    setNote("Mail app opened. Your message is ready to send.");
   }
 
   return (
@@ -38,8 +38,8 @@ export function ContactForm({
           <p className="eyebrow">Contact</p>
           <h2 id="contact-title">Ready to build something?</h2>
           <p>
-            Ceritakan kebutuhan websitenya, mulai dari landing page, dashboard,
-            sampai portfolio personal. Pesan akan dibuka lewat aplikasi email.
+            Tell me what you want to build, from landing pages and dashboards
+            to personal portfolios. Your message will open in your email app.
           </p>
 
           <div className="contact-links">
@@ -54,8 +54,8 @@ export function ContactForm({
         <form className="contact-form" onSubmit={handleSubmit}>
           <div className="field-grid">
             <label>
-              <span>01 Nama</span>
-              <input name="name" type="text" autoComplete="name" placeholder="Nama kamu" required />
+              <span>01 Name</span>
+              <input name="name" type="text" autoComplete="name" placeholder="Your name" required />
             </label>
             <label>
               <span>02 Email</span>
@@ -70,7 +70,7 @@ export function ContactForm({
           </div>
 
           <label>
-            <span>03 Kebutuhan</span>
+            <span>03 Need</span>
             <select name="intent" defaultValue={contactIntents[0]} required>
               {contactIntents.map((intent) => (
                 <option key={intent} value={intent}>
@@ -81,17 +81,17 @@ export function ContactForm({
           </label>
 
           <label>
-            <span>04 Pesan</span>
+            <span>04 Message</span>
             <textarea
               name="message"
               rows={5}
-              placeholder="Ceritakan kebutuhan websitenya..."
+              placeholder="Tell me what the website should do..."
               required
             />
           </label>
 
           <button className="send-button" type="submit">
-            <span>Kirim pesan</span>
+            <span>Send message</span>
             <Send size={17} aria-hidden="true" />
           </button>
 

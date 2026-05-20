@@ -47,22 +47,22 @@ export function Header({ siteConfig }: { siteConfig: SiteConfig }) {
   }, [preferencesReady, tiltEnabled]);
 
   return (
-    <header className="site-header" aria-label="Navigasi utama">
-      <Link className="brand-mark" href="/" aria-label="Kembali ke beranda">
+    <header className="site-header" aria-label="Main navigation">
+      <Link className="brand-mark" href="/" aria-label="Back to home">
         <span aria-hidden="true">{siteConfig.name.slice(0, 1)}</span>
       </Link>
 
-      <nav className="nav-pills" aria-label="Bagian halaman">
+      <nav className="nav-pills" aria-label="Site sections">
         <Link href="/portfolio">Project</Link>
         <Link href="/stack">Stack</Link>
-        <Link href="/collaborate">Kontak</Link>
+        <Link href="/collaborate">Contact</Link>
       </nav>
 
       <div className="header-actions">
         <button
           className={tiltEnabled ? "round-button active" : "round-button"}
           type="button"
-          aria-label={tiltEnabled ? "Matikan efek 3D tilt" : "Aktifkan efek 3D tilt"}
+          aria-label={tiltEnabled ? "Disable 3D tilt" : "Enable 3D tilt"}
           aria-pressed={tiltEnabled}
           title={tiltEnabled ? "Disable 3D tilt" : "Enable 3D tilt"}
           onClick={() => setTiltEnabled((current) => !current)}
@@ -73,9 +73,9 @@ export function Header({ siteConfig }: { siteConfig: SiteConfig }) {
         <button
           className={vibeMode ? "round-button active" : "round-button"}
           type="button"
-          aria-label="Ganti mode aksen"
+          aria-label="Toggle accent mode"
           aria-pressed={vibeMode}
-          title="Ganti mode aksen"
+          title="Toggle accent mode"
           onClick={() => setVibeMode((current) => !current)}
         >
           <Lightbulb size={17} strokeWidth={2} aria-hidden="true" />

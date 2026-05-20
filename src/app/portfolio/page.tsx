@@ -9,7 +9,7 @@ export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Portfolio",
-  description: "Daftar project pilihan dan studi kasus.",
+  description: "Selected projects and case studies.",
 };
 
 export default async function PortfolioPage() {
@@ -22,7 +22,7 @@ export default async function PortfolioPage() {
         <InnerPageHeading
           eyebrow="Portfolio"
           title="Selected Projects"
-          description="Kumpulan project pilihan dengan status, tahun, gambar, tag teknologi, dan link yang relevan."
+          description="A curated collection of projects with status, year, images, technology tags, and relevant links."
         />
         <Projects projects={content.projects} />
       </main>

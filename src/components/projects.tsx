@@ -18,10 +18,10 @@ export function Projects({ projects, compact = false }: ProjectsProps) {
       <div className="container">
         <div className="section-heading">
           <p className="eyebrow">Selected Work</p>
-          <h2 id="work-title">Project pilihan Gilang.</h2>
+          <h2 id="work-title">Gilang&apos;s selected projects.</h2>
           <p>
-            Beberapa pekerjaan web yang menonjol, lengkap dengan status,
-            teknologi, dan gambaran singkat dari tiap project.
+            A focused set of web projects with status, technology, and a short
+            overview of what each project is built to do.
           </p>
         </div>
 
@@ -37,7 +37,7 @@ export function Projects({ projects, compact = false }: ProjectsProps) {
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.45, delay: index * 0.06 }}
               >
-                <a href={project.href || "#contact"} aria-label={`Buka ${project.title}`}>
+                <a href={project.href || "#contact"} aria-label={`Open ${project.title}`}>
                   <div className="project-image">
                     <Image
                       src={project.image}
@@ -57,7 +57,7 @@ export function Projects({ projects, compact = false }: ProjectsProps) {
                     </div>
                     <h3>{project.title}</h3>
                     <p>{project.description}</p>
-                    <ul className="tag-list" aria-label="Teknologi">
+                    <ul className="tag-list" aria-label="Technologies">
                       {project.tags.map((tag) => (
                         <li key={tag}>{tag}</li>
                       ))}

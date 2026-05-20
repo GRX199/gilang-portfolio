@@ -9,7 +9,7 @@ export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Collaborate",
-  description: "Form kontak untuk mulai berdiskusi tentang project.",
+  description: "Contact form for starting a project conversation.",
 };
 
 export default async function CollaboratePage() {
@@ -22,7 +22,7 @@ export default async function CollaboratePage() {
         <InnerPageHeading
           eyebrow="Collaborate"
           title="Ready to build something?"
-          description="Halaman ini mengikuti fungsi collaborate di referensi: form singkat, jelas, dan langsung menuju email."
+          description="A short and direct contact form for project ideas, collaborations, or quick introductions."
         />
         <ContactForm contactIntents={content.contactIntents} siteConfig={content.siteConfig} />
       </main>

@@ -30,7 +30,7 @@ export function Hero({ content }: { content: SiteContent }) {
   useEffect(() => {
     const updateTime = () => {
       setTimeLabel(
-        new Intl.DateTimeFormat("id-ID", {
+        new Intl.DateTimeFormat("en-US", {
           weekday: "short",
           day: "2-digit",
           month: "short",
@@ -118,24 +118,24 @@ export function Hero({ content }: { content: SiteContent }) {
             <h1 id="hero-title">{siteConfig.headline}</h1>
             <p className="lead">{siteConfig.bio}</p>
 
-            <div className="hero-actions" aria-label="Tautan utama">
-              <Link href="/portfolio">Lihat project</Link>
-              <Link href="/stack">Lihat stack</Link>
-              <Link href="/collaborate">Mulai ngobrol</Link>
+            <div className="hero-actions" aria-label="Primary links">
+              <Link href="/portfolio">View projects</Link>
+              <Link href="/stack">View stack</Link>
+              <Link href="/collaborate">Start a conversation</Link>
             </div>
 
             <Signature />
 
             <p className="follow-line">- Follow along on the internet.</p>
 
-            <div className="status-list" aria-label="Status personal">
+            <div className="status-list" aria-label="Personal status">
               <div className="status-item">
                 <MapPin size={15} aria-hidden="true" />
                 <span>{activeStatus}</span>
               </div>
               <div className="status-item">
                 <Terminal size={15} aria-hidden="true" />
-                <span>{timeLabel || "Mengambil waktu..."}</span>
+                <span>{timeLabel || "Loading time..."}</span>
               </div>
               {quickLinks.map((link) => {
                 const Icon = getIcon(link.icon);
@@ -175,17 +175,17 @@ function KineticPanel({ content }: { content: SiteContent }) {
       href: "/portfolio",
       label: "Project",
       value: String(projects.length),
-      detail: `${featuredCount} unggulan`,
+      detail: `${featuredCount} featured`,
     },
     {
       href: "/stack",
       label: "Stack",
       value: String(stackItems.length),
-      detail: `${categoryCount} kategori`,
+      detail: `${categoryCount} categories`,
     },
     {
       href: "/collaborate",
-      label: "Kontak",
+      label: "Contact",
       value: "Open",
       detail: shortAvailability,
     },
@@ -193,13 +193,13 @@ function KineticPanel({ content }: { content: SiteContent }) {
       href: "/portfolio",
       label: "Featured",
       value: String(featuredCount),
-      detail: "project utama",
+      detail: "top projects",
     },
   ];
   const activityRows = [
     ["focus", siteConfig.focus],
     ["location", siteConfig.location],
-    ["featured", featuredProject?.title || "Portfolio siap dibuka"],
+    ["featured", featuredProject?.title || "Portfolio is ready"],
   ];
   const rows = [
     ["profile", siteConfig.handle],
@@ -211,7 +211,7 @@ function KineticPanel({ content }: { content: SiteContent }) {
   return (
     <motion.aside
       className="hero-console motion-console"
-      aria-label="Ringkasan portfolio"
+      aria-label="Portfolio summary"
       initial={{ opacity: 0, x: 24 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.55, delay: 0.15, ease: "easeOut" }}
@@ -230,11 +230,11 @@ function KineticPanel({ content }: { content: SiteContent }) {
           </div>
           <Link className="signal-board-action" href="/portfolio">
             <ArrowUpRight size={14} aria-hidden="true" />
-            Karya
+            Work
           </Link>
         </div>
 
-        <div className="signal-metrics" aria-label="Metrik website">
+        <div className="signal-metrics" aria-label="Website metrics">
           {metrics.map((metric) => (
             <Link className="signal-metric" href={metric.href} key={metric.label}>
               <span>{metric.label}</span>
@@ -244,7 +244,7 @@ function KineticPanel({ content }: { content: SiteContent }) {
           ))}
         </div>
 
-        <div className="signal-activity" aria-label="Ringkasan aktif">
+        <div className="signal-activity" aria-label="Active summary">
           {activityRows.map(([label, value]) => (
             <div className="signal-activity-item" key={label}>
               <span>{label}</span>
@@ -264,11 +264,11 @@ function KineticPanel({ content }: { content: SiteContent }) {
         ))}
       </div>
 
-      <div className="route-stack" aria-label="Navigasi cepat">
+      <div className="route-stack" aria-label="Quick navigation">
         {[
           ["/portfolio", "Project"],
           ["/stack", "Stack"],
-          ["/collaborate", "Kontak"],
+          ["/collaborate", "Contact"],
         ].map(([href, label]) => (
           <Link href={href} key={href}>
             <span>{label}</span>
