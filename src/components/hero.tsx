@@ -118,12 +118,6 @@ export function Hero({ content }: { content: SiteContent }) {
             <h1 id="hero-title">{siteConfig.headline}</h1>
             <p className="lead">{siteConfig.bio}</p>
 
-            <div className="hero-actions" aria-label="Primary links">
-              <Link href="/portfolio">View projects</Link>
-              <Link href="/stack">View stack</Link>
-              <Link href="/collaborate">Start a conversation</Link>
-            </div>
-
             <Signature />
 
             <p className="follow-line">- Follow along on the internet.</p>
@@ -131,18 +125,18 @@ export function Hero({ content }: { content: SiteContent }) {
             <div className="status-list" aria-label="Personal status">
               <div className="status-item">
                 <MapPin size={15} aria-hidden="true" />
-                <span>{activeStatus}</span>
+                <TextReveal text={activeStatus} delay={0.65} />
               </div>
               <div className="status-item">
                 <Terminal size={15} aria-hidden="true" />
-                <span>{timeLabel || "Loading time..."}</span>
+                <TextReveal text={timeLabel || "Loading time..."} delay={0.82} />
               </div>
-              {quickLinks.map((link) => {
+              {quickLinks.map((link, index) => {
                 const Icon = getIcon(link.icon);
                 return (
                   <Link className="status-item status-link" href={link.href} key={link.href}>
                     <Icon size={15} aria-hidden="true" />
-                    <span>{link.label}</span>
+                    <TextReveal text={link.label} delay={0.98 + index * 0.12} />
                   </Link>
                 );
               })}
@@ -162,6 +156,68 @@ export function Hero({ content }: { content: SiteContent }) {
       </motion.div>
     </section>
   );
+}
+
+function TextReveal({ delay = 0, text }: { delay?: number; text: string }) {
+  const [displayText, setDisplayText] = useState(() => createTextPlaceholder(text));
+
+  useEffect(() => {
+    let revealTimer: number | undefined;
+    const resetTimer = window.setTimeout(() => {
+      setDisplayText(createTextPlaceholder(text));
+    }, 0);
+    const startTimer = window.setTimeout(() => {
+      let progress = 0;
+
+      if (!text) {
+        setDisplayText("");
+        return;
+      }
+
+      revealTimer = window.setInterval(() => {
+        progress += 0.7;
+
+        if (progress >= text.length) {
+          window.clearInterval(revealTimer);
+          setDisplayText(text);
+          return;
+        }
+
+        setDisplayText(revealText(text, progress));
+      }, 28);
+    }, delay * 1000);
+
+    return () => {
+      window.clearTimeout(resetTimer);
+      window.clearTimeout(startTimer);
+
+      if (revealTimer !== undefined) {
+        window.clearInterval(revealTimer);
+      }
+    };
+  }, [delay, text]);
+
+  return (
+    <span className="text-reveal" aria-label={text}>
+      <span aria-hidden="true">{displayText}</span>
+    </span>
+  );
+}
+
+function createTextPlaceholder(text: string) {
+  return text.replace(/\S/g, "X");
+}
+
+function revealText(text: string, progress: number) {
+  return text
+    .split("")
+    .map((character, index) => {
+      if (character === " ") return " ";
+      if (index < progress) return character;
+
+      return Math.random() > 0.5 ? "X" : "/";
+    })
+    .join("");
 }
 
 function KineticPanel({ content }: { content: SiteContent }) {
@@ -261,19 +317,6 @@ function KineticPanel({ content }: { content: SiteContent }) {
           <p key={label}>
             <span>{label}</span> {value}
           </p>
-        ))}
-      </div>
-
-      <div className="route-stack" aria-label="Quick navigation">
-        {[
-          ["/portfolio", "Project"],
-          ["/stack", "Stack"],
-          ["/collaborate", "Contact"],
-        ].map(([href, label]) => (
-          <Link href={href} key={href}>
-            <span>{label}</span>
-            <ArrowUpRight size={15} aria-hidden="true" />
-          </Link>
         ))}
       </div>
     </motion.aside>

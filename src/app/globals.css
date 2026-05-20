@@ -190,6 +190,136 @@ svg {
   outline: none;
 }
 
+.home-page {
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+}
+
+.home-page main {
+  min-height: 0;
+  display: flex;
+}
+
+.home-page .hero-section {
+  flex: 1;
+  min-height: 0;
+  padding-block: 88px 12px;
+}
+
+.home-page .hero-grid {
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 330px);
+  gap: 52px;
+}
+
+.home-page .eyebrow {
+  margin-bottom: 12px;
+}
+
+.home-page h1 {
+  max-width: 700px;
+  margin-bottom: 16px;
+  font-size: clamp(48px, 6vw, 72px);
+}
+
+.home-page .lead {
+  max-width: 610px;
+  font-size: 16px;
+  line-height: 1.58;
+}
+
+.home-page .hero-actions {
+  gap: 14px;
+  margin: 22px 0 16px;
+}
+
+.home-page .signature {
+  width: 178px;
+  margin: 8px 0 14px;
+}
+
+.home-page .follow-line {
+  margin-bottom: 16px;
+}
+
+.home-page .status-list {
+  gap: 8px;
+}
+
+.home-page .status-item {
+  min-height: 20px;
+}
+
+.home-page .motion-console {
+  min-height: 450px;
+}
+
+.home-page .console-top {
+  padding: 12px 14px;
+}
+
+.home-page .signal-board {
+  gap: 10px;
+  padding: 16px;
+}
+
+.home-page .signal-metrics {
+  gap: 8px;
+}
+
+.home-page .signal-metric {
+  min-height: 86px;
+  padding: 12px;
+}
+
+.home-page .signal-metric strong {
+  font-size: 26px;
+}
+
+.home-page .signal-activity {
+  gap: 7px;
+}
+
+.home-page .signal-activity-item {
+  min-height: 32px;
+  padding: 6px 9px;
+}
+
+.home-page .console-lines {
+  gap: 8px;
+  padding: 14px 16px;
+}
+
+.home-page .route-stack {
+  gap: 8px;
+  padding: 0 16px 16px;
+}
+
+.home-page .route-stack a {
+  min-height: 36px;
+}
+
+.home-page .hero-ticker {
+  margin-top: 24px;
+}
+
+.home-page .hero-ticker div {
+  padding-block: 10px;
+}
+
+.home-page .site-footer {
+  padding: 8px 0 12px;
+}
+
+.home-page .footer-shell {
+  gap: 14px;
+}
+
+.home-page .footer-indicator {
+  min-height: 34px;
+  padding: 5px 10px;
+}
+
 .hero-section {
   position: relative;
   min-height: 100svh;
@@ -362,6 +492,23 @@ p {
   color: white;
 }
 
+.status-item > span {
+  min-width: 0;
+}
+
+.text-reveal {
+  max-width: 100%;
+  display: inline-block;
+  overflow: hidden;
+  font-variant-numeric: tabular-nums;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-reveal > span {
+  display: inline-block;
+}
+
 .hero-console {
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -374,7 +521,7 @@ p {
   position: relative;
   min-height: 540px;
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  grid-template-rows: auto minmax(0, 1fr) auto;
   transform-origin: center;
   transform-style: preserve-3d;
 }
@@ -1268,7 +1415,154 @@ textarea:focus {
   color: white;
 }
 
+@media (min-width: 921px) and (max-height: 760px) {
+  .home-page .hero-section {
+    padding-block: 62px 8px;
+  }
+
+  .home-page .hero-grid {
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 42px;
+  }
+
+  .home-page .eyebrow {
+    margin-bottom: 10px;
+    font-size: 11px;
+  }
+
+  .home-page h1 {
+    margin-bottom: 12px;
+    font-size: clamp(44px, 5.4vw, 64px);
+  }
+
+  .home-page .lead {
+    max-width: 590px;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .home-page .hero-actions {
+    gap: 12px;
+    margin: 16px 0 10px;
+  }
+
+  .home-page .signature {
+    width: 158px;
+    margin: 6px 0 10px;
+  }
+
+  .home-page .follow-line {
+    margin-bottom: 10px;
+  }
+
+  .home-page .status-list {
+    gap: 6px;
+  }
+
+  .home-page .status-item {
+    min-height: 18px;
+    gap: 10px;
+    font-size: 11px;
+  }
+
+  .home-page .motion-console {
+    min-height: 410px;
+  }
+
+  .home-page .signal-board {
+    gap: 8px;
+    padding: 13px;
+  }
+
+  .home-page .signal-board-title strong {
+    font-size: 18px;
+  }
+
+  .home-page .signal-metric {
+    min-height: 76px;
+    padding: 10px;
+  }
+
+  .home-page .signal-metric strong {
+    font-size: 23px;
+  }
+
+  .home-page .signal-activity-item {
+    min-height: 30px;
+    padding: 5px 8px;
+  }
+
+  .home-page .console-lines {
+    gap: 6px;
+    padding: 12px 14px;
+    font-size: 11px;
+  }
+
+  .home-page .route-stack {
+    gap: 6px;
+    padding: 0 14px 14px;
+  }
+
+  .home-page .route-stack a {
+    min-height: 32px;
+    font-size: 11px;
+  }
+
+  .home-page .hero-ticker {
+    margin-top: 12px;
+  }
+
+  .home-page .hero-ticker div {
+    padding-block: 7px;
+  }
+
+  .home-page .site-footer {
+    padding: 3px 0 6px;
+  }
+
+  .home-page .footer-indicator {
+    min-height: 28px;
+    padding: 3px 8px;
+  }
+}
+
 @media (max-width: 920px) {
+  .home-page {
+    display: block;
+    min-height: 100svh;
+  }
+
+  .home-page main {
+    display: block;
+  }
+
+  .home-page .hero-section {
+    min-height: auto;
+    padding-block: 118px 52px;
+  }
+
+  .home-page .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .home-page .motion-console {
+    min-height: 0;
+  }
+
+  .home-page .hero-ticker {
+    margin-top: 34px;
+  }
+
+  .home-page .site-footer {
+    padding: 28px 0 44px;
+  }
+
+  .home-page .footer-indicator {
+    min-height: 46px;
+    padding: 8px 11px;
+  }
+
   .hero-grid,
   .contact-grid {
     grid-template-columns: 1fr;
@@ -1453,6 +1747,10 @@ textarea:focus {
 }
 
 @media (max-width: 420px) {
+  .home-page h1 {
+    font-size: 44px;
+  }
+
   h1 {
     font-size: 44px;
   }

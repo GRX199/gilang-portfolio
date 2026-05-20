@@ -9,12 +9,12 @@ export default async function Home() {
   const content = await getSiteContent();
 
   return (
-    <>
+    <div className="home-page">
       <Header siteConfig={content.siteConfig} />
       <main id="main">
         <Hero content={content} />
       </main>
       <Footer projectCount={content.projects.length} />
-    </>
+    </div>
   );
 }
