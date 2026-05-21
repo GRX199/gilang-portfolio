@@ -22,13 +22,8 @@ export function StackSection({ stackItems }: { stackItems: StackItem[] }) {
       : stackItems.filter((item) => item.category === (activeFilter as StackCategory));
 
   return (
-    <section className="section" id="stack" aria-labelledby="stack-title">
+    <section className="section stack-section" id="stack" aria-label="Technology stack">
       <div className="container">
-        <div className="section-heading compact">
-          <p className="eyebrow">Tech Stack</p>
-          <h2 id="stack-title">Tools I use most often.</h2>
-        </div>
-
         <div className="stack-tabs" role="tablist" aria-label="Filter tech stack">
           {filters.map((filter) => (
             <button

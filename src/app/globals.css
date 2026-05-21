@@ -818,8 +818,12 @@ p {
   padding-block: 112px;
 }
 
+.inner-hero + .section {
+  padding-top: 42px;
+}
+
 .inner-hero {
-  padding-block: 154px 42px;
+  padding-block: 146px 32px;
 }
 
 .inner-hero h1 {
@@ -856,6 +860,36 @@ p {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
+}
+
+.project-source {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.035);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.project-source span {
+  color: var(--dim);
+}
+
+.project-source a {
+  color: var(--red);
+}
+
+.project-source a:hover,
+.project-source a:focus-visible {
+  color: white;
+  outline: none;
 }
 
 .project-card {
@@ -1016,6 +1050,10 @@ p {
 .sticky-copy {
   position: sticky;
   top: 110px;
+}
+
+.contact-aside {
+  max-width: 420px;
 }
 
 .contact-links {
@@ -1684,6 +1722,10 @@ textarea:focus {
     padding-block: 78px;
   }
 
+  .inner-hero + .section {
+    padding-top: 28px;
+  }
+
   .project-grid,
   .field-grid {
     grid-template-columns: 1fr;
@@ -1698,7 +1740,7 @@ textarea:focus {
   }
 
   .inner-hero {
-    padding-block: 126px 26px;
+    padding-block: 120px 22px;
   }
 
   .admin-page {

@@ -14,7 +14,7 @@ export function InnerPageHeading({ eyebrow, title, description }: InnerPageHeadi
         <h1 id="inner-page-title">{title}</h1>
         <p className="lead">{description}</p>
         <p className="back-line">
-          - Or just <Link href="/">go back home</Link>.
+          <Link href="/">Back to home</Link>
         </p>
       </div>
     </section>

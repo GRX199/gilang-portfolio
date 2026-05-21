@@ -32,16 +32,11 @@ export function ContactForm({
   }
 
   return (
-    <section className="section contact-section" id="contact" aria-labelledby="contact-title">
+    <section className="section contact-section" id="contact" aria-label="Contact form">
       <div className="container contact-grid">
-        <div className="section-heading sticky-copy">
-          <p className="eyebrow">Contact</p>
-          <h2 id="contact-title">Ready to build something?</h2>
-          <p>
-            Tell me what you want to build, from landing pages and dashboards
-            to personal portfolios. Your message will open in your email app.
-          </p>
-
+        <div className="contact-aside sticky-copy">
+          <p className="eyebrow">Links</p>
+          <p>Find me on these profiles, or send the form with a short brief.</p>
           <div className="contact-links">
             {siteConfig.socials.map((social) => (
               <a href={social.href} key={social.label} target="_blank" rel="noreferrer">
@@ -70,7 +65,7 @@ export function ContactForm({
           </div>
 
           <label>
-            <span>03 Need</span>
+            <span>03 Project Type</span>
             <select name="intent" defaultValue={contactIntents[0]} required>
               {contactIntents.map((intent) => (
                 <option key={intent} value={intent}>
@@ -85,7 +80,7 @@ export function ContactForm({
             <textarea
               name="message"
               rows={5}
-              placeholder="Tell me what the website should do..."
+              placeholder="Tell me about the page, feature, or problem..."
               required
             />
           </label>

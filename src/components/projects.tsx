@@ -3,31 +3,35 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import type { Project } from "@/lib/content-types";
+import type { GitHubProjectSource } from "@/lib/github-projects";
 import { getIcon } from "@/lib/icon-map";
 
 type ProjectsProps = {
   projects: Project[];
   compact?: boolean;
+  source?: GitHubProjectSource;
 };
 
-export function Projects({ projects, compact = false }: ProjectsProps) {
+export function Projects({ projects, compact = false, source }: ProjectsProps) {
   const visibleProjects = compact ? projects.filter((project) => project.featured) : projects;
 
   return (
-    <section className="section" id="work" aria-labelledby="work-title">
+    <section className="section project-section" id="work" aria-label="Projects">
       <div className="container">
-        <div className="section-heading">
-          <p className="eyebrow">Selected Work</p>
-          <h2 id="work-title">Gilang&apos;s selected projects.</h2>
-          <p>
-            A focused set of web projects with status, technology, and a short
-            overview of what each project is built to do.
-          </p>
-        </div>
+        {source ? (
+          <div className="project-source">
+            <span>Source</span>
+            <a href={source.href} target="_blank" rel="noreferrer">
+              {source.label}
+            </a>
+          </div>
+        ) : null}
 
         <div className="project-grid">
           {visibleProjects.map((project, index) => {
             const Icon = getIcon(project.icon);
+            const isExternalLink = project.href.startsWith("http");
+
             return (
               <motion.article
                 className="project-card"
@@ -37,7 +41,12 @@ export function Projects({ projects, compact = false }: ProjectsProps) {
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.45, delay: index * 0.06 }}
               >
-                <a href={project.href || "#contact"} aria-label={`Open ${project.title}`}>
+                <a
+                  href={project.href || "#contact"}
+                  aria-label={`Open ${project.title}`}
+                  target={isExternalLink ? "_blank" : undefined}
+                  rel={isExternalLink ? "noreferrer" : undefined}
+                >
                   <div className="project-image">
                     <Image
                       src={project.image}

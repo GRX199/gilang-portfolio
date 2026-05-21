@@ -4,29 +4,31 @@ import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { InnerPageHeading } from "@/components/inner-page-heading";
 import { getSiteContent } from "@/lib/content";
+import { getGitHubProjects } from "@/lib/github-projects";
 
 export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Collaborate",
-  description: "Contact form for starting a project conversation.",
+  description: "Contact Gilang for web projects and collaboration.",
 };
 
 export default async function CollaboratePage() {
   const content = await getSiteContent();
+  const { projects } = await getGitHubProjects(content.siteConfig, content.projects);
 
   return (
     <>
       <Header siteConfig={content.siteConfig} />
       <main id="main">
         <InnerPageHeading
-          eyebrow="Collaborate"
-          title="Ready to build something?"
-          description="A short and direct contact form for project ideas, collaborations, or quick introductions."
+          eyebrow="Contact"
+          title="Let's talk"
+          description="Send a short brief, project idea, or question. I will reply as soon as I can."
         />
         <ContactForm contactIntents={content.contactIntents} siteConfig={content.siteConfig} />
       </main>
-      <Footer projectCount={content.projects.length} />
+      <Footer projectCount={projects.length} />
     </>
   );
 }

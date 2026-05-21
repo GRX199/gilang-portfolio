@@ -11,15 +11,13 @@ export const defaultContent: SiteContent = {
     description:
       "Gilang's personal portfolio for profile, projects, tech stack, and contact.",
     headline: "Make it simple",
-    bio: "I build clean, fast, and maintainable websites. This portfolio highlights my projects, tech stack, and ways to start a collaboration.",
+    bio: "I build portfolio sites, dashboards, and small web tools with Next.js.",
     focus: "frontend, data, automation",
     availability: "available for selected work",
     spotifyUrl:
       "https://open.spotify.com/track/5WOSNVChcadlsCRiqXE45K?si=fdeaf2edceb649c1",
     socials: [
-      { label: "GitHub", href: "https://github.com/" },
-      { label: "LinkedIn", href: "https://linkedin.com/" },
-      { label: "Instagram", href: "https://instagram.com/" },
+      { label: "GitHub", href: "https://github.com/GRX199" },
     ],
   },
   statusMessages: [

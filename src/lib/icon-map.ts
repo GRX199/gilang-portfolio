@@ -1,6 +1,5 @@
 import type { LucideIcon } from "lucide-react";
 import {
-  Bot,
   Braces,
   Code2,
   Coffee,
@@ -20,13 +19,11 @@ import {
   Send,
   Server,
   ShoppingBag,
-  Sparkles,
   Terminal,
   Workflow,
 } from "lucide-react";
 
 export const iconMap = {
-  Bot,
   Braces,
   Code2,
   Coffee,
@@ -46,7 +43,6 @@ export const iconMap = {
   Send,
   Server,
   ShoppingBag,
-  Sparkles,
   Terminal,
   Workflow,
 } satisfies Record<string, LucideIcon>;
