@@ -19,16 +19,14 @@ http://localhost:3000
 
 Ada dua cara:
 
-1. Production CMS: buka `/studio` setelah Sanity env dikonfigurasi.
-2. Development cepat: buka `/admin` saat `npm run dev`, edit konten, lalu klik **Simpan konten**.
-3. Fallback manual: edit file `src/content/site-content.json`.
+1. CMS: buka `/studio` setelah Sanity env dikonfigurasi.
+2. Fallback manual: edit file `src/content/site-content.json`.
 
 - Ganti nama, role, lokasi, dan email.
-- Ganti daftar project.
-- Ganti tech stack.
+- Ganti status, quick links, tech stack, dan social links.
 - Update `siteUrl` sebelum deploy agar sitemap dan metadata benar.
 
-Saat production, editor file lokal dimatikan. Konten production disimpan di Sanity agar persist setelah deploy.
+Halaman Project mengambil repository publik dari GitHub. Untuk mengubah project yang tampil, edit nama repository, description, topics, language, atau visibility di GitHub.
 
 ## Deploy
 
@@ -73,6 +71,13 @@ Tambahkan CORS origin di dashboard Sanity untuk:
 ```text
 http://localhost:3000
 https://domain-kamu.com
+```
+
+Setelah Sanity siap, buka:
+
+```text
+http://localhost:3000/studio
+https://domain-kamu.com/studio
 ```
 
 ## Verifikasi

@@ -18,6 +18,8 @@ export const defaultContent: SiteContent = {
       "https://open.spotify.com/track/5WOSNVChcadlsCRiqXE45K?si=fdeaf2edceb649c1",
     socials: [
       { label: "GitHub", href: "https://github.com/GRX199" },
+      { label: "LinkedIn", href: "https://linkedin.com/" },
+      { label: "Instagram", href: "https://instagram.com/" },
     ],
   },
   statusMessages: [

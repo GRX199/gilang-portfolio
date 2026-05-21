@@ -31,6 +31,7 @@ NEXT_PUBLIC_SANITY_API_VERSION=2026-05-20
 3. Tambahkan CORS origin di Sanity untuk `http://localhost:3000` dan domain Vercel kamu.
 4. Jalankan `npm run sanity:seed` untuk mengirim konten awal.
 5. Deploy ke Vercel.
+6. Buka `/studio` untuk mengedit konten.
 
 ## 4. Routes
 
@@ -40,7 +41,6 @@ NEXT_PUBLIC_SANITY_API_VERSION=2026-05-20
 /stack        Tech stack
 /collaborate  Kontak
 /studio       Sanity Studio
-/admin        Deploy/CMS hub
 ```
 
 ## 5. Final Check
