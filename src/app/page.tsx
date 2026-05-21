@@ -2,13 +2,13 @@ import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { Hero } from "@/components/hero";
 import { getSiteContent } from "@/lib/content";
-import { getGitHubProjects } from "@/lib/github-projects";
+import { getPortfolioProjects } from "@/lib/github-projects";
 
 export const revalidate = 60;
 
 export default async function Home() {
   const content = await getSiteContent();
-  const { projects } = await getGitHubProjects(content.siteConfig, content.projects);
+  const { projects } = await getPortfolioProjects(content.siteConfig, content.projects);
   const portfolioContent = {
     ...content,
     projects,

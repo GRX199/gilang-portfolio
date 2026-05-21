@@ -15,20 +15,20 @@ type GitHubRepository = {
   updated_at: string;
 };
 
-export type GitHubProjectSource = {
+export type ProjectSource = {
   href: string;
   label: string;
   username: string;
 };
 
-export async function getGitHubProjects(
+export async function getPortfolioProjects(
   siteConfig: SiteConfig,
-  fallbackProjects: Project[],
-): Promise<{ projects: Project[]; source: GitHubProjectSource }> {
+  cmsProjects: Project[],
+): Promise<{ projects: Project[]; source: ProjectSource }> {
   const username = getGitHubUsername(siteConfig);
   const source = {
     href: `https://github.com/${username}?tab=repositories`,
-    label: `GitHub / ${username}`,
+    label: `CMS + GitHub / ${username}`,
     username,
   };
 
@@ -52,22 +52,51 @@ export async function getGitHubProjects(
     }
 
     const repositories = (await response.json()) as GitHubRepository[];
-    const projects = repositories
+    const githubProjects = repositories
       .filter((repository) => !repository.private && !repository.fork)
       .sort((left, right) => getRepoTime(right) - getRepoTime(left))
       .slice(0, 10)
       .map((repository, index) => toProject(repository, index));
 
     return {
-      projects: projects.length > 0 ? projects : fallbackProjects,
+      projects: mergeProjects(cmsProjects, githubProjects),
       source,
     };
   } catch {
     return {
-      projects: fallbackProjects,
+      projects: cmsProjects,
       source,
     };
   }
+}
+
+function mergeProjects(cmsProjects: Project[], githubProjects: Project[]) {
+  const seenKeys = new Set<string>();
+  const mergedProjects: Project[] = [];
+
+  for (const project of [...cmsProjects, ...githubProjects]) {
+    const keys = getProjectKeys(project);
+
+    if (keys.some((key) => seenKeys.has(key))) {
+      continue;
+    }
+
+    mergedProjects.push(project);
+    keys.forEach((key) => seenKeys.add(key));
+  }
+
+  return mergedProjects;
+}
+
+function getProjectKeys(project: Project) {
+  const keys = [`id:${project.id.toLowerCase()}`];
+  const href = project.href.trim().toLowerCase().replace(/\/$/, "");
+
+  if (href.includes("github.com/")) {
+    keys.push(`href:${href}`);
+  }
+
+  return keys;
 }
 
 function getGitHubUsername(siteConfig: SiteConfig) {

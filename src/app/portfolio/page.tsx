@@ -4,7 +4,7 @@ import { Header } from "@/components/header";
 import { InnerPageHeading } from "@/components/inner-page-heading";
 import { Projects } from "@/components/projects";
 import { getSiteContent } from "@/lib/content";
-import { getGitHubProjects } from "@/lib/github-projects";
+import { getPortfolioProjects } from "@/lib/github-projects";
 
 export const revalidate = 60;
 
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default async function PortfolioPage() {
   const content = await getSiteContent();
-  const { projects, source } = await getGitHubProjects(content.siteConfig, content.projects);
+  const { projects, source } = await getPortfolioProjects(content.siteConfig, content.projects);
 
   return (
     <>
@@ -23,8 +23,8 @@ export default async function PortfolioPage() {
       <main id="main">
         <InnerPageHeading
           eyebrow="Projects"
-          title="GitHub Projects"
-          description="Public repositories from my GitHub profile, sorted by latest update."
+          title="Projects"
+          description="CMS projects and public GitHub repositories in one place."
         />
         <Projects projects={projects} source={source} />
       </main>

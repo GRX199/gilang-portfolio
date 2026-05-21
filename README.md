@@ -26,7 +26,7 @@ Ada dua cara:
 - Ganti status, quick links, tech stack, dan social links.
 - Update `siteUrl` sebelum deploy agar sitemap dan metadata benar.
 
-Halaman Project mengambil repository publik dari GitHub. Untuk mengubah project yang tampil, edit nama repository, description, topics, language, atau visibility di GitHub.
+Halaman Project menggabungkan project dari CMS dan repository publik dari GitHub. Project CMS tampil lebih dulu, lalu repository GitHub ditambahkan otomatis. Untuk mengubah repo yang tampil, edit nama repository, description, topics, language, atau visibility di GitHub.
 
 ## Deploy
 

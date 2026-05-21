@@ -3,13 +3,13 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import type { Project } from "@/lib/content-types";
-import type { GitHubProjectSource } from "@/lib/github-projects";
+import type { ProjectSource } from "@/lib/github-projects";
 import { getIcon } from "@/lib/icon-map";
 
 type ProjectsProps = {
   projects: Project[];
   compact?: boolean;
-  source?: GitHubProjectSource;
+  source?: ProjectSource;
 };
 
 export function Projects({ projects, compact = false, source }: ProjectsProps) {
