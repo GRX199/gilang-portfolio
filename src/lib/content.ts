@@ -121,6 +121,7 @@ function normalizeProjects(projects?: Partial<Project>[]): Project[] {
       href: safeString(project.href, "/collaborate"),
       icon: safeString(project.icon, "Rocket"),
       featured: Boolean(project.featured),
+      source: project.source === "github" ? "github" : "cms",
     };
   });
 }

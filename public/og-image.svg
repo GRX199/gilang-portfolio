@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
-  <title id="title">Personal website open graph image</title>
-  <desc id="desc">Dark grid preview with large headline and red accent.</desc>
+  <title id="title">Gilang portfolio open graph image</title>
+  <desc id="desc">Dark grid preview for Gilang's portfolio website.</desc>
   <rect width="1200" height="630" fill="#050505"/>
   <path d="M0 70h1200M0 140h1200M0 210h1200M0 280h1200M0 350h1200M0 420h1200M0 490h1200M0 560h1200M100 0v630M200 0v630M300 0v630M400 0v630M500 0v630M600 0v630M700 0v630M800 0v630M900 0v630M1000 0v630M1100 0v630" stroke="#ffffff" stroke-opacity=".08"/>
   <circle cx="1005" cy="155" r="170" fill="#ff5b5f" opacity=".12"/>
   <circle cx="130" cy="500" r="220" fill="#7bdff2" opacity=".08"/>
-  <text x="120" y="180" fill="#ff5b5f" font-family="Consolas, monospace" font-size="28" font-weight="800">NAMA KAMU - WEBSITE DEVELOPER</text>
-  <text x="120" y="330" fill="#f6f4ef" font-family="Georgia, serif" font-size="108" font-weight="800">Make it yours.</text>
-  <text x="124" y="410" fill="#f6f4ef" opacity=".72" font-family="Arial, sans-serif" font-size="34">Personal website built with Next.js, Tailwind, Motion.</text>
+  <text x="120" y="180" fill="#ff5b5f" font-family="Consolas, monospace" font-size="28" font-weight="800">GILANG - DATA MANAGEMENT &amp; WEBSITE DEVELOPER</text>
+  <text x="120" y="330" fill="#f6f4ef" font-family="Georgia, serif" font-size="108" font-weight="800">Make it simple.</text>
+  <text x="124" y="410" fill="#f6f4ef" opacity=".72" font-family="Arial, sans-serif" font-size="34">Projects, stack, and contact in one portfolio.</text>
   <rect x="120" y="475" width="190" height="44" rx="8" fill="#ff5b5f" opacity=".9"/>
   <text x="150" y="504" fill="#ffffff" font-family="Consolas, monospace" font-size="18" font-weight="800">VIEW WORK</text>
 </svg>

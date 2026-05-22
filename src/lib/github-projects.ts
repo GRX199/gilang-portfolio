@@ -25,6 +25,10 @@ export async function getPortfolioProjects(
   siteConfig: SiteConfig,
   cmsProjects: Project[],
 ): Promise<{ projects: Project[]; source: ProjectSource }> {
+  const normalizedCmsProjects = cmsProjects.map((project) => ({
+    ...project,
+    source: project.source || ("cms" as const),
+  }));
   const username = getGitHubUsername(siteConfig);
   const source = {
     href: `https://github.com/${username}?tab=repositories`,
@@ -59,12 +63,12 @@ export async function getPortfolioProjects(
       .map((repository, index) => toProject(repository, index));
 
     return {
-      projects: mergeProjects(cmsProjects, githubProjects),
+      projects: mergeProjects(normalizedCmsProjects, githubProjects),
       source,
     };
   } catch {
     return {
-      projects: cmsProjects,
+      projects: normalizedCmsProjects,
       source,
     };
   }
@@ -132,6 +136,7 @@ function toProject(repository: GitHubRepository, index: number): Project {
     href: repository.html_url,
     icon: getRepositoryIcon(repository.language),
     featured: index < 3,
+    source: "github",
   };
 }
 

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import type { Project } from "@/lib/content-types";
 import type { ProjectSource } from "@/lib/github-projects";
 import { getIcon } from "@/lib/icon-map";
@@ -30,7 +31,7 @@ export function Projects({ projects, compact = false, source }: ProjectsProps) {
         <div className="project-grid">
           {visibleProjects.map((project, index) => {
             const Icon = getIcon(project.icon);
-            const isExternalLink = project.href.startsWith("http");
+            const sourceLabel = project.source === "github" ? "GitHub" : "CMS";
 
             return (
               <motion.article
@@ -41,12 +42,7 @@ export function Projects({ projects, compact = false, source }: ProjectsProps) {
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.45, delay: index * 0.06 }}
               >
-                <a
-                  href={project.href || "#contact"}
-                  aria-label={`Open ${project.title}`}
-                  target={isExternalLink ? "_blank" : undefined}
-                  rel={isExternalLink ? "noreferrer" : undefined}
-                >
+                <Link href={`/portfolio/${project.id}`} aria-label={`View ${project.title}`}>
                   <div className="project-image">
                     <Image
                       src={project.image}
@@ -63,6 +59,7 @@ export function Projects({ projects, compact = false, source }: ProjectsProps) {
                     <div className="project-meta">
                       <span>{project.year}</span>
                       <span>{project.status}</span>
+                      <span>{sourceLabel}</span>
                     </div>
                     <h3>{project.title}</h3>
                     <p>{project.description}</p>
@@ -72,7 +69,7 @@ export function Projects({ projects, compact = false, source }: ProjectsProps) {
                       ))}
                     </ul>
                   </div>
-                </a>
+                </Link>
               </motion.article>
             );
           })}

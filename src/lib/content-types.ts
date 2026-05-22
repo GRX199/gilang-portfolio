@@ -30,6 +30,7 @@ export type Project = {
   href: string;
   icon: string;
   featured: boolean;
+  source?: "cms" | "github";
 };
 
 export type StackCategory = "core" | "language" | "framework" | "tool";

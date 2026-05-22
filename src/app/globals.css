@@ -976,6 +976,111 @@ p {
   font-weight: 800;
 }
 
+.project-detail-hero {
+  padding-block: 146px 42px;
+}
+
+.project-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  align-items: end;
+  gap: 44px;
+}
+
+.project-detail-copy h1 {
+  margin-bottom: 18px;
+}
+
+.project-detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.project-detail-panel,
+.project-detail-sidebar,
+.project-detail-image {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(17, 17, 17, 0.74);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.24);
+}
+
+.project-detail-panel {
+  padding: 18px;
+}
+
+.project-detail-panel dl {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+}
+
+.project-detail-panel div {
+  display: grid;
+  gap: 5px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 12px;
+}
+
+.project-detail-panel div:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.project-detail-panel dt,
+.project-detail-sidebar .eyebrow {
+  color: var(--red);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.project-detail-panel dd {
+  margin: 0;
+  color: rgba(246, 244, 239, 0.86);
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.project-detail-section {
+  padding-top: 36px;
+}
+
+.project-detail-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  align-items: start;
+  gap: 22px;
+}
+
+.project-detail-image {
+  overflow: hidden;
+}
+
+.project-detail-image img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
+.project-detail-sidebar {
+  display: grid;
+  gap: 22px;
+  padding: 20px;
+}
+
+.project-detail-note p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
 .stack-tabs {
   display: flex;
   flex-wrap: wrap;
@@ -1727,8 +1832,14 @@ textarea:focus {
   }
 
   .project-grid,
+  .project-detail-grid,
+  .project-detail-layout,
   .field-grid {
     grid-template-columns: 1fr;
+  }
+
+  .project-detail-hero {
+    padding-block: 120px 28px;
   }
 
   .stack-grid {
