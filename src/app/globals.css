@@ -36,6 +36,7 @@ html {
 }
 
 body {
+  width: 100%;
   min-height: 100vh;
   margin: 0;
   overflow-x: hidden;
@@ -91,6 +92,10 @@ svg {
 .container {
   width: min(100% - 48px, 1040px);
   margin-inline: auto;
+}
+
+main {
+  min-width: 0;
 }
 
 .site-header {
@@ -947,6 +952,7 @@ p {
 
 .project-meta {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 18px;
@@ -1689,6 +1695,10 @@ textarea:focus {
     gap: 40px;
   }
 
+  .home-page .hero-copy {
+    max-width: 620px;
+  }
+
   .home-page .motion-console {
     min-height: 0;
   }
@@ -1746,9 +1756,10 @@ textarea:focus {
 
   .site-header {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
-    padding: 18px 16px;
+    gap: 10px;
+    padding: 14px 16px;
   }
 
   .brand-mark {
@@ -1757,43 +1768,79 @@ textarea:focus {
     flex: 0 0 auto;
   }
 
+  .header-actions {
+    flex: 0 0 auto;
+    gap: 6px;
+  }
+
   .round-button {
-    display: none;
+    width: 34px;
+    height: 34px;
+    display: grid;
   }
 
   .nav-pills {
-    max-width: calc(100vw - 76px);
-    gap: 2px;
-    padding: 4px;
+    max-width: calc(100vw - 72px);
+    min-height: 42px;
+    justify-content: center;
+    gap: 3px;
+    padding: 5px;
   }
 
   .nav-pills a {
-    padding: 7px 6px;
-    font-size: 9px;
+    min-height: 30px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 8px;
+    font-size: 10px;
     white-space: nowrap;
+  }
+
+  .hero-tilt-stage {
+    transform: none !important;
   }
 
   .hero-section {
     min-height: auto;
-    padding-block: 118px 52px;
+    padding-block: 108px 50px;
   }
 
   h1 {
-    font-size: 48px;
+    font-size: 46px;
+    overflow-wrap: anywhere;
   }
 
   h2 {
-    font-size: 40px;
+    font-size: 38px;
+    overflow-wrap: anywhere;
   }
 
   .lead {
     font-size: 16px;
+    line-height: 1.62;
   }
 
   .hero-console.motion-console {
+    width: 100%;
     display: block;
     max-width: none;
     min-height: 0;
+  }
+
+  .home-page .hero-grid {
+    justify-items: stretch;
+  }
+
+  .hero-grid > *,
+  .project-detail-grid > *,
+  .project-detail-layout > *,
+  .contact-grid > *,
+  .field-grid > * {
+    min-width: 0;
+  }
+
+  .hero-console {
+    width: 100%;
   }
 
   .signal-board {
@@ -1818,6 +1865,14 @@ textarea:focus {
     grid-template-columns: 68px minmax(0, 1fr);
   }
 
+  .signal-activity-item strong {
+    white-space: normal;
+  }
+
+  .console-lines p {
+    overflow-wrap: anywhere;
+  }
+
   .hero-ticker {
     width: min(100% - 32px, 1040px);
     margin-top: 34px;
@@ -1831,6 +1886,11 @@ textarea:focus {
     padding-top: 28px;
   }
 
+  .project-source {
+    width: 100%;
+    justify-content: space-between;
+  }
+
   .project-grid,
   .project-detail-grid,
   .project-detail-layout,
@@ -1838,8 +1898,51 @@ textarea:focus {
     grid-template-columns: 1fr;
   }
 
+  .project-card {
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.24);
+  }
+
+  .project-body {
+    padding: 18px;
+  }
+
+  .project-meta {
+    justify-content: flex-start;
+    gap: 8px 12px;
+  }
+
   .project-detail-hero {
-    padding-block: 120px 28px;
+    padding-block: 112px 28px;
+  }
+
+  .project-detail-actions,
+  .deploy-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .project-detail-actions .send-button,
+  .contact-form .send-button,
+  .deploy-actions .send-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .project-detail-panel,
+  .project-detail-sidebar {
+    padding: 16px;
+  }
+
+  .stack-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .stack-tabs button {
+    min-height: 42px;
+    padding: 0 10px;
+    text-align: center;
   }
 
   .stack-grid {
@@ -1901,15 +2004,98 @@ textarea:focus {
 
 @media (max-width: 420px) {
   .home-page h1 {
-    font-size: 44px;
+    font-size: 40px;
   }
 
   h1 {
-    font-size: 44px;
+    font-size: 40px;
   }
 
   h2 {
-    font-size: 36px;
+    font-size: 34px;
+  }
+
+  .container {
+    width: min(100% - 28px, 1040px);
+  }
+
+  .site-header {
+    padding-inline: 14px;
+  }
+
+  .brand-mark {
+    width: 32px;
+    height: 32px;
+  }
+
+  .round-button {
+    width: 32px;
+    height: 32px;
+  }
+
+  .header-actions {
+    gap: 5px;
+  }
+
+  .nav-pills {
+    max-width: calc(100vw - 64px);
+  }
+
+  .nav-pills a {
+    min-height: 29px;
+    padding: 0 7px;
+    font-size: 9px;
+  }
+
+  .home-page .hero-section,
+  .hero-section,
+  .inner-hero,
+  .project-detail-hero {
+    padding-top: 104px;
+  }
+
+  .signature {
+    width: 172px;
+  }
+
+  .status-item {
+    gap: 10px;
+    font-size: 11px;
+  }
+
+  .signal-board {
+    padding: 14px;
+  }
+
+  .signal-board-head {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .signal-board-action {
+    width: fit-content;
+  }
+
+  .signal-metric {
+    min-height: 86px;
+  }
+
+  .project-body,
+  .project-detail-panel,
+  .project-detail-sidebar,
+  .contact-form {
+    padding: 16px;
+  }
+
+  .project-source {
+    align-items: flex-start;
+    flex-direction: column;
+    border-radius: var(--radius);
+    gap: 4px;
+  }
+
+  .tag-list li {
+    padding: 5px 7px;
   }
 
   .footer-grid {
@@ -1918,6 +2104,45 @@ textarea:focus {
 
   .stack-card {
     min-height: 98px;
+  }
+}
+
+@media (max-width: 360px) {
+  h1,
+  .home-page h1 {
+    font-size: 38px;
+  }
+
+  h2 {
+    font-size: 32px;
+  }
+
+  .nav-pills a {
+    padding-inline: 6px;
+    font-size: 8px;
+  }
+
+  .site-header {
+    gap: 8px;
+    padding-inline: 12px;
+  }
+
+  .brand-mark,
+  .round-button {
+    width: 30px;
+    height: 30px;
+  }
+
+  .header-actions {
+    gap: 4px;
+  }
+
+  .signal-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .stack-grid {
+    grid-template-columns: 1fr;
   }
 }
 
