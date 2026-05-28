@@ -119,6 +119,34 @@ export const siteContentType = defineType({
               options: { list: iconOptions },
             }),
             defineField({ name: "featured", title: "Show on Homepage", type: "boolean" }),
+            defineField({ name: "role", title: "Role", type: "string" }),
+            defineField({ name: "timeline", title: "Timeline", type: "string" }),
+            defineField({ name: "problem", title: "Problem", type: "text", rows: 3 }),
+            defineField({ name: "solution", title: "Solution", type: "text", rows: 3 }),
+            defineField({ name: "impact", title: "Impact", type: "text", rows: 3 }),
+            defineField({
+              name: "highlights",
+              title: "Highlights",
+              type: "array",
+              of: [defineArrayMember({ type: "string" })],
+            }),
+            defineField({
+              name: "metrics",
+              title: "Case Study Metrics",
+              type: "array",
+              of: [
+                defineArrayMember({
+                  type: "object",
+                  fields: [
+                    defineField({ name: "label", title: "Label", type: "string" }),
+                    defineField({ name: "value", title: "Value", type: "string" }),
+                  ],
+                  preview: {
+                    select: { title: "value", subtitle: "label" },
+                  },
+                }),
+              ],
+            }),
           ],
           preview: {
             select: {

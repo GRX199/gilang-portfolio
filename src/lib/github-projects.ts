@@ -32,7 +32,7 @@ export async function getPortfolioProjects(
   const username = getGitHubUsername(siteConfig);
   const source = {
     href: `https://github.com/${username}?tab=repositories`,
-    label: `CMS + GitHub / ${username}`,
+    label: `Portfolio + GitHub / ${username}`,
     username,
   };
 
@@ -124,19 +124,33 @@ function getGitHubUsername(siteConfig: SiteConfig) {
 
 function toProject(repository: GitHubRepository, index: number): Project {
   const readableName = formatRepositoryName(repository.name);
+  const tags = getRepositoryTags(repository);
+  const year = String(new Date(repository.pushed_at || repository.updated_at).getFullYear());
 
   return {
     id: repository.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
     title: readableName,
-    year: String(new Date(repository.pushed_at || repository.updated_at).getFullYear()),
+    year,
     status: getRepositoryStatus(repository),
     description: repository.description?.trim() || `Source code for ${readableName}.`,
-    tags: getRepositoryTags(repository),
+    tags,
     image: "/projects/github.svg",
     href: repository.html_url,
     icon: getRepositoryIcon(repository.language),
     featured: index < 3,
     source: "github",
+    role: "Repository owner",
+    timeline: `${year} - current`,
+    highlights: [
+      `Public repository maintained on GitHub.`,
+      `Primary stack: ${tags.slice(0, 2).join(", ")}.`,
+      `Recently updated codebase with visible commit history.`,
+    ],
+    metrics: [
+      { label: "Source", value: "GitHub" },
+      { label: "Stack", value: tags[0] || "Code" },
+      { label: "Status", value: getRepositoryStatus(repository) },
+    ],
   };
 }
 

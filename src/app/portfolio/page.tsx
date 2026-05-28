@@ -10,13 +10,13 @@ export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Portfolio",
-  description: "CMS projects and public GitHub repositories.",
+  description: "Selected work, case studies, and public GitHub repositories.",
   alternates: {
     canonical: "/portfolio",
   },
   openGraph: {
     title: "Projects",
-    description: "CMS projects and public GitHub repositories.",
+    description: "Selected work, case studies, and public GitHub repositories.",
     url: "/portfolio",
     type: "website",
     images: [
@@ -40,8 +40,8 @@ export default async function PortfolioPage() {
       <main id="main">
         <InnerPageHeading
           eyebrow="Projects"
-          title="Projects"
-          description="CMS projects and public GitHub repositories in one place."
+          title="Selected Work"
+          description="A focused collection of portfolio work, public repositories, and concise project case studies."
         />
         <Projects projects={projects} source={source} />
       </main>

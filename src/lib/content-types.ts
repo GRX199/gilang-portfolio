@@ -31,6 +31,18 @@ export type Project = {
   icon: string;
   featured: boolean;
   source?: "cms" | "github";
+  role?: string;
+  timeline?: string;
+  problem?: string;
+  solution?: string;
+  impact?: string;
+  highlights?: string[];
+  metrics?: ProjectMetric[];
+};
+
+export type ProjectMetric = {
+  label: string;
+  value: string;
 };
 
 export type StackCategory = "core" | "language" | "framework" | "tool";

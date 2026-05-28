@@ -64,7 +64,31 @@
       "image": "/projects/dashboard.svg",
       "href": "/collaborate",
       "icon": "LayoutDashboard",
-      "featured": true
+      "featured": true,
+      "role": "Design, frontend, and data flow",
+      "timeline": "2026 - current",
+      "problem": "Operational teams need a clearer way to read daily performance without opening multiple reports or spreadsheet tabs.",
+      "solution": "A focused dashboard layout with grouped metrics, trend areas, and short summaries that help people understand movement quickly.",
+      "impact": "The interface reduces report friction and gives stakeholders a cleaner view of the numbers that matter most.",
+      "highlights": [
+        "Metric cards designed for fast scanning.",
+        "Responsive chart area for desktop and mobile review.",
+        "Reusable dashboard sections for future data sources."
+      ],
+      "metrics": [
+        {
+          "label": "Focus",
+          "value": "Data clarity"
+        },
+        {
+          "label": "Stack",
+          "value": "Next.js"
+        },
+        {
+          "label": "Status",
+          "value": "Live"
+        }
+      ]
     },
     {
       "id": "coffee-time",
@@ -80,7 +104,31 @@
       "image": "/projects/store.svg",
       "href": "/collaborate",
       "icon": "Coffee",
-      "featured": true
+      "featured": true,
+      "role": "UI design and frontend build",
+      "timeline": "2026",
+      "problem": "Small food and beverage brands often need a landing page that feels premium but still loads fast and works well on phones.",
+      "solution": "A responsive landing page structure with strong visual sections, clear menu highlights, and motion that supports the brand mood.",
+      "impact": "The page gives visitors a quick sense of the shop, menu, and direction without feeling heavy or over-designed.",
+      "highlights": [
+        "Mobile-first layout for browsing from social links.",
+        "Visual product sections with clear calls to action.",
+        "Lightweight motion for a more polished brand feel."
+      ],
+      "metrics": [
+        {
+          "label": "Focus",
+          "value": "Brand page"
+        },
+        {
+          "label": "Motion",
+          "value": "Framer"
+        },
+        {
+          "label": "Status",
+          "value": "In progress"
+        }
+      ]
     },
     {
       "id": "workflow-automation",
@@ -96,7 +144,31 @@
       "image": "/projects/automation.svg",
       "href": "/collaborate",
       "icon": "Workflow",
-      "featured": true
+      "featured": true,
+      "role": "Automation flow and backend scripting",
+      "timeline": "2025",
+      "problem": "Repeated reporting tasks take time when data, reminders, and logs are handled manually across separate tools.",
+      "solution": "A scheduled automation setup that collects inputs, sends notifications, and stores updates in a predictable structure.",
+      "impact": "Manual follow-up is reduced and the workflow becomes easier to monitor because each action leaves a clear record.",
+      "highlights": [
+        "Scheduled jobs for recurring work.",
+        "Notification flow connected to status changes.",
+        "Simple logging format for review and handoff."
+      ],
+      "metrics": [
+        {
+          "label": "Focus",
+          "value": "Automation"
+        },
+        {
+          "label": "Runtime",
+          "value": "Node.js"
+        },
+        {
+          "label": "Output",
+          "value": "Reports"
+        }
+      ]
     },
     {
       "id": "schoolify",
@@ -113,7 +185,31 @@
       "image": "/projects/dashboard.svg",
       "href": "/collaborate",
       "icon": "GraduationCap",
-      "featured": false
+      "featured": false,
+      "role": "Full-stack interface exploration",
+      "timeline": "2025",
+      "problem": "School operations need one place to manage schedules, users, and academic information without confusing navigation.",
+      "solution": "A dashboard-oriented school platform concept with calendars, authentication, charts, and database-backed records.",
+      "impact": "The case study explores how school data can be organized into clear workflows for admins, teachers, and students.",
+      "highlights": [
+        "Authentication-ready user flows.",
+        "Calendar and chart views for academic planning.",
+        "Database structure prepared with Prisma."
+      ],
+      "metrics": [
+        {
+          "label": "Focus",
+          "value": "School system"
+        },
+        {
+          "label": "Database",
+          "value": "PostgreSQL"
+        },
+        {
+          "label": "Type",
+          "value": "Case study"
+        }
+      ]
     },
     {
       "id": "launch-page",
@@ -129,7 +225,31 @@
       "image": "/projects/launch.svg",
       "href": "/collaborate",
       "icon": "Rocket",
-      "featured": false
+      "featured": false,
+      "role": "Landing page design and build",
+      "timeline": "2024",
+      "problem": "Early product ideas need a sharp launch page that explains the offer quickly and gives visitors a clear next step.",
+      "solution": "A compact launch page with editorial layout, product messaging, lightweight animation, and share-ready metadata.",
+      "impact": "The page creates a clean first impression and gives the project a usable public surface before the full product exists.",
+      "highlights": [
+        "Concise above-the-fold messaging.",
+        "SEO and share preview prepared for launch.",
+        "Simple sections that can expand as the product grows."
+      ],
+      "metrics": [
+        {
+          "label": "Focus",
+          "value": "Launch"
+        },
+        {
+          "label": "Stack",
+          "value": "Next.js"
+        },
+        {
+          "label": "Status",
+          "value": "Archived"
+        }
+      ]
     }
   ],
   "stackItems": [

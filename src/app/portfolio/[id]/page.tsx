@@ -77,6 +77,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
 
   const sourceLabel = getSourceLabel(project);
   const isExternalLink = project.href.startsWith("http");
+  const caseStudy = getProjectCaseStudy(project, sourceLabel);
 
   return (
     <>
@@ -85,7 +86,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
         <section className="project-detail-hero" aria-labelledby="project-title">
           <div className="container project-detail-grid">
             <div className="project-detail-copy">
-              <p className="eyebrow">Project / {sourceLabel}</p>
+              <p className="eyebrow">Case Study / {sourceLabel}</p>
               <h1 id="project-title">{project.title}</h1>
               <p className="lead">{project.description}</p>
               <div className="project-detail-actions">
@@ -117,6 +118,14 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                   <dd>{project.status}</dd>
                 </div>
                 <div>
+                  <dt>Role</dt>
+                  <dd>{caseStudy.role}</dd>
+                </div>
+                <div>
+                  <dt>Timeline</dt>
+                  <dd>{caseStudy.timeline}</dd>
+                </div>
+                <div>
                   <dt>Source</dt>
                   <dd>{sourceLabel}</dd>
                 </div>
@@ -126,19 +135,47 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
         </section>
 
         <section className="section project-detail-section" aria-label="Project details">
-          <div className="container project-detail-layout">
-            <div className="project-detail-image">
-              <Image
-                src={project.image}
-                alt={`${project.title} preview`}
-                width={1200}
-                height={750}
-                priority
-                sizes="(max-width: 920px) 100vw, 68vw"
-              />
+          <div className="container project-case-layout">
+            <div className="project-case-main">
+              <figure className="project-detail-image project-case-visual">
+                <Image
+                  src={project.image}
+                  alt={`${project.title} preview`}
+                  width={1200}
+                  height={750}
+                  priority
+                  sizes="(max-width: 920px) 100vw, 68vw"
+                />
+                <figcaption>
+                  <span>{project.status}</span>
+                  <strong>{project.title}</strong>
+                </figcaption>
+              </figure>
+
+              <div className="case-study-grid" aria-label="Case study sections">
+                {caseStudy.sections.map((section) => (
+                  <article className="case-study-card" key={section.label}>
+                    <p className="eyebrow">{section.label}</p>
+                    <h2>{section.title}</h2>
+                    <p>{section.body}</p>
+                  </article>
+                ))}
+              </div>
             </div>
 
-            <aside className="project-detail-sidebar">
+            <aside className="project-detail-sidebar case-study-sidebar">
+              <div>
+                <p className="eyebrow">Metrics</p>
+                <div className="case-metrics" aria-label="Project metrics">
+                  {caseStudy.metrics.map((metric) => (
+                    <div key={metric.label}>
+                      <span>{metric.label}</span>
+                      <strong>{metric.value}</strong>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <div>
                 <p className="eyebrow">Stack</p>
                 <ul className="tag-list" aria-label="Project stack">
@@ -147,10 +184,20 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                   ))}
                 </ul>
               </div>
+
+              <div>
+                <p className="eyebrow">Highlights</p>
+                <ul className="case-highlight-list">
+                  {caseStudy.highlights.map((highlight) => (
+                    <li key={highlight}>{highlight}</li>
+                  ))}
+                </ul>
+              </div>
+
               <div className="project-detail-note">
                 <p>
-                  This page is generated from the portfolio content pipeline, combining editable CMS
-                  entries and public GitHub repositories.
+                  Project notes are kept concise so visitors can scan the context, build direction,
+                  and result without losing the visual flow.
                 </p>
               </div>
             </aside>
@@ -181,5 +228,65 @@ async function getProjectById(id: string): Promise<{
 }
 
 function getSourceLabel(project: Project) {
-  return project.source === "github" ? "GitHub Repository" : "CMS Project";
+  return project.source === "github" ? "GitHub Repository" : "Portfolio Project";
+}
+
+function getProjectCaseStudy(project: Project, sourceLabel: string) {
+  const primaryStack = project.tags.slice(0, 3).join(", ");
+  const role = project.role || (project.source === "github" ? "Repository owner" : "Project owner");
+  const timeline = project.timeline || `${project.year} - current`;
+  const problem =
+    project.problem ||
+    `This work started from a need to make ${project.title.toLowerCase()} easier to understand, navigate, and maintain.`;
+  const solution =
+    project.solution ||
+    `The build focuses on a clean structure, readable content, and a stack centered around ${primaryStack || "modern web tools"}.`;
+  const impact =
+    project.impact ||
+    `The result is a clearer project surface that makes the work easier to inspect, share, and continue improving.`;
+  const highlights =
+    project.highlights && project.highlights.length > 0
+      ? project.highlights
+      : [
+          `Built around ${primaryStack || "a focused web stack"}.`,
+          `${sourceLabel} with a direct project link.`,
+          `${project.status} status for quick project context.`,
+        ];
+  const metrics =
+    project.metrics && project.metrics.length > 0
+      ? project.metrics
+      : [
+          { label: "Role", value: role },
+          { label: "Timeline", value: timeline },
+          { label: "Source", value: sourceLabel },
+        ];
+
+  return {
+    role,
+    timeline,
+    highlights,
+    metrics,
+    sections: [
+      {
+        label: "Overview",
+        title: "What this project is about",
+        body: project.description,
+      },
+      {
+        label: "Problem",
+        title: "The gap it solves",
+        body: problem,
+      },
+      {
+        label: "Solution",
+        title: "How it was shaped",
+        body: solution,
+      },
+      {
+        label: "Impact",
+        title: "Why it matters",
+        body: impact,
+      },
+    ],
+  };
 }

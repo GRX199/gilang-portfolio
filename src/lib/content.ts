@@ -2,6 +2,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type {
   Project,
+  ProjectMetric,
   QuickLink,
   SiteConfig,
   SiteContent,
@@ -109,9 +110,11 @@ function normalizeProjects(projects?: Partial<Project>[]): Project[] {
 
   return projects.map((project, index) => {
     const title = safeString(project.title, `Project ${index + 1}`);
+    const id = safeSlug(project.id, title);
+    const fallbackProject = defaultContent.projects.find((item) => item.id === id);
 
     return {
-      id: safeSlug(project.id, title),
+      id,
       title,
       year: safeString(project.year, String(new Date().getFullYear())),
       status: safeString(project.status, "Draft"),
@@ -122,8 +125,28 @@ function normalizeProjects(projects?: Partial<Project>[]): Project[] {
       icon: safeString(project.icon, "Rocket"),
       featured: Boolean(project.featured),
       source: project.source === "github" ? "github" : "cms",
+      role: optionalString(project.role) || fallbackProject?.role,
+      timeline: optionalString(project.timeline) || fallbackProject?.timeline,
+      problem: optionalString(project.problem) || fallbackProject?.problem,
+      solution: optionalString(project.solution) || fallbackProject?.solution,
+      impact: optionalString(project.impact) || fallbackProject?.impact,
+      highlights: normalizeOptionalStringArray(project.highlights) || fallbackProject?.highlights,
+      metrics: normalizeProjectMetrics(project.metrics) || fallbackProject?.metrics,
     };
   });
+}
+
+function normalizeProjectMetrics(metrics?: Partial<ProjectMetric>[]) {
+  if (!Array.isArray(metrics)) return undefined;
+
+  const normalized = metrics
+    .map((metric) => ({
+      label: safeString(metric.label, ""),
+      value: safeString(metric.value, ""),
+    }))
+    .filter((metric) => metric.label && metric.value);
+
+  return normalized.length > 0 ? normalized : undefined;
 }
 
 function normalizeStackItems(stackItems?: Partial<StackItem>[]): StackItem[] {
@@ -150,6 +173,20 @@ function normalizeStringArray(value: unknown, fallback: string[]) {
 
   const normalized = value.map((item) => String(item).trim()).filter(Boolean);
   return normalized.length > 0 ? normalized : fallback;
+}
+
+function normalizeOptionalStringArray(value: unknown) {
+  if (!Array.isArray(value)) return undefined;
+
+  const normalized = value.map((item) => String(item).trim()).filter(Boolean);
+  return normalized.length > 0 ? normalized : undefined;
+}
+
+function optionalString(value: unknown) {
+  if (typeof value !== "string") return undefined;
+
+  const trimmedValue = value.trim();
+  return trimmedValue.length > 0 ? trimmedValue : undefined;
 }
 
 function safeString(value: unknown, fallback: string) {
