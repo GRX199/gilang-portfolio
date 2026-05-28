@@ -5,9 +5,14 @@ import { notFound } from "next/navigation";
 import { ArrowUpRight } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
-import type { Project } from "@/lib/content-types";
 import { getSiteContent } from "@/lib/content";
 import { getPortfolioProjects } from "@/lib/github-projects";
+import {
+  getProjectById,
+  getProjectCaseStudy,
+  getSourceLabel,
+  toAbsoluteUrl,
+} from "@/lib/project-presenter";
 
 export const revalidate = 60;
 
@@ -37,6 +42,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   }
 
   const projectUrl = `/portfolio/${project.id}`;
+  const shareImage = `${projectUrl}/opengraph-image`;
 
   return {
     title: project.title,
@@ -51,10 +57,10 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
       type: "article",
       images: [
         {
-          url: project.image,
-          width: 960,
-          height: 600,
-          alt: `${project.title} preview`,
+          url: shareImage,
+          width: 1200,
+          height: 630,
+          alt: `${project.title} project share preview`,
         },
       ],
     },
@@ -62,7 +68,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
       card: "summary_large_image",
       title: `${project.title} | Project`,
       description: project.description,
-      images: [project.image],
+      images: [shareImage],
     },
   };
 }
@@ -78,11 +84,35 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
   const sourceLabel = getSourceLabel(project);
   const isExternalLink = project.href.startsWith("http");
   const caseStudy = getProjectCaseStudy(project, sourceLabel);
+  const projectUrl = `${content.siteConfig.siteUrl}/portfolio/${project.id}`;
+  const projectJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: project.title,
+    headline: `${project.title} case study`,
+    description: project.description,
+    url: projectUrl,
+    image: toAbsoluteUrl(content.siteConfig.siteUrl, project.image),
+    datePublished: `${project.year}-01-01`,
+    creator: {
+      "@type": "Person",
+      name: content.siteConfig.name,
+      url: content.siteConfig.siteUrl,
+    },
+    keywords: project.tags,
+    about: caseStudy.sections.map((section) => section.title),
+  };
 
   return (
     <>
       <Header siteConfig={content.siteConfig} />
       <main id="main">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(projectJsonLd).replace(/</g, "\\u003c"),
+          }}
+        />
         <section className="project-detail-hero" aria-labelledby="project-title">
           <div className="container project-detail-grid">
             <div className="project-detail-copy">
@@ -207,86 +237,4 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
       <Footer projectCount={projects.length} />
     </>
   );
-}
-
-async function getProjectById(id: string): Promise<{
-  content: Awaited<ReturnType<typeof getSiteContent>> | null;
-  project: Project | null;
-  projects: Project[];
-  siteUrl: string;
-}> {
-  const content = await getSiteContent();
-  const { projects } = await getPortfolioProjects(content.siteConfig, content.projects);
-  const project = projects.find((item) => item.id === id) || null;
-
-  return {
-    content,
-    project,
-    projects,
-    siteUrl: content.siteConfig.siteUrl,
-  };
-}
-
-function getSourceLabel(project: Project) {
-  return project.source === "github" ? "GitHub Repository" : "Portfolio Project";
-}
-
-function getProjectCaseStudy(project: Project, sourceLabel: string) {
-  const primaryStack = project.tags.slice(0, 3).join(", ");
-  const role = project.role || (project.source === "github" ? "Repository owner" : "Project owner");
-  const timeline = project.timeline || `${project.year} - current`;
-  const problem =
-    project.problem ||
-    `This work started from a need to make ${project.title.toLowerCase()} easier to understand, navigate, and maintain.`;
-  const solution =
-    project.solution ||
-    `The build focuses on a clean structure, readable content, and a stack centered around ${primaryStack || "modern web tools"}.`;
-  const impact =
-    project.impact ||
-    `The result is a clearer project surface that makes the work easier to inspect, share, and continue improving.`;
-  const highlights =
-    project.highlights && project.highlights.length > 0
-      ? project.highlights
-      : [
-          `Built around ${primaryStack || "a focused web stack"}.`,
-          `${sourceLabel} with a direct project link.`,
-          `${project.status} status for quick project context.`,
-        ];
-  const metrics =
-    project.metrics && project.metrics.length > 0
-      ? project.metrics
-      : [
-          { label: "Role", value: role },
-          { label: "Timeline", value: timeline },
-          { label: "Source", value: sourceLabel },
-        ];
-
-  return {
-    role,
-    timeline,
-    highlights,
-    metrics,
-    sections: [
-      {
-        label: "Overview",
-        title: "What this project is about",
-        body: project.description,
-      },
-      {
-        label: "Problem",
-        title: "The gap it solves",
-        body: problem,
-      },
-      {
-        label: "Solution",
-        title: "How it was shaped",
-        body: solution,
-      },
-      {
-        label: "Impact",
-        title: "Why it matters",
-        body: impact,
-      },
-    ],
-  };
 }
