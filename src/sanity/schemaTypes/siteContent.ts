@@ -131,6 +131,38 @@ export const siteContentType = defineType({
               of: [defineArrayMember({ type: "string" })],
             }),
             defineField({
+              name: "screenshots",
+              title: "Screenshots",
+              type: "array",
+              of: [
+                defineArrayMember({
+                  type: "object",
+                  fields: [
+                    defineField({ name: "title", title: "Title", type: "string" }),
+                    defineField({ name: "caption", title: "Caption", type: "text", rows: 2 }),
+                    defineField({
+                      name: "image",
+                      title: "Image Path or URL",
+                      type: "string",
+                    }),
+                    defineField({
+                      name: "imageAsset",
+                      title: "Sanity Image Upload",
+                      type: "image",
+                      options: { hotspot: true },
+                    }),
+                  ],
+                  preview: {
+                    select: {
+                      title: "title",
+                      subtitle: "caption",
+                      media: "imageAsset",
+                    },
+                  },
+                }),
+              ],
+            }),
+            defineField({
               name: "metrics",
               title: "Case Study Metrics",
               type: "array",

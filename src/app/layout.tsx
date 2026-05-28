@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
+import { CursorAura } from "@/components/cursor-aura";
+import { RouteTransition } from "@/components/route-transition";
 import { getSiteContent } from "@/lib/content";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -78,6 +80,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <RouteTransition />
+        <CursorAura />
         {children}
         <Analytics />
       </body>

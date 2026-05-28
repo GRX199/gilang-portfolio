@@ -63,6 +63,23 @@ export const defaultContent: SiteContent = {
         { label: "Stack", value: "Next.js" },
         { label: "Status", value: "Live" },
       ],
+      screenshots: [
+        {
+          title: "Dashboard overview",
+          caption: "Primary metrics grouped for quick daily scanning.",
+          image: "/projects/dashboard.svg",
+        },
+        {
+          title: "Report flow",
+          caption: "Automation-ready section for follow-up and scheduled summaries.",
+          image: "/projects/automation.svg",
+        },
+        {
+          title: "Responsive frame",
+          caption: "Compact preview for reviewing key data on smaller screens.",
+          image: "/projects/launch.svg",
+        },
+      ],
     },
     {
       id: "coffee-time",
@@ -93,6 +110,23 @@ export const defaultContent: SiteContent = {
         { label: "Focus", value: "Brand page" },
         { label: "Motion", value: "Framer" },
         { label: "Status", value: "In progress" },
+      ],
+      screenshots: [
+        {
+          title: "Storefront hero",
+          caption: "Opening section with product-first visual hierarchy.",
+          image: "/projects/store.svg",
+        },
+        {
+          title: "Launch section",
+          caption: "Editorial content block for promotions and seasonal offers.",
+          image: "/projects/launch.svg",
+        },
+        {
+          title: "Mobile preview",
+          caption: "Layout direction for visitors arriving from social links.",
+          image: "/projects/dashboard.svg",
+        },
       ],
     },
     {
@@ -125,6 +159,23 @@ export const defaultContent: SiteContent = {
         { label: "Runtime", value: "Node.js" },
         { label: "Output", value: "Reports" },
       ],
+      screenshots: [
+        {
+          title: "Automation map",
+          caption: "Workflow overview for jobs, notifications, and data records.",
+          image: "/projects/automation.svg",
+        },
+        {
+          title: "Status dashboard",
+          caption: "Monitoring surface for recurring tasks and outputs.",
+          image: "/projects/dashboard.svg",
+        },
+        {
+          title: "Repository notes",
+          caption: "Implementation handoff area for code and setup details.",
+          image: "/projects/github.svg",
+        },
+      ],
     },
     {
       id: "schoolify",
@@ -156,6 +207,23 @@ export const defaultContent: SiteContent = {
         { label: "Database", value: "PostgreSQL" },
         { label: "Type", value: "Case study" },
       ],
+      screenshots: [
+        {
+          title: "Admin dashboard",
+          caption: "Overview area for school activity, charts, and upcoming events.",
+          image: "/projects/dashboard.svg",
+        },
+        {
+          title: "Academic planning",
+          caption: "Calendar-ready direction for teachers, students, and admins.",
+          image: "/projects/launch.svg",
+        },
+        {
+          title: "Data model",
+          caption: "Database-backed structure prepared for role-based workflows.",
+          image: "/projects/automation.svg",
+        },
+      ],
     },
     {
       id: "launch-page",
@@ -186,6 +254,23 @@ export const defaultContent: SiteContent = {
         { label: "Focus", value: "Launch" },
         { label: "Stack", value: "Next.js" },
         { label: "Status", value: "Archived" },
+      ],
+      screenshots: [
+        {
+          title: "Launch hero",
+          caption: "Concise first screen for explaining a new product idea.",
+          image: "/projects/launch.svg",
+        },
+        {
+          title: "Offer block",
+          caption: "Section pattern for value props and quick decisions.",
+          image: "/projects/store.svg",
+        },
+        {
+          title: "Share preview",
+          caption: "Social-ready direction for early launch distribution.",
+          image: "/projects/dashboard.svg",
+        },
       ],
     },
   ],

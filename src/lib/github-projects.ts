@@ -146,6 +146,13 @@ function toProject(repository: GitHubRepository, index: number): Project {
       `Primary stack: ${tags.slice(0, 2).join(", ")}.`,
       `Recently updated codebase with visible commit history.`,
     ],
+    screenshots: [
+      {
+        title: "Repository preview",
+        caption: `${readableName} source overview and public project notes.`,
+        image: "/projects/github.svg",
+      },
+    ],
     metrics: [
       { label: "Source", value: "GitHub" },
       { label: "Stack", value: tags[0] || "Code" },

@@ -10,6 +10,7 @@ import { getPortfolioProjects } from "@/lib/github-projects";
 import {
   getProjectById,
   getProjectCaseStudy,
+  getProjectScreenshots,
   getSourceLabel,
   toAbsoluteUrl,
 } from "@/lib/project-presenter";
@@ -84,6 +85,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
   const sourceLabel = getSourceLabel(project);
   const isExternalLink = project.href.startsWith("http");
   const caseStudy = getProjectCaseStudy(project, sourceLabel);
+  const screenshots = getProjectScreenshots(project);
   const projectUrl = `${content.siteConfig.siteUrl}/portfolio/${project.id}`;
   const projectJsonLd = {
     "@context": "https://schema.org",
@@ -181,6 +183,33 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                   <strong>{project.title}</strong>
                 </figcaption>
               </figure>
+
+              <div className="project-screenshot-gallery" aria-label="Project screenshots">
+                <div className="project-screenshot-heading">
+                  <p className="eyebrow">Screenshots</p>
+                  <h2>Visual checkpoints.</h2>
+                </div>
+                <div className="project-screenshot-grid">
+                  {screenshots.map((screenshot, index) => (
+                    <figure
+                      className={index === 0 ? "project-screenshot primary" : "project-screenshot"}
+                      key={`${screenshot.title}-${index}`}
+                    >
+                      <Image
+                        src={screenshot.image}
+                        alt={`${project.title} - ${screenshot.title}`}
+                        width={960}
+                        height={600}
+                        sizes={index === 0 ? "(max-width: 920px) 100vw, 68vw" : "(max-width: 920px) 100vw, 32vw"}
+                      />
+                      <figcaption>
+                        <strong>{screenshot.title}</strong>
+                        <span>{screenshot.caption}</span>
+                      </figcaption>
+                    </figure>
+                  ))}
+                </div>
+              </div>
 
               <div className="case-study-grid" aria-label="Case study sections">
                 {caseStudy.sections.map((section) => (

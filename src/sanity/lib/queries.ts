@@ -42,6 +42,11 @@ export const siteContentQuery = groq`*[_type == "siteContent" && _id == "siteCon
     solution,
     impact,
     highlights[],
+    screenshots[] {
+      title,
+      caption,
+      "image": coalesce(image, imageAsset.asset->url, "/projects/launch.svg")
+    },
     metrics[] {
       label,
       value

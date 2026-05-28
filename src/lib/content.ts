@@ -3,6 +3,7 @@ import path from "node:path";
 import type {
   Project,
   ProjectMetric,
+  ProjectScreenshot,
   QuickLink,
   SiteConfig,
   SiteContent,
@@ -132,6 +133,10 @@ function normalizeProjects(projects?: Partial<Project>[]): Project[] {
       impact: optionalString(project.impact) || fallbackProject?.impact,
       highlights: normalizeOptionalStringArray(project.highlights) || fallbackProject?.highlights,
       metrics: normalizeProjectMetrics(project.metrics) || fallbackProject?.metrics,
+      screenshots:
+        normalizeProjectScreenshots(project.screenshots) ||
+        fallbackProject?.screenshots ||
+        createDefaultScreenshots(safeString(project.image, "/projects/launch.svg"), title),
     };
   });
 }
@@ -147,6 +152,30 @@ function normalizeProjectMetrics(metrics?: Partial<ProjectMetric>[]) {
     .filter((metric) => metric.label && metric.value);
 
   return normalized.length > 0 ? normalized : undefined;
+}
+
+function normalizeProjectScreenshots(screenshots?: Partial<ProjectScreenshot>[]) {
+  if (!Array.isArray(screenshots)) return undefined;
+
+  const normalized = screenshots
+    .map((screenshot, index) => ({
+      title: safeString(screenshot.title, `View ${index + 1}`),
+      caption: safeString(screenshot.caption, "Project interface preview."),
+      image: safeString(screenshot.image, "/projects/launch.svg"),
+    }))
+    .filter((screenshot) => screenshot.title && screenshot.caption && screenshot.image);
+
+  return normalized.length > 0 ? normalized : undefined;
+}
+
+function createDefaultScreenshots(image: string, title: string) {
+  return [
+    {
+      title: "Main view",
+      caption: `${title} primary interface preview.`,
+      image,
+    },
+  ];
 }
 
 function normalizeStackItems(stackItems?: Partial<StackItem>[]): StackItem[] {

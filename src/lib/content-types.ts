@@ -38,11 +38,18 @@ export type Project = {
   impact?: string;
   highlights?: string[];
   metrics?: ProjectMetric[];
+  screenshots?: ProjectScreenshot[];
 };
 
 export type ProjectMetric = {
   label: string;
   value: string;
+};
+
+export type ProjectScreenshot = {
+  title: string;
+  caption: string;
+  image: string;
 };
 
 export type StackCategory = "core" | "language" | "framework" | "tool";

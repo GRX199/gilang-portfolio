@@ -1,7 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowUpRight, GitBranch, Layers, Star, Terminal } from "lucide-react";
+import {
+  ArrowDownAZ,
+  ArrowUpRight,
+  GitBranch,
+  Layers,
+  Search,
+  Star,
+  Terminal,
+  X,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
@@ -16,29 +25,52 @@ type ProjectsProps = {
 };
 
 type ProjectFilter = "all" | "featured" | "portfolio" | "github";
+type ProjectSort = "featured" | "newest" | "name";
 
 export function Projects({ projects, compact = false, source }: ProjectsProps) {
   const [activeFilter, setActiveFilter] = useState<ProjectFilter>("all");
-  const featuredProjects = projects.filter((project) => project.featured);
-  const sourceCounts = {
-    all: projects.length,
-    featured: featuredProjects.length,
-    portfolio: projects.filter((project) => project.source !== "github").length,
-    github: projects.filter((project) => project.source === "github").length,
-  };
-  const uniqueStackCount = new Set(projects.flatMap((project) => project.tags)).size;
+  const [activeSort, setActiveSort] = useState<ProjectSort>("featured");
+  const [searchQuery, setSearchQuery] = useState("");
+  const featuredProjects = useMemo(
+    () => projects.filter((project) => project.featured),
+    [projects],
+  );
+  const sourceCounts = useMemo(
+    () => ({
+      all: projects.length,
+      featured: featuredProjects.length,
+      portfolio: projects.filter((project) => project.source !== "github").length,
+      github: projects.filter((project) => project.source === "github").length,
+    }),
+    [featuredProjects.length, projects],
+  );
+  const uniqueStackCount = useMemo(
+    () => new Set(projects.flatMap((project) => project.tags)).size,
+    [projects],
+  );
   const visibleProjects = useMemo(() => {
     const baseProjects = compact ? featuredProjects : projects;
+    let nextProjects = baseProjects;
+    const query = searchQuery.trim().toLowerCase();
 
-    if (compact) return baseProjects;
-    if (activeFilter === "featured") return baseProjects.filter((project) => project.featured);
-    if (activeFilter === "portfolio") {
-      return baseProjects.filter((project) => project.source !== "github");
+    if (compact) return sortProjects(baseProjects, "featured");
+    if (activeFilter === "featured") {
+      nextProjects = nextProjects.filter((project) => project.featured);
     }
-    if (activeFilter === "github") return baseProjects.filter((project) => project.source === "github");
+    if (activeFilter === "portfolio") {
+      nextProjects = nextProjects.filter((project) => project.source !== "github");
+    }
+    if (activeFilter === "github") {
+      nextProjects = nextProjects.filter((project) => project.source === "github");
+    }
 
-    return baseProjects;
-  }, [activeFilter, compact, featuredProjects, projects]);
+    if (query) {
+      nextProjects = nextProjects.filter((project) => projectMatchesQuery(project, query));
+    }
+
+    return sortProjects(nextProjects, activeSort);
+  }, [activeFilter, activeSort, compact, featuredProjects, projects, searchQuery]);
+  const resultLabel = `${visibleProjects.length} of ${projects.length} shown`;
   const filterOptions: {
     id: ProjectFilter;
     label: string;
@@ -103,6 +135,49 @@ export function Projects({ projects, compact = false, source }: ProjectsProps) {
           </div>
         ) : null}
 
+        {!compact ? (
+          <div className="project-library-controls" aria-label="Project library controls">
+            <label className="project-search">
+              <Search size={16} aria-hidden="true" />
+              <span className="sr-only">Search projects</span>
+              <input
+                type="search"
+                value={searchQuery}
+                placeholder="Search project, stack, or status"
+                onChange={(event) => setSearchQuery(event.target.value)}
+              />
+              {searchQuery ? (
+                <button
+                  className="project-search-clear"
+                  type="button"
+                  aria-label="Clear project search"
+                  onClick={() => setSearchQuery("")}
+                >
+                  <X size={14} aria-hidden="true" />
+                </button>
+              ) : null}
+            </label>
+
+            <label className="project-sort">
+              <ArrowDownAZ size={16} aria-hidden="true" />
+              <span>Sort</span>
+              <select
+                value={activeSort}
+                aria-label="Sort projects"
+                onChange={(event) => setActiveSort(event.target.value as ProjectSort)}
+              >
+                <option value="featured">Featured first</option>
+                <option value="newest">Newest first</option>
+                <option value="name">Name A-Z</option>
+              </select>
+            </label>
+
+            <div className="project-results-count" aria-live="polite">
+              {resultLabel}
+            </div>
+          </div>
+        ) : null}
+
         <div className="project-grid project-grid-showcase">
           {visibleProjects.map((project, index) => {
             const Icon = getIcon(project.icon);
@@ -118,7 +193,7 @@ export function Projects({ projects, compact = false, source }: ProjectsProps) {
                 initial={{ opacity: 0, y: 18 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.45, delay: index * 0.06 }}
+                transition={{ duration: 0.45, delay: Math.min(index * 0.04, 0.28) }}
               >
                 <Link href={`/portfolio/${project.id}`} aria-label={`View ${project.title}`}>
                   <div className="project-image">
@@ -167,7 +242,11 @@ export function Projects({ projects, compact = false, source }: ProjectsProps) {
 
         {visibleProjects.length === 0 ? (
           <div className="project-empty-state">
-            <p>No projects in this filter yet.</p>
+            <p>
+              {searchQuery.trim()
+                ? `No projects found for "${searchQuery.trim()}".`
+                : "No projects in this filter yet."}
+            </p>
           </div>
         ) : null}
       </div>
@@ -184,4 +263,46 @@ function getCardHighlights(project: Project) {
     `${project.tags.slice(0, 2).join(" + ")} focused build.`,
     project.source === "github" ? "Public repository with visible source." : "Editable portfolio case study.",
   ];
+}
+
+function projectMatchesQuery(project: Project, query: string) {
+  const searchableText = [
+    project.title,
+    project.description,
+    project.status,
+    project.year,
+    project.role,
+    project.source,
+    ...project.tags,
+    ...(project.highlights || []),
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+
+  return searchableText.includes(query);
+}
+
+function sortProjects(projects: Project[], sort: ProjectSort) {
+  const sortedProjects = [...projects];
+
+  if (sort === "name") {
+    return sortedProjects.sort((left, right) => left.title.localeCompare(right.title));
+  }
+
+  return sortedProjects.sort((left, right) => {
+    if (sort === "featured" && Number(right.featured) !== Number(left.featured)) {
+      return Number(right.featured) - Number(left.featured);
+    }
+
+    const yearDifference = getProjectYear(right) - getProjectYear(left);
+    if (yearDifference !== 0) return yearDifference;
+
+    return left.title.localeCompare(right.title);
+  });
+}
+
+function getProjectYear(project: Project) {
+  const year = Number.parseInt(project.year, 10);
+  return Number.isFinite(year) ? year : 0;
 }

@@ -86,6 +86,20 @@ export function getProjectCaseStudy(project: Project, sourceLabel: string) {
   };
 }
 
+export function getProjectScreenshots(project: Project) {
+  if (project.screenshots && project.screenshots.length > 0) {
+    return project.screenshots;
+  }
+
+  return [
+    {
+      title: "Main view",
+      caption: `${project.title} primary interface preview.`,
+      image: project.image,
+    },
+  ];
+}
+
 export function toAbsoluteUrl(siteUrl: string, value: string) {
   try {
     return new URL(value, siteUrl).toString();
