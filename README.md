@@ -53,6 +53,15 @@ src/content/project-screenshot-manifest.json
 
 Commit dan push file hasil capture tersebut agar Vercel menampilkan gambar terbaru saat deploy. Kalau screenshot belum ada atau URL gagal dicapture, website tetap memakai gambar manual dari CMS atau fallback bawaan.
 
+Repo ini juga punya GitHub Actions otomatis:
+
+- Berjalan tiap 6 jam.
+- Mencari repo GitHub public yang punya field Website/Homepage.
+- Capture hanya project yang belum punya screenshot di manifest.
+- Commit hasil screenshot otomatis, lalu Vercel akan redeploy dari commit itu.
+
+Untuk menjalankan otomatisnya saat itu juga, buka tab GitHub **Actions** lalu pilih **Capture Project Screenshots** dan klik **Run workflow**.
+
 ## Deploy
 
 Project ini sudah siap deploy ke Vercel.

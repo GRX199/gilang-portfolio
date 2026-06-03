@@ -53,6 +53,8 @@ npm run capture:screenshots
 
 Script ini membuat PNG ke `public/projects/captures` dan memperbarui `src/content/project-screenshot-manifest.json`. Commit hasilnya sebelum push agar Vercel memakai preview terbaru. Script ini sengaja tidak dijalankan otomatis di Vercel supaya build tetap ringan.
 
+GitHub Actions `Capture Project Screenshots` akan menjalankan capture otomatis tiap 6 jam untuk repo GitHub baru yang punya Website/Homepage URL. Kalau ada screenshot baru, workflow commit hasilnya dan Vercel redeploy otomatis.
+
 ## 6. Final Check
 
 ```bash

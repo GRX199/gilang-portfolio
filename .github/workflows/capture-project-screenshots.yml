@@ -1,0 +1,71 @@
+name: Capture Project Screenshots
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 */6 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: capture-project-screenshots
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    name: Capture missing live screenshots
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify Chrome
+        run: |
+          if command -v google-chrome >/dev/null 2>&1; then
+            google-chrome --version
+          elif command -v google-chrome-stable >/dev/null 2>&1; then
+            google-chrome-stable --version
+          elif command -v chromium >/dev/null 2>&1; then
+            chromium --version
+          elif command -v chromium-browser >/dev/null 2>&1; then
+            chromium-browser --version
+          else
+            echo "Chrome or Chromium is required for screenshot capture."
+            exit 1
+          fi
+
+      - name: Capture missing screenshots
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
+          NEXT_PUBLIC_SANITY_DATASET: ${{ secrets.NEXT_PUBLIC_SANITY_DATASET }}
+          NEXT_PUBLIC_SANITY_API_VERSION: ${{ secrets.NEXT_PUBLIC_SANITY_API_VERSION }}
+          SANITY_API_READ_TOKEN: ${{ secrets.SANITY_API_READ_TOKEN }}
+        run: npm run capture:screenshots -- --missing-only --allow-partial --wait 5000 --timeout 60000
+
+      - name: Commit screenshot updates
+        run: |
+          if [ -z "$(git status --porcelain public/projects/captures src/content/project-screenshot-manifest.json)" ]; then
+            echo "No screenshot changes to commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/projects/captures src/content/project-screenshot-manifest.json
+          git commit -m "Update live project screenshots"
+          git push

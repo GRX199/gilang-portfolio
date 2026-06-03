@@ -13,8 +13,10 @@ const localContentPath = path.join(rootDir, "src", "content", "site-content.json
 const manifestPath = path.join(rootDir, "src", "content", "project-screenshot-manifest.json");
 const captureDir = path.join(rootDir, "public", "projects", "captures");
 const defaultOptions = {
+  allowPartial: false,
   height: 960,
   includeGithub: true,
+  missingOnly: false,
   only: "",
   timeout: 45_000,
   wait: 3_500,
@@ -44,17 +46,25 @@ await mkdir(captureDir, { recursive: true });
 
 const content = (await loadSanityContent()) || (await loadLocalContent());
 const projects = await collectProjects(content, options);
-const targets = projects
+let targets = projects
   .map((project) => createCaptureTarget(project))
   .filter(Boolean);
+const manifest = await loadManifest();
+const nextProjects = { ...(manifest.projects || {}) };
+
+if (options.missingOnly) {
+  targets = targets.filter((target) => !nextProjects[target.id]?.main);
+}
 
 if (targets.length === 0) {
-  console.log("No live project URLs found. Add liveUrl in CMS or use an absolute hosted href.");
+  console.log(
+    options.missingOnly
+      ? "No new live project screenshots to capture."
+      : "No live project URLs found. Add liveUrl in CMS or use an absolute hosted href.",
+  );
   process.exit(0);
 }
 
-const manifest = await loadManifest();
-const nextProjects = { ...(manifest.projects || {}) };
 const failures = [];
 
 for (const target of targets) {
@@ -98,7 +108,9 @@ await writeFile(
 if (failures.length > 0) {
   console.warn("\nSome screenshots failed:");
   failures.forEach((failure) => console.warn(`- ${failure}`));
-  process.exitCode = 1;
+  if (!options.allowPartial) {
+    process.exitCode = 1;
+  }
 } else {
   console.log("\nProject screenshots captured successfully.");
 }
@@ -111,6 +123,9 @@ function parseArgs(args) {
     const next = args[index + 1];
 
     switch (arg) {
+      case "--allow-partial":
+        parsed.allowPartial = true;
+        break;
       case "--chrome-path":
         parsed.chromePath = next;
         index += 1;
@@ -118,6 +133,9 @@ function parseArgs(args) {
       case "--height":
         parsed.height = Number(next) || defaultOptions.height;
         index += 1;
+        break;
+      case "--missing-only":
+        parsed.missingOnly = true;
         break;
       case "--help":
       case "-h":
@@ -159,6 +177,8 @@ Usage:
 
 Options:
   --only <project-id>       Capture one project only.
+  --allow-partial           Keep a successful exit even if a project URL fails.
+  --missing-only            Capture only projects missing from the manifest.
   --skip-github            Do not fetch GitHub repositories with homepage URLs.
   --width <number>         Screenshot viewport width. Default: ${defaultOptions.width}
   --height <number>        Screenshot viewport height. Default: ${defaultOptions.height}
