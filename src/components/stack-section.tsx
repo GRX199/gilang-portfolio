@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowUpRight } from "lucide-react";
 import { useState } from "react";
 import { trackPortfolioEvent } from "@/lib/analytics";
 import type { StackCategory, StackItem } from "@/lib/content-types";
@@ -46,12 +47,37 @@ export function StackSection({ stackItems }: { stackItems: StackItem[] }) {
         <div className="stack-grid" aria-live="polite">
           {visibleItems.map((item) => {
             const Icon = getIcon(item.icon);
-            return (
-              <div className="stack-card" key={item.name}>
+            const cardContent = (
+              <>
                 <span className="stack-icon" aria-hidden="true">
                   <Icon size={24} />
                 </span>
                 <span>{item.name}</span>
+                {item.href ? (
+                  <ArrowUpRight
+                    className="stack-card-link-indicator"
+                    size={15}
+                    aria-hidden="true"
+                  />
+                ) : null}
+              </>
+            );
+
+            return item.href ? (
+              <a
+                className="stack-card"
+                href={item.href}
+                key={item.name}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`Open ${item.name} website`}
+                onClick={() => trackPortfolioEvent("Stack Link Opened", { stack: item.name })}
+              >
+                {cardContent}
+              </a>
+            ) : (
+              <div className="stack-card" key={item.name}>
+                {cardContent}
               </div>
             );
           })}

@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   capture:
-    name: Capture missing live screenshots
+    name: Capture missing live previews
     runs-on: ubuntu-latest
     timeout-minutes: 35
 
@@ -48,7 +48,7 @@ jobs:
             exit 1
           fi
 
-      - name: Capture missing screenshots
+      - name: Capture missing desktop and mobile screenshots
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}

@@ -124,6 +124,7 @@ function normalizeProjects(projects?: Partial<Project>[]): Project[] {
       image: safeString(project.image, "/projects/launch.svg"),
       href: safeString(project.href, "/collaborate"),
       liveUrl: optionalUrl(project.liveUrl) || fallbackProject?.liveUrl,
+      repositoryUrl: optionalUrl(project.repositoryUrl) || fallbackProject?.repositoryUrl,
       icon: safeString(project.icon, "Rocket"),
       featured: Boolean(project.featured),
       useAutoScreenshot:
@@ -131,6 +132,10 @@ function normalizeProjects(projects?: Partial<Project>[]): Project[] {
           ? project.useAutoScreenshot
           : fallbackProject?.useAutoScreenshot,
       source: project.source === "github" ? "github" : "cms",
+      lastUpdated: optionalString(project.lastUpdated) || fallbackProject?.lastUpdated,
+      primaryLanguage: optionalString(project.primaryLanguage) || fallbackProject?.primaryLanguage,
+      repositoryTopics:
+        normalizeOptionalStringArray(project.repositoryTopics) || fallbackProject?.repositoryTopics,
       role: optionalString(project.role) || fallbackProject?.role,
       timeline: optionalString(project.timeline) || fallbackProject?.timeline,
       problem: optionalString(project.problem) || fallbackProject?.problem,
@@ -192,14 +197,17 @@ function normalizeStackItems(stackItems?: Partial<StackItem>[]): StackItem[] {
 
   return stackItems.map((item, index) => {
     const name = safeString(item.name, `Stack ${index + 1}`);
+    const id = safeSlug(item.id, name);
+    const fallbackStackItem = defaultContent.stackItems.find((stackItem) => stackItem.id === id);
 
     return {
-      id: safeSlug(item.id, name),
+      id,
       name,
       category: stackCategories.includes(item.category as StackCategory)
         ? (item.category as StackCategory)
         : "tool",
       icon: safeString(item.icon, "Code2"),
+      href: optionalUrl(item.href) || fallbackStackItem?.href,
     };
   });
 }

@@ -1331,6 +1331,32 @@ p {
   list-style: none;
 }
 
+.project-card-signals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0 0;
+}
+
+.project-card-signals span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(246, 244, 239, 0.14);
+  border-radius: 999px;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.035);
+  color: rgba(246, 244, 239, 0.72);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.project-card-signals svg {
+  color: var(--red);
+}
+
 .project-card-highlights li {
   position: relative;
   padding-left: 16px;
@@ -1741,6 +1767,7 @@ p {
 }
 
 .stack-card {
+  position: relative;
   min-height: 120px;
   display: grid;
   place-items: center;
@@ -1752,6 +1779,18 @@ p {
   color: rgba(246, 244, 239, 0.86);
   font-weight: 800;
   text-align: center;
+  text-decoration: none;
+  transition: border-color 180ms ease, background 180ms ease, color 180ms ease,
+    transform 180ms ease;
+}
+
+a.stack-card:hover,
+a.stack-card:focus-visible {
+  border-color: rgba(255, 91, 95, 0.58);
+  background: rgba(255, 91, 95, 0.08);
+  color: var(--text);
+  outline: none;
+  transform: translateY(-2px);
 }
 
 .stack-icon {
@@ -1762,6 +1801,20 @@ p {
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.06);
   color: var(--red);
+}
+
+.stack-card-link-indicator {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  color: rgba(246, 244, 239, 0.5);
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+a.stack-card:hover .stack-card-link-indicator,
+a.stack-card:focus-visible .stack-card-link-indicator {
+  color: var(--red);
+  transform: translate(2px, -2px);
 }
 
 .contact-section {

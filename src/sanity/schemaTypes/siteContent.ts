@@ -73,6 +73,12 @@ export const siteContentType = defineType({
               type: "string",
               options: { list: iconOptions },
             }),
+            defineField({
+              name: "href",
+              title: "Website",
+              type: "url",
+              description: "Official website or documentation URL for this stack item.",
+            }),
           ],
           preview: {
             select: { title: "label", subtitle: "href" },

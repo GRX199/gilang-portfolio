@@ -29,10 +29,14 @@ export type Project = {
   image: string;
   href: string;
   liveUrl?: string;
+  repositoryUrl?: string;
   icon: string;
   featured: boolean;
   useAutoScreenshot?: boolean;
   source?: "cms" | "github";
+  lastUpdated?: string;
+  primaryLanguage?: string;
+  repositoryTopics?: string[];
   role?: string;
   timeline?: string;
   problem?: string;
@@ -62,6 +66,7 @@ export type StackItem = {
   name: string;
   category: StackCategory;
   icon: string;
+  href?: string;
 };
 
 export type QuickLink = {

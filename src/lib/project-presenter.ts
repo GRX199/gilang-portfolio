@@ -50,11 +50,7 @@ export function getProjectCaseStudy(project: Project, sourceLabel: string) {
   const metrics =
     project.metrics && project.metrics.length > 0
       ? project.metrics
-      : [
-          { label: "Role", value: role },
-          { label: "Timeline", value: timeline },
-          { label: "Source", value: sourceLabel },
-        ];
+      : getFallbackMetrics(project, role, timeline, sourceLabel);
 
   return {
     role,
@@ -106,4 +102,28 @@ export function toAbsoluteUrl(siteUrl: string, value: string) {
   } catch {
     return value;
   }
+}
+
+function getFallbackMetrics(project: Project, role: string, timeline: string, sourceLabel: string) {
+  const metrics = [
+    { label: "Role", value: role },
+    { label: "Timeline", value: timeline },
+    { label: "Source", value: sourceLabel },
+  ];
+
+  if (project.lastUpdated) {
+    metrics.push({ label: "Updated", value: formatProjectMetricDate(project.lastUpdated) });
+  }
+
+  return metrics.slice(0, 4);
+}
+
+function formatProjectMetricDate(value: string) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Recent";
+
+  return new Intl.DateTimeFormat("en", {
+    month: "short",
+    year: "numeric",
+  }).format(date);
 }

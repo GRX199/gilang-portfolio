@@ -3,7 +3,9 @@ import type { Project, ProjectScreenshot } from "@/lib/content-types";
 
 type GeneratedProjectVisual = {
   capturedAt?: string;
+  desktop?: string;
   main?: string;
+  mobile?: string;
   screenshots?: ProjectScreenshot[];
   sourceUrl?: string;
 };
@@ -22,7 +24,10 @@ export function applyGeneratedProjectVisual(project: Project): Project {
   if (project.useAutoScreenshot === false) return project;
 
   const generatedVisual = generatedProjects[project.id];
-  const generatedImage = generatedVisual?.main || generatedVisual?.screenshots?.[0]?.image;
+  const generatedImage =
+    generatedVisual?.desktop ||
+    generatedVisual?.main ||
+    generatedVisual?.screenshots?.[0]?.image;
 
   if (!generatedImage) return project;
 

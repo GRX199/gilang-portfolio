@@ -59,7 +59,8 @@ export const siteContentQuery = groq`*[_type == "siteContent" && _id == "siteCon
     id,
     name,
     category,
-    icon
+    icon,
+    href
   },
   contactIntents[]
 }`;

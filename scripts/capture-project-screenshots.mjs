@@ -17,6 +17,8 @@ const defaultOptions = {
   height: 960,
   includeGithub: true,
   missingOnly: false,
+  mobileHeight: 844,
+  mobileWidth: 390,
   only: "",
   timeout: 45_000,
   wait: 3_500,
@@ -53,7 +55,12 @@ const manifest = await loadManifest();
 const nextProjects = { ...(manifest.projects || {}) };
 
 if (options.missingOnly) {
-  targets = targets.filter((target) => !nextProjects[target.id]?.main);
+  targets = targets.filter((target) => {
+    const existingProject = nextProjects[target.id];
+    const hasDesktopPreview = Boolean(existingProject?.desktop || existingProject?.main);
+
+    return !(hasDesktopPreview && existingProject?.mobile);
+  });
 }
 
 if (targets.length === 0) {
@@ -70,22 +77,52 @@ const failures = [];
 for (const target of targets) {
   console.log(`Capturing ${target.title} from ${target.sourceUrl}`);
   const screenshots = [];
+  let desktopPreview = "";
+  let mobilePreview = "";
 
   for (const [index, view] of target.views.entries()) {
-    const filePath = getCaptureFilePath(target.id, view, index);
-    const publicPath = toPublicPath(filePath);
+    const captureViews = [
+      {
+        device: "desktop",
+        filePath: getCaptureFilePath(target.id, view, index, "desktop"),
+        height: options.height,
+        width: options.width,
+      },
+      {
+        device: "mobile",
+        filePath: getCaptureFilePath(target.id, view, index, "mobile"),
+        height: options.mobileHeight,
+        width: options.mobileWidth,
+      },
+    ];
 
-    try {
-      await captureUrl(chromePath, view.url, filePath, options);
-      screenshots.push({
-        title: view.title,
-        caption: view.caption,
-        image: publicPath,
-      });
-      console.log(`  saved ${publicPath}`);
-    } catch (error) {
-      failures.push(`${target.title} (${view.url}): ${error.message}`);
-      console.warn(`  failed ${view.url}`);
+    for (const captureView of captureViews) {
+      const publicPath = toPublicPath(captureView.filePath);
+
+      try {
+        await captureUrl(chromePath, view.url, captureView.filePath, {
+          ...options,
+          height: captureView.height,
+          width: captureView.width,
+        });
+        screenshots.push({
+          title: getCaptureTitle(view, captureView.device),
+          caption: getCaptureCaption(view, captureView.device),
+          image: publicPath,
+        });
+
+        if (index === 0 && captureView.device === "desktop") {
+          desktopPreview = publicPath;
+        }
+        if (index === 0 && captureView.device === "mobile") {
+          mobilePreview = publicPath;
+        }
+
+        console.log(`  saved ${publicPath}`);
+      } catch (error) {
+        failures.push(`${target.title} (${view.url}, ${captureView.device}): ${error.message}`);
+        console.warn(`  failed ${view.url} (${captureView.device})`);
+      }
     }
   }
 
@@ -93,7 +130,9 @@ for (const target of targets) {
     nextProjects[target.id] = {
       capturedAt: new Date().toISOString(),
       sourceUrl: target.sourceUrl,
-      main: screenshots[0].image,
+      main: desktopPreview || screenshots[0].image,
+      desktop: desktopPreview || undefined,
+      mobile: mobilePreview || undefined,
       screenshots,
     };
   }
@@ -136,6 +175,14 @@ function parseArgs(args) {
         break;
       case "--missing-only":
         parsed.missingOnly = true;
+        break;
+      case "--mobile-height":
+        parsed.mobileHeight = Number(next) || defaultOptions.mobileHeight;
+        index += 1;
+        break;
+      case "--mobile-width":
+        parsed.mobileWidth = Number(next) || defaultOptions.mobileWidth;
+        index += 1;
         break;
       case "--help":
       case "-h":
@@ -182,6 +229,8 @@ Options:
   --skip-github            Do not fetch GitHub repositories with homepage URLs.
   --width <number>         Screenshot viewport width. Default: ${defaultOptions.width}
   --height <number>        Screenshot viewport height. Default: ${defaultOptions.height}
+  --mobile-width <number>  Mobile screenshot viewport width. Default: ${defaultOptions.mobileWidth}
+  --mobile-height <number> Mobile screenshot viewport height. Default: ${defaultOptions.mobileHeight}
   --wait <ms>              Virtual time budget before screenshot. Default: ${defaultOptions.wait}
   --timeout <ms>           Browser process timeout. Default: ${defaultOptions.timeout}
   --chrome-path <path>     Custom Chrome or Edge executable path.
@@ -475,7 +524,7 @@ function createCaptureTarget(project) {
   const paths = getScreenshotPaths(project);
   const views = paths.map((viewPath, index) => {
     const pageUrl = resolveViewUrl(sourceUrl, viewPath);
-    const title = index === 0 ? "Live homepage" : formatPathTitle(viewPath);
+    const title = index === 0 ? "homepage" : formatPathTitle(viewPath);
 
     return {
       caption:
@@ -551,12 +600,21 @@ function ensureTrailingSlash(value) {
   return value.endsWith("/") ? value : `${value}/`;
 }
 
-function getCaptureFilePath(projectId, view, index) {
-  if (index === 0) {
-    return path.join(captureDir, `${projectId}.png`);
-  }
+function getCaptureFilePath(projectId, view, index, device) {
+  const viewSuffix = index === 0 ? "" : `-${slugify(view.path || view.title)}`;
+  const deviceSuffix = device === "mobile" ? "-mobile" : "";
 
-  return path.join(captureDir, `${projectId}-${slugify(view.path || view.title)}.png`);
+  return path.join(captureDir, `${projectId}${viewSuffix}${deviceSuffix}.png`);
+}
+
+function getCaptureTitle(view, device) {
+  const deviceLabel = device === "mobile" ? "Mobile" : "Desktop";
+  return `${deviceLabel} ${view.title}`;
+}
+
+function getCaptureCaption(view, device) {
+  const deviceLabel = device === "mobile" ? "Mobile viewport." : "Desktop viewport.";
+  return `${view.caption} ${deviceLabel}`;
 }
 
 function toPublicPath(filePath) {
@@ -568,37 +626,80 @@ async function captureUrl(chromePath, url, outputPath, currentOptions) {
 
   await mkdir(path.dirname(outputPath), { recursive: true });
 
-  const args = [
-    "--headless=new",
-    "--disable-gpu",
-    "--hide-scrollbars",
-    "--no-first-run",
-    "--no-default-browser-check",
-    `--user-data-dir=${userDataDir}`,
-    `--window-size=${currentOptions.width},${currentOptions.height}`,
-    `--virtual-time-budget=${currentOptions.wait}`,
-    `--screenshot=${outputPath}`,
-    url,
-  ];
-
   try {
+    await assertChromePageLoads(chromePath, url, userDataDir, currentOptions);
+
+    const args = [
+      "--headless=new",
+      "--disable-gpu",
+      "--hide-scrollbars",
+      "--no-first-run",
+      "--no-default-browser-check",
+      `--user-data-dir=${userDataDir}`,
+      `--window-size=${currentOptions.width},${currentOptions.height}`,
+      `--virtual-time-budget=${currentOptions.wait}`,
+      `--screenshot=${outputPath}`,
+      url,
+    ];
+
     await runProcess(chromePath, args, currentOptions.timeout);
   } finally {
     await rm(userDataDir, { force: true, recursive: true });
   }
 }
 
+async function assertChromePageLoads(chromePath, url, userDataDir, currentOptions) {
+  const args = [
+    "--headless=new",
+    "--disable-gpu",
+    "--no-first-run",
+    "--no-default-browser-check",
+    `--user-data-dir=${userDataDir}`,
+    `--window-size=${currentOptions.width},${currentOptions.height}`,
+    `--virtual-time-budget=${Math.min(currentOptions.wait, 5_000)}`,
+    "--dump-dom",
+    url,
+  ];
+  const { stderr, stdout } = await runProcessWithOutput(
+    chromePath,
+    args,
+    currentOptions.timeout,
+  );
+  const output = `${stdout}\n${stderr}`;
+  const errorPatterns = [
+    /chrome-error:\/\/chromewebdata/i,
+    /This site can(?:'|’)t be reached/i,
+    /DNS_PROBE_/i,
+    /ERR_NAME_NOT_RESOLVED/i,
+    /ERR_CONNECTION_/i,
+    /ERR_TUNNEL_CONNECTION_FAILED/i,
+  ];
+
+  if (errorPatterns.some((pattern) => pattern.test(output))) {
+    throw new Error("Chrome loaded an error page instead of the project URL.");
+  }
+}
+
 function runProcess(command, args, timeout) {
+  return runProcessWithOutput(command, args, timeout).then(() => undefined);
+}
+
+function runProcessWithOutput(command, args, timeout) {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, {
       stdio: ["ignore", "pipe", "pipe"],
       windowsHide: true,
     });
+    let stdout = "";
     let stderr = "";
     const timer = setTimeout(() => {
       child.kill("SIGKILL");
       reject(new Error(`Timed out after ${timeout}ms`));
     }, timeout);
+
+    child.stdout.on("data", (chunk) => {
+      stdout += chunk.toString();
+    });
 
     child.stderr.on("data", (chunk) => {
       stderr += chunk.toString();
@@ -612,7 +713,7 @@ function runProcess(command, args, timeout) {
     child.on("close", (code) => {
       clearTimeout(timer);
       if (code === 0) {
-        resolve();
+        resolve({ stderr, stdout });
         return;
       }
 

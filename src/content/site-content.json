@@ -257,73 +257,85 @@
       "id": "nextjs",
       "name": "Next.js",
       "category": "core",
-      "icon": "MonitorSmartphone"
+      "icon": "MonitorSmartphone",
+      "href": "https://nextjs.org"
     },
     {
       "id": "react",
       "name": "React",
       "category": "core",
-      "icon": "Code2"
+      "icon": "Code2",
+      "href": "https://react.dev"
     },
     {
       "id": "typescript",
       "name": "TypeScript",
       "category": "language",
-      "icon": "Braces"
+      "icon": "Braces",
+      "href": "https://www.typescriptlang.org"
     },
     {
       "id": "tailwind",
       "name": "Tailwind CSS",
       "category": "framework",
-      "icon": "Palette"
+      "icon": "Palette",
+      "href": "https://tailwindcss.com"
     },
     {
       "id": "nodejs",
       "name": "Node.js",
       "category": "framework",
-      "icon": "Server"
+      "icon": "Server",
+      "href": "https://nodejs.org"
     },
     {
       "id": "postgresql",
       "name": "PostgreSQL",
       "category": "tool",
-      "icon": "Database"
+      "icon": "Database",
+      "href": "https://www.postgresql.org"
     },
     {
       "id": "rest-api",
       "name": "REST API",
       "category": "framework",
-      "icon": "Globe2"
+      "icon": "Globe2",
+      "href": "https://developer.mozilla.org/en-US/docs/Glossary/REST"
     },
     {
       "id": "automation",
       "name": "Automation",
       "category": "core",
-      "icon": "Workflow"
+      "icon": "Workflow",
+      "href": "https://docs.github.com/en/actions"
     },
     {
       "id": "github",
       "name": "GitHub",
       "category": "tool",
-      "icon": "GitPullRequest"
+      "icon": "GitPullRequest",
+      "href": "https://github.com"
     },
     {
       "id": "figma",
       "name": "Figma",
       "category": "tool",
-      "icon": "PenTool"
+      "icon": "PenTool",
+      "href": "https://figma.com"
     },
     {
       "id": "vercel",
       "name": "Vercel",
       "category": "tool",
-      "icon": "Gauge"
+      "icon": "Gauge",
+      "href": "https://vercel.com"
     },
     {
       "id": "email",
       "name": "Email",
       "category": "tool",
-      "icon": "Mail"
+      "icon": "Mail",
+      "href": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/a#email_links"
     }
   ],
   "contactIntents": [

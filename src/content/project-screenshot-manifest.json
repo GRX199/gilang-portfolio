@@ -1,50 +1,78 @@
 {
   "projects": {
     "gilang-portfolio": {
-      "capturedAt": "2026-06-03T17:04:57.770Z",
+      "capturedAt": "2026-06-03T18:09:41.090Z",
       "sourceUrl": "https://gilang-portfolio-iota.vercel.app/",
       "main": "/projects/captures/gilang-portfolio.png",
+      "desktop": "/projects/captures/gilang-portfolio.png",
+      "mobile": "/projects/captures/gilang-portfolio-mobile.png",
       "screenshots": [
         {
-          "title": "Live homepage",
-          "caption": "Captured from the deployed project homepage.",
+          "title": "Desktop homepage",
+          "caption": "Captured from the deployed project homepage. Desktop viewport.",
           "image": "/projects/captures/gilang-portfolio.png"
+        },
+        {
+          "title": "Mobile homepage",
+          "caption": "Captured from the deployed project homepage. Mobile viewport.",
+          "image": "/projects/captures/gilang-portfolio-mobile.png"
         }
       ]
     },
     "pedagang-keliling": {
-      "capturedAt": "2026-06-03T17:05:03.577Z",
+      "capturedAt": "2026-06-03T18:07:14.025Z",
       "sourceUrl": "https://pedagang-keliling.vercel.app/",
       "main": "/projects/captures/pedagang-keliling.png",
+      "desktop": "/projects/captures/pedagang-keliling.png",
+      "mobile": "/projects/captures/pedagang-keliling-mobile.png",
       "screenshots": [
         {
-          "title": "Live homepage",
-          "caption": "Captured from the deployed project homepage.",
+          "title": "Desktop homepage",
+          "caption": "Captured from the deployed project homepage. Desktop viewport.",
           "image": "/projects/captures/pedagang-keliling.png"
+        },
+        {
+          "title": "Mobile homepage",
+          "caption": "Captured from the deployed project homepage. Mobile viewport.",
+          "image": "/projects/captures/pedagang-keliling-mobile.png"
         }
       ]
     },
     "desa-tounelet-1": {
-      "capturedAt": "2026-06-03T17:05:38.182Z",
+      "capturedAt": "2026-06-03T18:07:23.788Z",
       "sourceUrl": "https://desa-tounelet-1.vercel.app/",
       "main": "/projects/captures/desa-tounelet-1.png",
+      "desktop": "/projects/captures/desa-tounelet-1.png",
+      "mobile": "/projects/captures/desa-tounelet-1-mobile.png",
       "screenshots": [
         {
-          "title": "Live homepage",
-          "caption": "Captured from the deployed project homepage.",
+          "title": "Desktop homepage",
+          "caption": "Captured from the deployed project homepage. Desktop viewport.",
           "image": "/projects/captures/desa-tounelet-1.png"
+        },
+        {
+          "title": "Mobile homepage",
+          "caption": "Captured from the deployed project homepage. Mobile viewport.",
+          "image": "/projects/captures/desa-tounelet-1-mobile.png"
         }
       ]
     },
     "bukutamubpsdmpkominfomdo": {
-      "capturedAt": "2026-06-03T17:05:41.965Z",
+      "capturedAt": "2026-06-03T18:07:28.684Z",
       "sourceUrl": "https://buku-tamu-bpsdmp-kominfo-mdo.vercel.app/",
       "main": "/projects/captures/bukutamubpsdmpkominfomdo.png",
+      "desktop": "/projects/captures/bukutamubpsdmpkominfomdo.png",
+      "mobile": "/projects/captures/bukutamubpsdmpkominfomdo-mobile.png",
       "screenshots": [
         {
-          "title": "Live homepage",
-          "caption": "Captured from the deployed project homepage.",
+          "title": "Desktop homepage",
+          "caption": "Captured from the deployed project homepage. Desktop viewport.",
           "image": "/projects/captures/bukutamubpsdmpkominfomdo.png"
+        },
+        {
+          "title": "Mobile homepage",
+          "caption": "Captured from the deployed project homepage. Mobile viewport.",
+          "image": "/projects/captures/bukutamubpsdmpkominfomdo-mobile.png"
         }
       ]
     }

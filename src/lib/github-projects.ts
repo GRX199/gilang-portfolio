@@ -126,7 +126,8 @@ function getGitHubUsername(siteConfig: SiteConfig) {
 function toProject(repository: GitHubRepository, index: number): Project {
   const readableName = formatRepositoryName(repository.name);
   const tags = getRepositoryTags(repository);
-  const year = String(new Date(repository.pushed_at || repository.updated_at).getFullYear());
+  const lastUpdated = repository.pushed_at || repository.updated_at;
+  const year = String(new Date(lastUpdated).getFullYear());
   const liveUrl = getRepositoryHomepage(repository.homepage);
 
   return {
@@ -139,16 +140,22 @@ function toProject(repository: GitHubRepository, index: number): Project {
     image: "/projects/github.svg",
     href: repository.html_url,
     liveUrl,
+    repositoryUrl: repository.html_url,
     icon: getRepositoryIcon(repository.language),
     featured: index < 3,
     useAutoScreenshot: Boolean(liveUrl),
     source: "github",
+    lastUpdated,
+    primaryLanguage: repository.language || undefined,
+    repositoryTopics: repository.topics || [],
     role: "Repository owner",
     timeline: `${year} - current`,
     highlights: [
       `Public repository maintained on GitHub.`,
       `Primary stack: ${tags.slice(0, 2).join(", ")}.`,
-      `Recently updated codebase with visible commit history.`,
+      liveUrl
+        ? `Live deployment connected from the repository homepage.`
+        : `Visible source code and commit history.`,
     ],
     screenshots: [
       {
@@ -160,7 +167,7 @@ function toProject(repository: GitHubRepository, index: number): Project {
     metrics: [
       { label: "Source", value: "GitHub" },
       { label: "Stack", value: tags[0] || "Code" },
-      { label: "Status", value: getRepositoryStatus(repository) },
+      { label: "Updated", value: formatRepositoryDate(lastUpdated) },
     ],
   };
 }
@@ -216,4 +223,14 @@ function formatRepositoryName(name: string) {
     .replace(/\s+/g, " ")
     .trim()
     .replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+function formatRepositoryDate(value: string) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Recent";
+
+  return new Intl.DateTimeFormat("en", {
+    month: "short",
+    year: "numeric",
+  }).format(date);
 }

@@ -4,7 +4,10 @@ import { motion, useReducedMotion } from "framer-motion";
 import {
   ArrowDownAZ,
   ArrowUpRight,
+  Camera,
+  Clock3,
   GitBranch,
+  Globe2,
   Layers,
   Search,
   Star,
@@ -218,6 +221,7 @@ export function Projects({ projects, compact = false, source }: ProjectsProps) {
             const Icon = getIcon(project.icon);
             const sourceLabel = project.source === "github" ? "GitHub repo" : "Portfolio work";
             const cardHighlights = getCardHighlights(project);
+            const projectSignals = getProjectSignals(project, sourceLabel);
 
             return (
               <motion.article
@@ -270,6 +274,18 @@ export function Projects({ projects, compact = false, source }: ProjectsProps) {
                     </div>
                     <h3>{project.title}</h3>
                     <p>{project.description}</p>
+                    <div className="project-card-signals" aria-label={`${project.title} signals`}>
+                      {projectSignals.map((signal) => {
+                        const SignalIcon = signal.icon;
+
+                        return (
+                          <span key={signal.label}>
+                            <SignalIcon size={12} aria-hidden="true" />
+                            {signal.label}
+                          </span>
+                        );
+                      })}
+                    </div>
                     <ul className="project-card-highlights" aria-label={`${project.title} highlights`}>
                       {cardHighlights.map((highlight) => (
                         <li key={highlight}>{highlight}</li>
@@ -324,8 +340,13 @@ function projectMatchesQuery(project: Project, query: string) {
     project.year,
     project.role,
     project.source,
+    project.liveUrl,
+    project.repositoryUrl,
+    project.lastUpdated,
+    project.primaryLanguage,
     ...project.tags,
     ...(project.highlights || []),
+    ...(project.repositoryTopics || []),
   ]
     .filter(Boolean)
     .join(" ")
@@ -356,4 +377,40 @@ function sortProjects(projects: Project[], sort: ProjectSort) {
 function getProjectYear(project: Project) {
   const year = Number.parseInt(project.year, 10);
   return Number.isFinite(year) ? year : 0;
+}
+
+function getProjectSignals(project: Project, sourceLabel: string) {
+  const signals: { label: string; icon: typeof Terminal }[] = [];
+
+  if (project.liveUrl) {
+    signals.push({ label: "Live site", icon: Globe2 });
+  }
+
+  if (project.image.includes("/projects/captures/")) {
+    signals.push({ label: "Auto preview", icon: Camera });
+  }
+
+  if (project.lastUpdated) {
+    signals.push({ label: `Updated ${formatProjectDate(project.lastUpdated)}`, icon: Clock3 });
+  }
+
+  if (signals.length === 0) {
+    signals.push({
+      label: sourceLabel,
+      icon: project.source === "github" ? GitBranch : Terminal,
+    });
+  }
+
+  return signals.slice(0, 3);
+}
+
+function formatProjectDate(value: string) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "recently";
+
+  return new Intl.DateTimeFormat("en", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(date);
 }

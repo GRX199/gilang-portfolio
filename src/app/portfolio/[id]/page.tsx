@@ -85,6 +85,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
   const isExternalLink = project.href.startsWith("http");
   const caseStudy = getProjectCaseStudy(project, sourceLabel);
   const screenshots = getProjectScreenshots(project);
+  const lastUpdatedLabel = project.lastUpdated ? formatProjectPanelDate(project.lastUpdated) : "";
   const projectUrl = `${content.siteConfig.siteUrl}/portfolio/${project.id}`;
   const projectJsonLd = {
     "@context": "https://schema.org",
@@ -123,6 +124,8 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
               <ProjectDetailActions
                 href={project.href}
                 isExternalLink={isExternalLink}
+                liveUrl={project.liveUrl}
+                repositoryUrl={project.repositoryUrl}
                 source={sourceLabel}
                 title={project.title}
               />
@@ -150,6 +153,18 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                   <dt>Source</dt>
                   <dd>{sourceLabel}</dd>
                 </div>
+                {project.liveUrl ? (
+                  <div>
+                    <dt>Live</dt>
+                    <dd>Available</dd>
+                  </div>
+                ) : null}
+                {lastUpdatedLabel ? (
+                  <div>
+                    <dt>Updated</dt>
+                    <dd>{lastUpdatedLabel}</dd>
+                  </div>
+                ) : null}
               </dl>
             </div>
           </div>
@@ -261,4 +276,15 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
       <Footer projectCount={projects.length} />
     </>
   );
+}
+
+function formatProjectPanelDate(value: string) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+
+  return new Intl.DateTimeFormat("en", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(date);
 }
