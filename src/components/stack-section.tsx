@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { trackPortfolioEvent } from "@/lib/analytics";
 import type { StackCategory, StackItem } from "@/lib/content-types";
 import { getIcon } from "@/lib/icon-map";
 
@@ -32,7 +33,10 @@ export function StackSection({ stackItems }: { stackItems: StackItem[] }) {
               type="button"
               role="tab"
               aria-selected={filter.value === activeFilter}
-              onClick={() => setActiveFilter(filter.value)}
+              onClick={() => {
+                setActiveFilter(filter.value);
+                trackPortfolioEvent("Stack Filter", { filter: filter.value });
+              }}
             >
               {filter.label}
             </button>

@@ -101,6 +101,30 @@ svg {
   white-space: nowrap;
 }
 
+.skip-link {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 160;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 10px 13px;
+  background: var(--text);
+  color: var(--bg);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  transform: translateY(-140%);
+  transition: transform 180ms ease;
+}
+
+.skip-link:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 4px;
+  transform: translateY(0);
+}
+
 .container {
   width: min(100% - 48px, 1040px);
   margin-inline: auto;
@@ -275,6 +299,11 @@ main {
   background: var(--red);
   color: white;
   outline: none;
+}
+
+.nav-pills a[aria-current="page"] {
+  background: rgba(255, 91, 95, 0.18);
+  color: white;
 }
 
 .home-page {
@@ -472,6 +501,7 @@ h2 {
   font-weight: 800;
   letter-spacing: 0;
   line-height: 0.98;
+  text-wrap: balance;
 }
 
 h1 {
@@ -2151,6 +2181,52 @@ textarea:focus {
   color: white;
 }
 
+:where(a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 4px;
+}
+
+.nav-pills a:focus-visible,
+.project-filter-bar button:focus-visible,
+.stack-tabs button:focus-visible,
+.send-button:focus-visible,
+.round-button:focus-visible,
+.project-card a:focus-visible,
+.signal-metric:focus-visible,
+.signal-board-action:focus-visible,
+.route-stack a:focus-visible {
+  box-shadow: 0 0 0 4px rgba(123, 223, 242, 0.16);
+}
+
+.project-card a:focus-visible {
+  outline-offset: -4px;
+}
+
+.project-search:focus-within,
+.project-sort:focus-within {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px rgba(123, 223, 242, 0.14);
+}
+
+.project-search input:focus-visible,
+.project-sort select:focus-visible {
+  outline: none;
+}
+
+@supports (content-visibility: auto) {
+  .project-card,
+  .project-screenshot,
+  .case-study-card,
+  .stack-card {
+    content-visibility: auto;
+    contain-intrinsic-size: 320px;
+  }
+
+  .featured-project-card {
+    contain-intrinsic-size: 560px;
+  }
+}
+
 @media (min-width: 921px) and (max-height: 760px) {
   .home-page .hero-section {
     padding-block: 62px 8px;
@@ -2549,6 +2625,10 @@ textarea:focus {
     padding-block: 112px 28px;
   }
 
+  .project-detail-copy h1 {
+    max-width: min(100%, 11ch);
+  }
+
   .project-detail-actions,
   .deploy-actions {
     display: grid;
@@ -2942,5 +3022,24 @@ textarea:focus {
     transition-duration: 0.001ms !important;
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
+  }
+
+  .hero-section::before,
+  .signal-scan {
+    display: none;
+  }
+
+  .hero-ticker div {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .hero-tilt-stage,
+  .project-card:hover,
+  .project-card:hover .project-image img,
+  .signal-metric:hover,
+  .route-stack a:hover,
+  .signal-board-action:hover {
+    transform: none !important;
   }
 }

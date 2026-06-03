@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowUpRight } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
+import { ProjectDetailActions } from "@/components/project-detail-actions";
 import { getSiteContent } from "@/lib/content";
 import { getPortfolioProjects } from "@/lib/github-projects";
 import {
@@ -121,22 +120,12 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
               <p className="eyebrow">Case Study / {sourceLabel}</p>
               <h1 id="project-title">{project.title}</h1>
               <p className="lead">{project.description}</p>
-              <div className="project-detail-actions">
-                {project.href ? (
-                  <a
-                    className="send-button"
-                    href={project.href}
-                    target={isExternalLink ? "_blank" : undefined}
-                    rel={isExternalLink ? "noreferrer" : undefined}
-                  >
-                    <span>{isExternalLink ? "Open project" : "Open page"}</span>
-                    <ArrowUpRight size={17} aria-hidden="true" />
-                  </a>
-                ) : null}
-                <Link className="send-button ghost" href="/portfolio">
-                  Back to projects
-                </Link>
-              </div>
+              <ProjectDetailActions
+                href={project.href}
+                isExternalLink={isExternalLink}
+                source={sourceLabel}
+                title={project.title}
+              />
             </div>
 
             <div className="project-detail-panel" aria-label="Project summary">
@@ -200,7 +189,13 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                         alt={`${project.title} - ${screenshot.title}`}
                         width={960}
                         height={600}
-                        sizes={index === 0 ? "(max-width: 920px) 100vw, 68vw" : "(max-width: 920px) 100vw, 32vw"}
+                        sizes={
+                          index === 0
+                            ? "(max-width: 920px) 100vw, 68vw"
+                            : "(max-width: 920px) 100vw, 32vw"
+                        }
+                        loading="lazy"
+                        decoding="async"
                       />
                       <figcaption>
                         <strong>{screenshot.title}</strong>

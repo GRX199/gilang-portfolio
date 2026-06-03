@@ -2,6 +2,7 @@
 
 import { Send } from "lucide-react";
 import { FormEvent, useState } from "react";
+import { trackPortfolioEvent } from "@/lib/analytics";
 import type { SiteConfig } from "@/lib/content-types";
 
 export function ContactForm({
@@ -25,6 +26,11 @@ export function ContactForm({
       "\n",
     );
 
+    trackPortfolioEvent("Contact Form Submitted", {
+      intent,
+      hasMessage: Boolean(message.trim()),
+    });
+
     window.location.href = `mailto:${siteConfig.email}?subject=${encodeURIComponent(
       subject,
     )}&body=${encodeURIComponent(body)}`;
@@ -39,18 +45,31 @@ export function ContactForm({
           <p>Find me on these profiles, or send the form with a short brief.</p>
           <div className="contact-links">
             {siteConfig.socials.map((social) => (
-              <a href={social.href} key={social.label} target="_blank" rel="noreferrer">
+              <a
+                href={social.href}
+                key={social.label}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => trackPortfolioEvent("Social Link Opened", { label: social.label })}
+              >
                 {social.label}
               </a>
             ))}
           </div>
         </div>
 
-        <form className="contact-form" onSubmit={handleSubmit}>
+        <form className="contact-form" onSubmit={handleSubmit} aria-describedby="contact-note">
           <div className="field-grid">
             <label>
               <span>01 Name</span>
-              <input name="name" type="text" autoComplete="name" placeholder="Your name" required />
+              <input
+                name="name"
+                type="text"
+                autoComplete="name"
+                placeholder="Your name"
+                minLength={2}
+                required
+              />
             </label>
             <label>
               <span>02 Email</span>
@@ -81,6 +100,7 @@ export function ContactForm({
               name="message"
               rows={5}
               placeholder="Tell me about the page, feature, or problem..."
+              minLength={20}
               required
             />
           </label>
@@ -90,7 +110,7 @@ export function ContactForm({
             <Send size={17} aria-hidden="true" />
           </button>
 
-          <p className="form-note" role="status">
+          <p className="form-note" id="contact-note" role="status">
             {note}
           </p>
         </form>

@@ -1,10 +1,15 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { usePathname } from "next/navigation";
 
 export function RouteTransition() {
   const pathname = usePathname();
+  const shouldReduceMotion = useReducedMotion() ?? false;
+
+  if (shouldReduceMotion) {
+    return null;
+  }
 
   return (
     <AnimatePresence mode="wait">

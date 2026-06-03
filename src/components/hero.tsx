@@ -1,9 +1,10 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
 import { ArrowUpRight, MapPin, Terminal } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { trackPortfolioEvent } from "@/lib/analytics";
 import type { SiteContent } from "@/lib/content-types";
 import { getIcon } from "@/lib/icon-map";
 
@@ -12,6 +13,7 @@ export function Hero({ content }: { content: SiteContent }) {
   const [timeLabel, setTimeLabel] = useState("");
   const [statusIndex, setStatusIndex] = useState(0);
   const [tiltEnabled, setTiltEnabled] = useState(true);
+  const shouldReduceMotion = useReducedMotion() ?? false;
   const x = useMotionValue(0.5);
   const y = useMotionValue(0.5);
   const springX = useSpring(x, { stiffness: 120, damping: 18 });
@@ -20,6 +22,7 @@ export function Hero({ content }: { content: SiteContent }) {
   const rotateX = useTransform(springY, [0, 1], [6, -6]);
 
   const activeStatus = statusMessages[statusIndex % statusMessages.length] || siteConfig.location;
+  const canTilt = tiltEnabled && !shouldReduceMotion;
   const tickerItems = [
     siteConfig.focus,
     siteConfig.availability,
@@ -45,15 +48,19 @@ export function Hero({ content }: { content: SiteContent }) {
 
     updateTime();
     const timeTimer = window.setInterval(updateTime, 30_000);
-    const statusTimer = window.setInterval(() => {
-      setStatusIndex((current) => current + 1);
-    }, 4_000);
+    const statusTimer = shouldReduceMotion
+      ? undefined
+      : window.setInterval(() => {
+          setStatusIndex((current) => current + 1);
+        }, 4_000);
 
     return () => {
       window.clearInterval(timeTimer);
-      window.clearInterval(statusTimer);
+      if (statusTimer !== undefined) {
+        window.clearInterval(statusTimer);
+      }
     };
-  }, []);
+  }, [shouldReduceMotion]);
 
   useEffect(() => {
     const syncTiltPreference = () => {
@@ -77,11 +84,11 @@ export function Hero({ content }: { content: SiteContent }) {
   }, []);
 
   useEffect(() => {
-    if (!tiltEnabled) {
+    if (!canTilt) {
       x.set(0.5);
       y.set(0.5);
     }
-  }, [tiltEnabled, x, y]);
+  }, [canTilt, x, y]);
 
   return (
     <section
@@ -89,7 +96,7 @@ export function Hero({ content }: { content: SiteContent }) {
       id="home"
       aria-labelledby="hero-title"
       onMouseMove={(event) => {
-        if (!tiltEnabled) return;
+        if (!canTilt) return;
         const rect = event.currentTarget.getBoundingClientRect();
         x.set((event.clientX - rect.left) / rect.width);
         y.set((event.clientY - rect.top) / rect.height);
@@ -101,12 +108,12 @@ export function Hero({ content }: { content: SiteContent }) {
     >
       <motion.div
         className="hero-tilt-stage"
-        initial={{ opacity: 0, y: 16 }}
+        initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.55, ease: "easeOut" }}
+        transition={{ duration: shouldReduceMotion ? 0 : 0.55, ease: "easeOut" }}
         style={{
-          rotateX: tiltEnabled ? rotateX : 0,
-          rotateY: tiltEnabled ? rotateY : 0,
+          rotateX: canTilt ? rotateX : 0,
+          rotateY: canTilt ? rotateY : 0,
           transformStyle: "preserve-3d",
         }}
       >
@@ -125,18 +132,31 @@ export function Hero({ content }: { content: SiteContent }) {
             <div className="status-list" aria-label="Personal status">
               <div className="status-item">
                 <MapPin size={15} aria-hidden="true" />
-                <TextReveal text={activeStatus} delay={0.65} />
+                <TextReveal text={activeStatus} delay={0.65} instant={shouldReduceMotion} />
               </div>
               <div className="status-item">
                 <Terminal size={15} aria-hidden="true" />
-                <TextReveal text={timeLabel || "Loading time..."} delay={0.82} />
+                <TextReveal
+                  text={timeLabel || "Loading time..."}
+                  delay={0.82}
+                  instant={shouldReduceMotion}
+                />
               </div>
               {quickLinks.map((link, index) => {
                 const Icon = getIcon(link.icon);
                 return (
-                  <Link className="status-item status-link" href={link.href} key={link.href}>
+                  <Link
+                    className="status-item status-link"
+                    href={link.href}
+                    key={link.href}
+                    onClick={() => trackPortfolioEvent("Hero Quick Link", { label: link.label })}
+                  >
                     <Icon size={15} aria-hidden="true" />
-                    <TextReveal text={link.label} delay={0.98 + index * 0.12} />
+                    <TextReveal
+                      text={link.label}
+                      delay={0.98 + index * 0.12}
+                      instant={shouldReduceMotion}
+                    />
                   </Link>
                 );
               })}
@@ -158,10 +178,22 @@ export function Hero({ content }: { content: SiteContent }) {
   );
 }
 
-function TextReveal({ delay = 0, text }: { delay?: number; text: string }) {
+function TextReveal({
+  delay = 0,
+  instant = false,
+  text,
+}: {
+  delay?: number;
+  instant?: boolean;
+  text: string;
+}) {
   const [displayText, setDisplayText] = useState(() => createTextPlaceholder(text));
 
   useEffect(() => {
+    if (instant) {
+      return;
+    }
+
     let revealTimer: number | undefined;
     const resetTimer = window.setTimeout(() => {
       setDisplayText(createTextPlaceholder(text));
@@ -195,11 +227,11 @@ function TextReveal({ delay = 0, text }: { delay?: number; text: string }) {
         window.clearInterval(revealTimer);
       }
     };
-  }, [delay, text]);
+  }, [delay, instant, text]);
 
   return (
     <span className="text-reveal" aria-label={text}>
-      <span aria-hidden="true">{displayText}</span>
+      <span aria-hidden="true">{instant ? text : displayText}</span>
     </span>
   );
 }
@@ -222,6 +254,7 @@ function revealText(text: string, progress: number) {
 
 function KineticPanel({ content }: { content: SiteContent }) {
   const { projects, siteConfig, stackItems } = content;
+  const shouldReduceMotion = useReducedMotion() ?? false;
   const featuredCount = projects.filter((project) => project.featured).length;
   const categoryCount = new Set(stackItems.map((item) => item.category)).size;
   const featuredProject = projects.find((project) => project.featured) || projects[0];
@@ -268,9 +301,13 @@ function KineticPanel({ content }: { content: SiteContent }) {
     <motion.aside
       className="hero-console motion-console"
       aria-label="Portfolio summary"
-      initial={{ opacity: 0, x: 24 }}
+      initial={shouldReduceMotion ? false : { opacity: 0, x: 24 }}
       animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.55, delay: 0.15, ease: "easeOut" }}
+      transition={{
+        duration: shouldReduceMotion ? 0 : 0.55,
+        delay: shouldReduceMotion ? 0 : 0.15,
+        ease: "easeOut",
+      }}
     >
       <div className="console-top">
         <span />
@@ -284,7 +321,11 @@ function KineticPanel({ content }: { content: SiteContent }) {
             <span>Portfolio snapshot</span>
             <strong>{siteConfig.handle}</strong>
           </div>
-          <Link className="signal-board-action" href="/portfolio">
+          <Link
+            className="signal-board-action"
+            href="/portfolio"
+            onClick={() => trackPortfolioEvent("Console Route Opened", { label: "Work" })}
+          >
             <ArrowUpRight size={14} aria-hidden="true" />
             Work
           </Link>
@@ -292,7 +333,14 @@ function KineticPanel({ content }: { content: SiteContent }) {
 
         <div className="signal-metrics" aria-label="Website metrics">
           {metrics.map((metric) => (
-            <Link className="signal-metric" href={metric.href} key={metric.label}>
+            <Link
+              className="signal-metric"
+              href={metric.href}
+              key={metric.label}
+              onClick={() =>
+                trackPortfolioEvent("Console Metric Opened", { label: metric.label })
+              }
+            >
               <span>{metric.label}</span>
               <strong>{metric.value}</strong>
               <small>{metric.detail}</small>
@@ -324,6 +372,8 @@ function KineticPanel({ content }: { content: SiteContent }) {
 }
 
 function Signature() {
+  const shouldReduceMotion = useReducedMotion() ?? false;
+
   return (
     <svg
       className="signature"
@@ -339,9 +389,13 @@ function Signature() {
         fontSize="58"
         fontWeight="400"
         letterSpacing="0"
-        initial={{ opacity: 0, y: 8 }}
+        initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.65, delay: 0.25, ease: "easeOut" }}
+        transition={{
+          duration: shouldReduceMotion ? 0 : 0.65,
+          delay: shouldReduceMotion ? 0 : 0.25,
+          ease: "easeOut",
+        }}
       >
         Gilang
       </motion.text>
@@ -352,9 +406,13 @@ function Signature() {
         strokeWidth="3.2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        initial={{ pathLength: 0 }}
+        initial={shouldReduceMotion ? false : { pathLength: 0 }}
         animate={{ pathLength: 1 }}
-        transition={{ duration: 1.1, delay: 0.65, ease: "easeInOut" }}
+        transition={{
+          duration: shouldReduceMotion ? 0 : 1.1,
+          delay: shouldReduceMotion ? 0 : 0.65,
+          ease: "easeInOut",
+        }}
       />
       <motion.path
         d="M242 76c19 7 33 4 42-8"
@@ -362,9 +420,13 @@ function Signature() {
         stroke="currentColor"
         strokeWidth="2.4"
         strokeLinecap="round"
-        initial={{ opacity: 0, pathLength: 0 }}
+        initial={shouldReduceMotion ? false : { opacity: 0, pathLength: 0 }}
         animate={{ opacity: 0.72, pathLength: 1 }}
-        transition={{ duration: 0.65, delay: 1.1, ease: "easeOut" }}
+        transition={{
+          duration: shouldReduceMotion ? 0 : 0.65,
+          delay: shouldReduceMotion ? 0 : 1.1,
+          ease: "easeOut",
+        }}
       />
     </svg>
   );

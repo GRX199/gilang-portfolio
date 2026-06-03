@@ -78,8 +78,8 @@ export function getProjectCaseStudy(project: Project, sourceLabel: string) {
         body: solution,
       },
       {
-        label: "Impact",
-        title: "Why it matters",
+        label: "Result",
+        title: "What changed",
         body: impact,
       },
     ],

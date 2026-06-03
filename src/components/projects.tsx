@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   ArrowDownAZ,
   ArrowUpRight,
@@ -13,7 +13,8 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { trackPortfolioEvent } from "@/lib/analytics";
 import type { Project } from "@/lib/content-types";
 import type { ProjectSource } from "@/lib/github-projects";
 import { getIcon } from "@/lib/icon-map";
@@ -31,6 +32,7 @@ export function Projects({ projects, compact = false, source }: ProjectsProps) {
   const [activeFilter, setActiveFilter] = useState<ProjectFilter>("all");
   const [activeSort, setActiveSort] = useState<ProjectSort>("featured");
   const [searchQuery, setSearchQuery] = useState("");
+  const shouldReduceMotion = useReducedMotion() ?? false;
   const featuredProjects = useMemo(
     () => projects.filter((project) => project.featured),
     [projects],
@@ -83,6 +85,19 @@ export function Projects({ projects, compact = false, source }: ProjectsProps) {
     { id: "github", label: "GitHub", count: sourceCounts.github, icon: GitBranch },
   ];
 
+  useEffect(() => {
+    if (compact || !searchQuery.trim()) return;
+
+    const searchTimer = window.setTimeout(() => {
+      trackPortfolioEvent("Project Search", {
+        results: visibleProjects.length,
+        sourceCount: projects.length,
+      });
+    }, 700);
+
+    return () => window.clearTimeout(searchTimer);
+  }, [compact, projects.length, searchQuery, visibleProjects.length]);
+
   return (
     <section className="section project-section" id="work" aria-label="Projects">
       <div className="container project-showcase">
@@ -90,7 +105,12 @@ export function Projects({ projects, compact = false, source }: ProjectsProps) {
           {source ? (
             <div className="project-source">
               <span>Library</span>
-              <a href={source.href} target="_blank" rel="noreferrer">
+              <a
+                href={source.href}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => trackPortfolioEvent("Project Source Opened", { label: source.label })}
+              >
                 {source.label}
               </a>
             </div>
@@ -124,7 +144,13 @@ export function Projects({ projects, compact = false, source }: ProjectsProps) {
                   type="button"
                   aria-pressed={isActive}
                   key={filter.id}
-                  onClick={() => setActiveFilter(filter.id)}
+                  onClick={() => {
+                    setActiveFilter(filter.id);
+                    trackPortfolioEvent("Project Filter", {
+                      filter: filter.id,
+                      count: filter.count,
+                    });
+                  }}
                 >
                   <Icon size={14} aria-hidden="true" />
                   <span>{filter.label}</span>
@@ -151,7 +177,12 @@ export function Projects({ projects, compact = false, source }: ProjectsProps) {
                   className="project-search-clear"
                   type="button"
                   aria-label="Clear project search"
-                  onClick={() => setSearchQuery("")}
+                  onClick={() => {
+                    setSearchQuery("");
+                    trackPortfolioEvent("Project Search Cleared", {
+                      filter: activeFilter,
+                    });
+                  }}
                 >
                   <X size={14} aria-hidden="true" />
                 </button>
@@ -164,7 +195,11 @@ export function Projects({ projects, compact = false, source }: ProjectsProps) {
               <select
                 value={activeSort}
                 aria-label="Sort projects"
-                onChange={(event) => setActiveSort(event.target.value as ProjectSort)}
+                onChange={(event) => {
+                  const nextSort = event.target.value as ProjectSort;
+                  setActiveSort(nextSort);
+                  trackPortfolioEvent("Project Sort", { sort: nextSort });
+                }}
               >
                 <option value="featured">Featured first</option>
                 <option value="newest">Newest first</option>
@@ -190,12 +225,26 @@ export function Projects({ projects, compact = false, source }: ProjectsProps) {
                   !compact && index === 0 ? "project-card featured-project-card" : "project-card"
                 }
                 key={project.title}
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
+                whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.45, delay: Math.min(index * 0.04, 0.28) }}
+                transition={{
+                  duration: shouldReduceMotion ? 0 : 0.45,
+                  delay: shouldReduceMotion ? 0 : Math.min(index * 0.04, 0.28),
+                }}
               >
-                <Link href={`/portfolio/${project.id}`} aria-label={`View ${project.title}`}>
+                <Link
+                  href={`/portfolio/${project.id}`}
+                  aria-label={`View ${project.title}`}
+                  onClick={() =>
+                    trackPortfolioEvent("Project Case Study Opened", {
+                      title: project.title,
+                      source: project.source || "cms",
+                      featured: project.featured,
+                      status: project.status,
+                    })
+                  }
+                >
                   <div className="project-image">
                     <Image
                       src={project.image}
@@ -203,6 +252,8 @@ export function Projects({ projects, compact = false, source }: ProjectsProps) {
                       width={960}
                       height={600}
                       sizes="(max-width: 768px) 100vw, 50vw"
+                      loading="lazy"
+                      decoding="async"
                     />
                     <div className="project-icon" aria-hidden="true">
                       <Icon size={20} />
