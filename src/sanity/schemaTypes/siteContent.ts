@@ -102,7 +102,8 @@ export const siteContentType = defineType({
             defineField({
               name: "image",
               title: "Image Path or URL",
-              description: "Use /projects/file.svg for public assets, or upload a Sanity image below.",
+              description:
+                "Manual fallback image. Auto screenshot can replace this when a live URL is captured.",
               type: "string",
             }),
             defineField({
@@ -112,6 +113,29 @@ export const siteContentType = defineType({
               options: { hotspot: true },
             }),
             defineField({ name: "href", title: "Project Link", type: "string" }),
+            defineField({
+              name: "liveUrl",
+              title: "Live Website URL",
+              description:
+                "Public deployed URL used by npm run capture:screenshots. Leave empty for non-website projects.",
+              type: "url",
+            }),
+            defineField({
+              name: "useAutoScreenshot",
+              title: "Use Auto Screenshot",
+              description:
+                "When enabled, generated screenshots from the live URL replace the manual image if available.",
+              type: "boolean",
+              initialValue: true,
+            }),
+            defineField({
+              name: "screenshotPaths",
+              title: "Auto Screenshot Paths",
+              description:
+                "Optional paths to capture from the live URL, for example /, /dashboard, /contact.",
+              type: "array",
+              of: [defineArrayMember({ type: "string" })],
+            }),
             defineField({
               name: "icon",
               title: "Icon",

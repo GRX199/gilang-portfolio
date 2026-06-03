@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "deploy:check": "npm run lint && npm run typecheck && npm run build",
+    "capture:screenshots": "node scripts/capture-project-screenshots.mjs",
     "sanity:seed": "node scripts/seed-sanity.mjs"
   },
   "dependencies": {

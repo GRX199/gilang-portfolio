@@ -28,8 +28,10 @@ export type Project = {
   tags: string[];
   image: string;
   href: string;
+  liveUrl?: string;
   icon: string;
   featured: boolean;
+  useAutoScreenshot?: boolean;
   source?: "cms" | "github";
   role?: string;
   timeline?: string;
@@ -39,6 +41,7 @@ export type Project = {
   highlights?: string[];
   metrics?: ProjectMetric[];
   screenshots?: ProjectScreenshot[];
+  screenshotPaths?: string[];
 };
 
 export type ProjectMetric = {

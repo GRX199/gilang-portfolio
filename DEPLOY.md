@@ -43,7 +43,17 @@ NEXT_PUBLIC_SANITY_API_VERSION=2026-05-20
 /studio       Sanity Studio
 ```
 
-## 5. Final Check
+## 5. Project Screenshots
+
+Untuk project website yang sudah hosting, isi `Live Website URL` di CMS lalu jalankan:
+
+```bash
+npm run capture:screenshots
+```
+
+Script ini membuat PNG ke `public/projects/captures` dan memperbarui `src/content/project-screenshot-manifest.json`. Commit hasilnya sebelum push agar Vercel memakai preview terbaru. Script ini sengaja tidak dijalankan otomatis di Vercel supaya build tetap ringan.
+
+## 6. Final Check
 
 ```bash
 npm run deploy:check

@@ -123,8 +123,13 @@ function normalizeProjects(projects?: Partial<Project>[]): Project[] {
       tags: normalizeStringArray(project.tags, ["Next.js"]),
       image: safeString(project.image, "/projects/launch.svg"),
       href: safeString(project.href, "/collaborate"),
+      liveUrl: optionalUrl(project.liveUrl) || fallbackProject?.liveUrl,
       icon: safeString(project.icon, "Rocket"),
       featured: Boolean(project.featured),
+      useAutoScreenshot:
+        typeof project.useAutoScreenshot === "boolean"
+          ? project.useAutoScreenshot
+          : fallbackProject?.useAutoScreenshot,
       source: project.source === "github" ? "github" : "cms",
       role: optionalString(project.role) || fallbackProject?.role,
       timeline: optionalString(project.timeline) || fallbackProject?.timeline,
@@ -133,6 +138,8 @@ function normalizeProjects(projects?: Partial<Project>[]): Project[] {
       impact: optionalString(project.impact) || fallbackProject?.impact,
       highlights: normalizeOptionalStringArray(project.highlights) || fallbackProject?.highlights,
       metrics: normalizeProjectMetrics(project.metrics) || fallbackProject?.metrics,
+      screenshotPaths:
+        normalizeOptionalStringArray(project.screenshotPaths) || fallbackProject?.screenshotPaths,
       screenshots:
         normalizeProjectScreenshots(project.screenshots) ||
         fallbackProject?.screenshots ||
@@ -216,6 +223,18 @@ function optionalString(value: unknown) {
 
   const trimmedValue = value.trim();
   return trimmedValue.length > 0 ? trimmedValue : undefined;
+}
+
+function optionalUrl(value: unknown) {
+  const url = optionalString(value);
+  if (!url) return undefined;
+
+  try {
+    const parsedUrl = new URL(url);
+    return parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:" ? url : undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 function safeString(value: unknown, fallback: string) {

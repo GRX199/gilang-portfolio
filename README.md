@@ -28,6 +28,31 @@ Ada dua cara:
 
 Halaman Project menggabungkan project dari CMS dan repository publik dari GitHub. Project CMS tampil lebih dulu, lalu repository GitHub ditambahkan otomatis. Untuk mengubah repo yang tampil, edit nama repository, description, topics, language, atau visibility di GitHub.
 
+## Screenshot Project Otomatis
+
+Project website yang sudah live bisa memakai screenshot langsung dari halaman deploy.
+
+Di CMS, isi field berikut pada project:
+
+- `Live Website URL`: URL project yang sudah hosting, misalnya `https://project-kamu.vercel.app`.
+- `Use Auto Screenshot`: aktifkan kalau screenshot generated boleh mengganti gambar manual.
+- `Auto Screenshot Paths`: opsional, isi path seperti `/`, `/dashboard`, `/contact` untuk visual checkpoints.
+
+Lalu jalankan:
+
+```bash
+npm run capture:screenshots
+```
+
+Hasilnya disimpan ke:
+
+```text
+public/projects/captures
+src/content/project-screenshot-manifest.json
+```
+
+Commit dan push file hasil capture tersebut agar Vercel menampilkan gambar terbaru saat deploy. Kalau screenshot belum ada atau URL gagal dicapture, website tetap memakai gambar manual dari CMS atau fallback bawaan.
+
 ## Deploy
 
 Project ini sudah siap deploy ke Vercel.

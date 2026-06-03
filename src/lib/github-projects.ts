@@ -1,4 +1,5 @@
 import type { Project, SiteConfig } from "@/lib/content-types";
+import { applyGeneratedProjectVisuals } from "@/lib/project-visuals";
 
 type GitHubRepository = {
   archived: boolean;
@@ -63,12 +64,12 @@ export async function getPortfolioProjects(
       .map((repository, index) => toProject(repository, index));
 
     return {
-      projects: mergeProjects(normalizedCmsProjects, githubProjects),
+      projects: applyGeneratedProjectVisuals(mergeProjects(normalizedCmsProjects, githubProjects)),
       source,
     };
   } catch {
     return {
-      projects: normalizedCmsProjects,
+      projects: applyGeneratedProjectVisuals(normalizedCmsProjects),
       source,
     };
   }
@@ -126,6 +127,7 @@ function toProject(repository: GitHubRepository, index: number): Project {
   const readableName = formatRepositoryName(repository.name);
   const tags = getRepositoryTags(repository);
   const year = String(new Date(repository.pushed_at || repository.updated_at).getFullYear());
+  const liveUrl = getRepositoryHomepage(repository.homepage);
 
   return {
     id: repository.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
@@ -136,8 +138,10 @@ function toProject(repository: GitHubRepository, index: number): Project {
     tags,
     image: "/projects/github.svg",
     href: repository.html_url,
+    liveUrl,
     icon: getRepositoryIcon(repository.language),
     featured: index < 3,
+    useAutoScreenshot: Boolean(liveUrl),
     source: "github",
     role: "Repository owner",
     timeline: `${year} - current`,
@@ -159,6 +163,17 @@ function toProject(repository: GitHubRepository, index: number): Project {
       { label: "Status", value: getRepositoryStatus(repository) },
     ],
   };
+}
+
+function getRepositoryHomepage(homepage: string | null) {
+  if (!homepage?.trim()) return undefined;
+
+  try {
+    const url = new URL(homepage.trim());
+    return url.protocol === "http:" || url.protocol === "https:" ? url.toString() : undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 function getRepositoryStatus(repository: GitHubRepository) {
