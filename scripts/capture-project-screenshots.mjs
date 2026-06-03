@@ -1,5 +1,7 @@
 import { spawn } from "node:child_process";
 import { existsSync } from "node:fs";
+import http from "node:http";
+import https from "node:https";
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -211,15 +213,11 @@ async function loadSanityContent() {
   url.searchParams.set("query", query);
 
   try {
-    const response = await fetch(url, {
+    const json = await requestJsonWithFallback(url, {
       headers: process.env.SANITY_API_READ_TOKEN
         ? { Authorization: `Bearer ${process.env.SANITY_API_READ_TOKEN}` }
         : undefined,
     });
-
-    if (!response.ok) return null;
-
-    const json = await response.json();
     return json.result || null;
   } catch {
     return null;
@@ -252,16 +250,18 @@ async function loadGithubProjects(siteConfig) {
   if (!username) return [];
 
   try {
-    const response = await fetch(
+    const repositories = await requestJsonWithFallback(
       `https://api.github.com/users/${encodeURIComponent(username)}/repos?sort=updated&per_page=24`,
       {
-        headers: { Accept: "application/vnd.github+json" },
+        headers: {
+          Accept: "application/vnd.github+json",
+          ...(process.env.GITHUB_TOKEN
+            ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
+            : {}),
+        },
+        timeout: 45_000,
       },
     );
-
-    if (!response.ok) return [];
-
-    const repositories = await response.json();
 
     return repositories
       .filter((repository) => !repository.private && !repository.fork && repository.homepage)
@@ -273,9 +273,158 @@ async function loadGithubProjects(siteConfig) {
         useAutoScreenshot: true,
       }))
       .filter((project) => project.liveUrl);
-  } catch {
+  } catch (error) {
+    console.warn(`Could not load GitHub repositories for ${username}: ${error.message}`);
     return [];
   }
+}
+
+async function requestJsonWithFallback(url, options = {}) {
+  try {
+    return await requestJson(url, options);
+  } catch (error) {
+    if (process.platform !== "win32") {
+      throw error;
+    }
+
+    return requestJsonViaPowerShell(url, options);
+  }
+}
+
+function requestJson(url, options = {}) {
+  const requestUrl = typeof url === "string" ? new URL(url) : url;
+  const transport = requestUrl.protocol === "http:" ? http : https;
+
+  return new Promise((resolve, reject) => {
+    const request = transport.request(
+      requestUrl,
+      {
+        headers: {
+          "User-Agent": "gilang-portfolio-screenshot-capture",
+          ...(options.headers || {}),
+        },
+      },
+      (response) => {
+        if (
+          response.statusCode >= 300 &&
+          response.statusCode < 400 &&
+          response.headers.location
+        ) {
+          response.resume();
+          resolve(requestJson(new URL(response.headers.location, requestUrl), options));
+          return;
+        }
+
+        let body = "";
+
+        response.setEncoding("utf8");
+        response.on("data", (chunk) => {
+          body += chunk;
+        });
+        response.on("end", () => {
+          if (response.statusCode < 200 || response.statusCode >= 300) {
+            reject(new Error(`Request failed with ${response.statusCode}`));
+            return;
+          }
+
+          try {
+            resolve(JSON.parse(body));
+          } catch (error) {
+            reject(error);
+          }
+        });
+      },
+    );
+
+    request.setTimeout(options.timeout || 15_000, () => {
+      request.destroy(new Error(`Request timed out after ${options.timeout || 15_000}ms`));
+    });
+    request.on("error", reject);
+    request.end();
+  });
+}
+
+function requestJsonViaPowerShell(url, options = {}) {
+  const requestUrl = String(typeof url === "string" ? url : url.toString());
+  const headers = {
+    "User-Agent": "gilang-portfolio-screenshot-capture",
+    ...(options.headers || {}),
+  };
+  const requestUrlBase64 = Buffer.from(requestUrl, "utf8").toString("base64");
+  const headersBase64 = Buffer.from(JSON.stringify(headers), "utf8").toString("base64");
+  const timeoutSeconds = Math.max(5, Math.ceil((options.timeout || 15_000) / 1000));
+  const script = `
+$ProgressPreference = 'SilentlyContinue'
+$ErrorActionPreference = 'Stop'
+$uri = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('${requestUrlBase64}'))
+$headersJson = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('${headersBase64}'))
+$headersObject = $headersJson | ConvertFrom-Json
+$headers = @{}
+$headersObject.PSObject.Properties | ForEach-Object { $headers[$_.Name] = [string]$_.Value }
+$response = Invoke-WebRequest -Uri $uri -Headers $headers -UseBasicParsing -TimeoutSec ${timeoutSeconds}
+[Console]::Out.Write($response.Content)
+`;
+  const encodedCommand = Buffer.from(script, "utf16le").toString("base64");
+
+  return new Promise((resolve, reject) => {
+    const child = spawn(
+      "powershell.exe",
+      [
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-EncodedCommand",
+        encodedCommand,
+      ],
+      {
+        stdio: ["ignore", "pipe", "pipe"],
+        windowsHide: true,
+      },
+    );
+    let stdout = "";
+    let stderr = "";
+    const timer = setTimeout(() => {
+      child.kill("SIGKILL");
+      reject(new Error(`PowerShell request timed out after ${timeoutSeconds}s`));
+    }, timeoutSeconds * 1000 + 5_000);
+
+    child.stdout.on("data", (chunk) => {
+      stdout += chunk.toString();
+    });
+    child.stderr.on("data", (chunk) => {
+      stderr += chunk.toString();
+    });
+    child.on("error", (error) => {
+      clearTimeout(timer);
+      reject(error);
+    });
+    child.on("close", (code) => {
+      clearTimeout(timer);
+
+      if (code !== 0) {
+        reject(new Error(stderr.trim() || `PowerShell exited with code ${code}`));
+        return;
+      }
+
+      try {
+        resolve(JSON.parse(extractJsonText(stdout)));
+      } catch (error) {
+        reject(error);
+      }
+    });
+  });
+}
+
+function extractJsonText(value) {
+  const trimmedValue = value.trim();
+  const objectIndex = trimmedValue.indexOf("{");
+  const arrayIndex = trimmedValue.indexOf("[");
+  const indexes = [objectIndex, arrayIndex].filter((index) => index >= 0);
+
+  if (indexes.length === 0) return trimmedValue;
+
+  return trimmedValue.slice(Math.min(...indexes));
 }
 
 function getGithubUsername(siteConfig) {
