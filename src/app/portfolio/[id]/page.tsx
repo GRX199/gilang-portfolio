@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ExternalLink } from "lucide-react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Footer } from "@/components/footer";
@@ -195,9 +196,13 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                 </div>
                 <div className="project-screenshot-grid">
                   {screenshots.map((screenshot, index) => (
-                    <figure
+                    <a
                       className={index === 0 ? "project-screenshot primary" : "project-screenshot"}
+                      href={screenshot.image}
                       key={`${screenshot.title}-${index}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`Open ${project.title} ${screenshot.title} screenshot`}
                     >
                       <Image
                         src={screenshot.image}
@@ -212,11 +217,17 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                         loading="lazy"
                         decoding="async"
                       />
-                      <figcaption>
-                        <strong>{screenshot.title}</strong>
-                        <span>{screenshot.caption}</span>
-                      </figcaption>
-                    </figure>
+                      <span className="project-screenshot-caption">
+                        <span>
+                          <strong>{screenshot.title}</strong>
+                          <span>{screenshot.caption}</span>
+                        </span>
+                        <span className="project-screenshot-open">
+                          <ExternalLink size={14} strokeWidth={2} aria-hidden="true" />
+                          Open image
+                        </span>
+                      </span>
+                    </a>
                   ))}
                 </div>
               </div>
