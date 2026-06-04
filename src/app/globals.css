@@ -1768,6 +1768,7 @@ p {
 .project-screenshot-modal-image {
   min-height: 0;
   overflow: auto;
+  overscroll-behavior: contain;
   background:
     linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
@@ -3013,19 +3014,27 @@ textarea:focus {
   }
 
   .project-screenshot-modal {
-    padding: 14px;
+    place-items: start center;
+    padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
   }
 
   .project-screenshot-modal-shell {
-    max-height: 88svh;
+    width: 100%;
+    max-height: calc(100svh - 24px);
   }
 
   .project-screenshot-modal-head {
+    align-items: center;
     padding: 14px;
   }
 
   .project-screenshot-modal-head h2 {
-    font-size: 30px;
+    font-size: 28px;
+    line-height: 1;
+  }
+
+  .project-screenshot-modal-image {
+    max-height: calc(100svh - 168px);
   }
 
   .case-study-card {
@@ -3324,16 +3333,20 @@ textarea:focus {
   }
 
   .project-screenshot-modal {
-    padding: 10px;
+    padding: max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom));
+  }
+
+  .project-screenshot-modal-shell {
+    max-height: calc(100svh - 16px);
   }
 
   .project-screenshot-modal-head {
     gap: 12px;
-    padding: 12px;
+    padding: 10px 12px;
   }
 
   .project-screenshot-modal-head h2 {
-    font-size: 26px;
+    font-size: 24px;
   }
 
   .project-screenshot-modal-close {
@@ -3342,8 +3355,12 @@ textarea:focus {
   }
 
   .project-screenshot-modal-shell > p {
-    padding: 12px;
+    padding: 10px 12px;
     font-size: 13px;
+  }
+
+  .project-screenshot-modal-image {
+    max-height: calc(100svh - 142px);
   }
 
   .case-study-card h2 {
