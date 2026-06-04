@@ -15,6 +15,7 @@ export function ProjectScreenshotGallery({
   screenshots,
 }: ProjectScreenshotGalleryProps) {
   const [activeScreenshot, setActiveScreenshot] = useState<ProjectScreenshot | null>(null);
+  const [modalOrientation, setModalOrientation] = useState<"landscape" | "portrait">("landscape");
   const titleId = useId();
 
   useEffect(() => {
@@ -36,6 +37,11 @@ export function ProjectScreenshotGallery({
     };
   }, [activeScreenshot]);
 
+  const openScreenshot = (screenshot: ProjectScreenshot) => {
+    setModalOrientation("landscape");
+    setActiveScreenshot(screenshot);
+  };
+
   return (
     <>
       <div className="project-screenshot-grid">
@@ -45,7 +51,7 @@ export function ProjectScreenshotGallery({
             key={`${screenshot.title}-${index}`}
             type="button"
             aria-label={`View ${projectTitle} ${screenshot.title} screenshot`}
-            onClick={() => setActiveScreenshot(screenshot)}
+            onClick={() => openScreenshot(screenshot)}
           >
             <Image
               src={screenshot.image}
@@ -74,7 +80,7 @@ export function ProjectScreenshotGallery({
 
       {activeScreenshot ? (
         <div
-          className="project-screenshot-modal"
+          className={`project-screenshot-modal ${modalOrientation}`}
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
@@ -108,6 +114,13 @@ export function ProjectScreenshotGallery({
                 height={900}
                 sizes="100vw"
                 priority
+                unoptimized
+                onLoad={(event) => {
+                  const image = event.currentTarget;
+                  setModalOrientation(
+                    image.naturalHeight > image.naturalWidth ? "portrait" : "landscape",
+                  );
+                }}
               />
             </div>
             <p>{activeScreenshot.caption}</p>

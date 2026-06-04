@@ -1783,6 +1783,23 @@ p {
   object-fit: contain;
 }
 
+.project-screenshot-modal.portrait .project-screenshot-modal-shell {
+  width: min(100%, 620px);
+}
+
+.project-screenshot-modal.portrait .project-screenshot-modal-image {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.project-screenshot-modal.portrait .project-screenshot-modal-image img {
+  width: auto;
+  max-width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
 .project-screenshot-modal-shell > p {
   margin: 0;
   border-top: 1px solid var(--line);
@@ -3037,6 +3054,15 @@ textarea:focus {
     max-height: calc(100svh - 168px);
   }
 
+  .project-screenshot-modal.portrait .project-screenshot-modal-shell {
+    width: min(100%, 430px);
+  }
+
+  .project-screenshot-modal.portrait .project-screenshot-modal-image {
+    height: calc(100svh - 168px);
+    max-height: calc(100svh - 168px);
+  }
+
   .case-study-card {
     min-height: auto;
     padding: 18px;
@@ -3360,6 +3386,11 @@ textarea:focus {
   }
 
   .project-screenshot-modal-image {
+    max-height: calc(100svh - 142px);
+  }
+
+  .project-screenshot-modal.portrait .project-screenshot-modal-image {
+    height: calc(100svh - 142px);
     max-height: calc(100svh - 142px);
   }
 

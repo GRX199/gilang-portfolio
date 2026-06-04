@@ -20,6 +20,7 @@ const defaultOptions = {
   mobileHeight: 844,
   mobileWidth: 390,
   only: "",
+  scale: 2,
   timeout: 45_000,
   wait: 3_500,
   width: 1440,
@@ -47,11 +48,11 @@ if (!chromePath) {
 await mkdir(captureDir, { recursive: true });
 
 const content = (await loadSanityContent()) || (await loadLocalContent());
-const projects = await collectProjects(content, options);
+const manifest = await loadManifest();
+const projects = mergeManifestProjects(await collectProjects(content, options), manifest, options);
 let targets = projects
   .map((project) => createCaptureTarget(project))
   .filter(Boolean);
-const manifest = await loadManifest();
 const nextProjects = { ...(manifest.projects || {}) };
 
 if (options.missingOnly) {
@@ -127,13 +128,15 @@ for (const target of targets) {
   }
 
   if (screenshots.length > 0) {
+    const previousProject = nextProjects[target.id] || {};
+
     nextProjects[target.id] = {
       capturedAt: new Date().toISOString(),
       sourceUrl: target.sourceUrl,
-      main: desktopPreview || screenshots[0].image,
-      desktop: desktopPreview || undefined,
-      mobile: mobilePreview || undefined,
-      screenshots,
+      main: desktopPreview || previousProject.desktop || previousProject.main || screenshots[0].image,
+      desktop: desktopPreview || previousProject.desktop || undefined,
+      mobile: mobilePreview || previousProject.mobile || undefined,
+      screenshots: mergeScreenshots(screenshots, previousProject.screenshots || []),
     };
   }
 }
@@ -192,6 +195,10 @@ function parseArgs(args) {
         parsed.only = next || "";
         index += 1;
         break;
+      case "--scale":
+        parsed.scale = Number(next) || defaultOptions.scale;
+        index += 1;
+        break;
       case "--skip-github":
         parsed.includeGithub = false;
         break;
@@ -231,6 +238,7 @@ Options:
   --height <number>        Screenshot viewport height. Default: ${defaultOptions.height}
   --mobile-width <number>  Mobile screenshot viewport width. Default: ${defaultOptions.mobileWidth}
   --mobile-height <number> Mobile screenshot viewport height. Default: ${defaultOptions.mobileHeight}
+  --scale <number>         Device scale factor for sharper images. Default: ${defaultOptions.scale}
   --wait <ms>              Virtual time budget before screenshot. Default: ${defaultOptions.wait}
   --timeout <ms>           Browser process timeout. Default: ${defaultOptions.timeout}
   --chrome-path <path>     Custom Chrome or Edge executable path.
@@ -312,6 +320,25 @@ async function collectProjects(content, currentOptions) {
       seenIds.add(project.id);
       return true;
     });
+}
+
+function mergeManifestProjects(projects, manifest, currentOptions) {
+  const seenIds = new Set(projects.map((project) => project.id));
+  const manifestProjects = Object.entries(manifest.projects || {})
+    .map(([id, project]) => {
+      if (currentOptions.only && id !== currentOptions.only) return null;
+      if (seenIds.has(id) || !project?.sourceUrl) return null;
+
+      return {
+        id,
+        title: formatRepositoryName(id),
+        liveUrl: project.sourceUrl,
+        useAutoScreenshot: true,
+      };
+    })
+    .filter(Boolean);
+
+  return [...projects, ...manifestProjects];
 }
 
 async function loadGithubProjects(siteConfig) {
@@ -621,6 +648,20 @@ function toPublicPath(filePath) {
   return `/${path.relative(path.join(rootDir, "public"), filePath).replace(/\\/g, "/")}`;
 }
 
+function mergeScreenshots(nextScreenshots, previousScreenshots) {
+  const screenshotsByTitle = new Map();
+
+  for (const screenshot of previousScreenshots) {
+    screenshotsByTitle.set(String(screenshot.title || screenshot.image).toLowerCase(), screenshot);
+  }
+
+  for (const screenshot of nextScreenshots) {
+    screenshotsByTitle.set(String(screenshot.title || screenshot.image).toLowerCase(), screenshot);
+  }
+
+  return Array.from(screenshotsByTitle.values());
+}
+
 async function captureUrl(chromePath, url, outputPath, currentOptions) {
   const userDataDir = path.join(os.tmpdir(), `gilang-capture-${Date.now()}-${Math.random()}`);
 
@@ -637,6 +678,7 @@ async function captureUrl(chromePath, url, outputPath, currentOptions) {
       "--no-default-browser-check",
       `--user-data-dir=${userDataDir}`,
       `--window-size=${currentOptions.width},${currentOptions.height}`,
+      `--force-device-scale-factor=${currentOptions.scale}`,
       `--virtual-time-budget=${currentOptions.wait}`,
       `--screenshot=${outputPath}`,
       url,
@@ -656,6 +698,7 @@ async function assertChromePageLoads(chromePath, url, userDataDir, currentOption
     "--no-default-browser-check",
     `--user-data-dir=${userDataDir}`,
     `--window-size=${currentOptions.width},${currentOptions.height}`,
+    `--force-device-scale-factor=${currentOptions.scale}`,
     `--virtual-time-budget=${Math.min(currentOptions.wait, 5_000)}`,
     "--dump-dom",
     url,
