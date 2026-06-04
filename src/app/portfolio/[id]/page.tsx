@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { ExternalLink } from "lucide-react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { ProjectDetailActions } from "@/components/project-detail-actions";
+import { ProjectScreenshotGallery } from "@/components/project-screenshot-gallery";
 import { getSiteContent } from "@/lib/content";
 import { getPortfolioProjects } from "@/lib/github-projects";
 import {
@@ -194,42 +194,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                   <p className="eyebrow">Screenshots</p>
                   <h2>Visual checkpoints.</h2>
                 </div>
-                <div className="project-screenshot-grid">
-                  {screenshots.map((screenshot, index) => (
-                    <a
-                      className={index === 0 ? "project-screenshot primary" : "project-screenshot"}
-                      href={screenshot.image}
-                      key={`${screenshot.title}-${index}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={`Open ${project.title} ${screenshot.title} screenshot`}
-                    >
-                      <Image
-                        src={screenshot.image}
-                        alt={`${project.title} - ${screenshot.title}`}
-                        width={960}
-                        height={600}
-                        sizes={
-                          index === 0
-                            ? "(max-width: 920px) 100vw, 68vw"
-                            : "(max-width: 920px) 100vw, 32vw"
-                        }
-                        loading="lazy"
-                        decoding="async"
-                      />
-                      <span className="project-screenshot-caption">
-                        <span>
-                          <strong>{screenshot.title}</strong>
-                          <span>{screenshot.caption}</span>
-                        </span>
-                        <span className="project-screenshot-open">
-                          <ExternalLink size={14} strokeWidth={2} aria-hidden="true" />
-                          Open image
-                        </span>
-                      </span>
-                    </a>
-                  ))}
-                </div>
+                <ProjectScreenshotGallery projectTitle={project.title} screenshots={screenshots} />
               </div>
 
               <div className="case-study-grid" aria-label="Case study sections">

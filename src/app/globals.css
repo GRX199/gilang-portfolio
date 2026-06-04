@@ -1591,15 +1591,21 @@ p {
 }
 
 .project-screenshot {
+  appearance: none;
   position: relative;
+  width: 100%;
   min-width: 0;
   display: block;
   margin: 0;
+  padding: 0;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: rgba(17, 17, 17, 0.72);
   color: inherit;
+  cursor: zoom-in;
+  font: inherit;
+  text-align: left;
   box-shadow: 0 22px 70px rgba(0, 0, 0, 0.2);
   transition: border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
 }
@@ -1684,6 +1690,105 @@ p {
   border-color: rgba(255, 91, 95, 0.56);
   background: var(--red-glow);
   color: white;
+}
+
+.project-screenshot-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 180;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.project-screenshot-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(0, 0, 0, 0.78);
+  cursor: zoom-out;
+  backdrop-filter: blur(14px);
+}
+
+.project-screenshot-modal-shell {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 1120px);
+  max-height: min(88svh, 860px);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: rgba(10, 10, 10, 0.96);
+  box-shadow: 0 28px 110px rgba(0, 0, 0, 0.68);
+}
+
+.project-screenshot-modal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  border-bottom: 1px solid var(--line);
+  padding: 16px 18px;
+}
+
+.project-screenshot-modal-head .eyebrow {
+  margin-bottom: 6px;
+}
+
+.project-screenshot-modal-head h2 {
+  max-width: none;
+  margin: 0;
+  font-size: clamp(28px, 4vw, 44px);
+}
+
+.project-screenshot-modal-close {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.045);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+}
+
+.project-screenshot-modal-close:hover,
+.project-screenshot-modal-close:focus-visible {
+  border-color: rgba(255, 91, 95, 0.58);
+  background: var(--red-glow);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.project-screenshot-modal-image {
+  min-height: 0;
+  overflow: auto;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    #050505;
+  background-size: 32px 32px;
+}
+
+.project-screenshot-modal-image img {
+  width: 100%;
+  height: auto;
+  min-height: 260px;
+  object-fit: contain;
+}
+
+.project-screenshot-modal-shell > p {
+  margin: 0;
+  border-top: 1px solid var(--line);
+  padding: 14px 18px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.55;
 }
 
 .case-study-grid {
@@ -2907,6 +3012,22 @@ textarea:focus {
     grid-column: span 1;
   }
 
+  .project-screenshot-modal {
+    padding: 14px;
+  }
+
+  .project-screenshot-modal-shell {
+    max-height: 88svh;
+  }
+
+  .project-screenshot-modal-head {
+    padding: 14px;
+  }
+
+  .project-screenshot-modal-head h2 {
+    font-size: 30px;
+  }
+
   .case-study-card {
     min-height: auto;
     padding: 18px;
@@ -3200,6 +3321,29 @@ textarea:focus {
 
   .project-screenshot-open {
     width: fit-content;
+  }
+
+  .project-screenshot-modal {
+    padding: 10px;
+  }
+
+  .project-screenshot-modal-head {
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .project-screenshot-modal-head h2 {
+    font-size: 26px;
+  }
+
+  .project-screenshot-modal-close {
+    width: 34px;
+    height: 34px;
+  }
+
+  .project-screenshot-modal-shell > p {
+    padding: 12px;
+    font-size: 13px;
   }
 
   .case-study-card h2 {
